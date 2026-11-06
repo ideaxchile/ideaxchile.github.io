@@ -207,6 +207,10 @@ p{margin:0 0 1em}
   body.imprimiendo *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body.imprimiendo .bro-dip,body.imprimiendo .bro-semana,body.imprimiendo .bro-datos{break-inside:avoid}
   body.imprimiendo #brochure{zoom:.8}
+  body.imprimiendo #brochure h4{break-after:avoid;page-break-after:avoid}
+  body.imprimiendo #brochure h4 + p{break-before:avoid}
+  body.imprimiendo #brochure::backdrop{background:#fff!important;display:none}
+  html:has(body.imprimiendo),body.imprimiendo{background:#fff!important}
   @page{size:A4;margin:10mm}
 }
 
@@ -598,6 +602,102 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
   .legal{padding:20px 20px 0}
 }
 
+
+
+/* ===== Catálogo de diplomados ===== */
+.area-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.area-tab{font:inherit;font-size:.86rem;font-weight:600;padding:9px 16px;border-radius:30px;border:1.5px solid var(--linea);background:#fff;color:var(--noche);cursor:pointer;transition:.2s}
+.area-tab:hover{border-color:var(--c)}
+.area-tab.activa{background:var(--c);border-color:var(--c);color:#fff}
+.area-panel{display:none;margin-top:22px}
+.area-panel.activa{display:block}
+.grilla-dips{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.dip{background:#fff;border-radius:14px;box-shadow:var(--sombra);padding:22px 22px 20px;border-top:5px solid var(--c);display:flex;flex-direction:column}
+.dip small{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--c)}
+.dip h3{font-size:1.15rem;color:var(--noche);line-height:1.25;margin:4px 0 8px}
+.dip p{font-size:.9rem;color:var(--gris);margin:0 0 12px;line-height:1.5}
+.dip-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.dip-meta span{font-size:.76rem;font-weight:600;color:var(--c);background:color-mix(in srgb,var(--c) 11%,#fff);padding:4px 10px;border-radius:20px}
+.dip-meta span:last-child{color:var(--noche);background:var(--papel)}
+details.dip-materias{background:none;box-shadow:none;border:0;border-top:1px solid var(--linea);border-radius:0;margin:12px 0 0}
+details.dip-materias summary{padding:10px 0;font-size:.86rem;font-weight:600;color:var(--c)}
+details.dip-materias summary::after{width:22px;height:22px}
+details.dip-materias ol{margin:0 0 6px;padding-left:20px}
+details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
+.dip-acciones{display:flex;gap:8px;margin-top:12px}
+.dip-acciones .btn{flex:1;justify-content:center;padding:10px 12px;font-size:.86rem;box-shadow:none}
+.area-master{margin-top:20px;display:flex;align-items:center;gap:20px;justify-content:space-between;background:var(--noche);color:#fff;border-radius:14px;padding:20px 26px;border-left:6px solid var(--c)}
+.area-master small{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#FFB27A;font-weight:700}
+.area-master b{display:block;font-size:1.05rem;margin:2px 0}
+.area-master span{font-size:.86rem;color:rgba(255,255,255,.8)}
+.btn-blanco{background:#fff;color:var(--noche);border:0;flex:none;box-shadow:none}
+@media (max-width:1000px){.grilla-dips{grid-template-columns:1fr 1fr}.area-master{flex-direction:column;align-items:flex-start}}
+@media (max-width:700px){
+  .area-tabs{flex-wrap:nowrap;overflow-x:auto;margin-right:-20px;padding:2px 20px 8px 0;scrollbar-width:none}
+  .area-tab{flex:none}
+  .grilla-dips{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin-right:-20px;padding:4px 20px 18px 2px}
+  .grilla-dips>.dip{flex:0 0 84%;scroll-snap-align:start}
+  .dip-acciones{flex-direction:column}
+}
+
+/* ===== Quiero más información ===== */
+.dip-info{display:block;text-align:center;margin-top:10px;font-size:.86rem;font-weight:600;color:var(--c);text-decoration:underline;text-underline-offset:3px}
+.dip-info.claro{color:#FFB27A;margin-top:8px}
+.area-master-acc{display:flex;flex-direction:column;align-items:center;flex:none}
+.btn-blanco-borde{background:#fff;color:var(--noche);border:2px solid var(--noche);box-shadow:none}
+.modo-form{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--papel);border-radius:12px;padding:5px}
+.modo-form button{font:inherit;font-weight:600;font-size:.92rem;border:0;border-radius:9px;padding:11px 8px;background:none;color:var(--gris);cursor:pointer}
+.modo-form button.activo{background:#fff;color:var(--noche);box-shadow:0 2px 8px rgba(15,39,71,.12)}
+.modo-ayuda{grid-column:1/-1;margin:-4px 0 4px;font-size:.84rem;color:var(--gris)}
+#formulario.modo-info .solo-inscribir{display:none}
+@media (max-width:1000px){.area-master-acc{align-items:flex-start}}
+/* ===== v3: página más compacta ===== */
+.desliza{display:none}
+.seccion{padding:72px 0}
+.formatos,.grilla-programas,.grilla-masters{margin-top:30px}
+.pasos{margin-top:34px}
+@media (max-width:700px){
+  .seccion{padding:52px 0}
+  .formatos,.grilla-masters,.grilla-programas,.modulos,.pasos,.docentes{display:flex!important;flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;padding:4px 2px 18px;margin-left:-4px;margin-right:-20px;padding-right:20px;scrollbar-width:thin;justify-content:flex-start}
+  .formatos>*,.grilla-masters>*,.grilla-programas>*,.modulos>*,.pasos>*,.docentes>.docente{flex:0 0 84%!important;max-width:84%;min-width:0;scroll-snap-align:start}
+  .pasos::before{display:none}
+  .desliza{display:block;font-size:.78rem;color:var(--gris);margin:14px 0 -6px;font-weight:600}
+  .desliza::after{content:"  →"}
+  .metodologia .desliza{color:rgba(255,255,255,.7)}
+}
+
+.master-dips ol{display:none}
+.master-dips{padding-top:10px}.master-dips b{margin:0}
+.modulo .cursos{display:none}
+.modulo.abierto .cursos{display:block}
+.ver-cursos{margin:4px 22px 14px;background:none;border:0;padding:0;font:inherit;font-size:.88rem;font-weight:600;color:var(--c);cursor:pointer;text-align:left;display:inline-flex;gap:6px;align-items:center}
+.ver-cursos::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin-top:-4px;transition:transform .2s}
+.modulo.abierto .ver-cursos::after{transform:rotate(-135deg);margin-top:4px}
+.modulos{gap:18px;margin-top:28px}
+.cifras-emp{margin-top:28px}
+.historia-grid{grid-template-columns:1fr;max-width:900px}
+.hitos{margin-top:36px}
+.paises{margin-top:32px;padding:22px 28px;gap:12px 28px}
+.paises h4{font-size:.95rem}
+.chip{padding:4px 11px;font-size:.8rem}
+.naturaleza{margin-top:24px;padding:24px 28px}
+.equipo{margin-top:30px;grid-template-columns:240px 1fr}
+.equipo-foto{padding:28px}.equipo-foto img{width:150px}
+.equipo-cuerpo{padding:30px 36px}
+.equipo-cuerpo p + p{display:none}
+.docentes .docente{flex:0 1 calc(33.333% - 14px)}
+.docente{padding:18px 20px;cursor:pointer}
+.docente-cabeza{margin-bottom:8px}
+.docente p.grado{font-size:.85rem;margin:0}
+.docente p.bio{display:none;margin-top:10px}
+.docente.abierto p.bio{display:block}
+.docente .mas{margin-top:8px;font-size:.8rem;font-weight:600;color:var(--c)}
+.faq-extra{display:none}
+#preguntas.todas .faq-extra{display:block}
+#preguntas.todas .ver-faq{display:none}
+.ver-faq{margin-top:8px}
+@media (max-width:900px){.docentes .docente{flex-basis:calc(50% - 10px)}.equipo{grid-template-columns:1fr}.equipo-foto{padding:22px}.equipo-foto img{width:110px}}
+@media (max-width:600px){.docentes .docente{flex-basis:100%;min-width:0}.equipo-cuerpo{padding:24px 22px}}
 </style>
 </head>
 <body>
@@ -622,7 +722,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
     <nav class="menu" id="menu" aria-label="Principal">
       <a class="enlace activo" href="#inicio">Inicio</a>
       <a class="enlace" href="#formatos">Programas</a>
-      <a class="enlace" href="#masters">Masters Profesionales</a>
+      <a class="enlace" href="#diplomados">Diplomados</a>
       <a class="enlace" href="#emprendedores">Emprendedores</a>
       <a class="enlace" href="#metodologia">Metodología</a>
       <a class="enlace" href="#historia">Nuestra Historia</a>
@@ -653,28 +753,6 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
   </div>
 </section>
 
-<!-- FRANJA -->
-<section class="franja" aria-label="Formatos de los programas">
-  <div class="contenedor">
-    <div class="dato">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>
-      <div><strong>Cursos de 8 semanas</strong><span>Una sesión en vivo cada semana</span></div>
-    </div>
-    <div class="dato">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-1.5zM4 19.5A2 2 0 0 1 6 17.5h13"/></svg>
-      <div><strong>Diplomados de 4 meses</strong><span>Asincrónicos, a tu ritmo semanal</span></div>
-    </div>
-    <div class="dato">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 9l9-5 9 5-9 5z"/><path d="M7 11.5V16c0 1.5 2.2 3 5 3s5-1.5 5-3v-4.5M21 9v6"/></svg>
-      <div><strong>Masters Profesionales</strong><span>12 meses: tres diplomados, Metodología y paper</span></div>
-    </div>
-    <div class="dato">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>
-      <div><strong>Facultad Virtual</strong><span>Materiales, entregas y evaluaciones en línea</span></div>
-    </div>
-  </div>
-</section>
-
 <!-- RUTAS FORMATIVAS -->
 <section class="seccion rutas" id="formatos">
   <div class="contenedor">
@@ -682,6 +760,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
     <h2 class="titulo">Tres formatos para avanzar a tu ritmo</h2>
     <p class="bajada">Un curso para una necesidad puntual, un diplomado para especializarte, o una ruta completa para obtener un Master Profesional. Todo se desarrolla en la Facultad Virtual de IDEAX.</p>
 
+    <span class="desliza">Desliza para ver más</span>
     <div class="formatos">
       <article class="formato" style="--c:#F07C1B">
         <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="5" width="13" height="12" rx="2"/><path d="M15.5 10l6-3.5v11l-6-3.5"/></svg></span>
@@ -690,7 +769,6 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
         <span class="dur">8 semanas</span>
         <ul>
           <li>Una sesión en vivo cada semana con el docente</li>
-          <li>Trabajo autónomo con material concreto</li>
           <li>Proyecto aplicado a tu organización o negocio</li>
           <li>Incluye el programa para emprendedores, completo o por módulo</li>
         </ul>
@@ -702,9 +780,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
         <h3>Diplomados</h3>
         <span class="dur">4 meses</span>
         <ul>
-          <li>Módulos de varias semanas con carga de trabajo definida</li>
           <li>Cada semana, un texto de estudio y un caso que resuelves y subes</li>
-          <li>Consultas al docente durante todo el diplomado</li>
           <li>Al cerrar cada módulo, una exposición en video para su evaluación</li>
           <li>Convalidable con otros programas de IDEAX</li>
         </ul>
@@ -719,7 +795,6 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
           <li>Tres diplomados de una misma ruta</li>
           <li>Diplomado en Metodología de la Investigación y Escritura Académica, incluido</li>
           <li>Trabajo final: un paper aplicado</li>
-          <li>Evaluación por pares para su publicación en la revista CMIA</li>
           <li>Título propio de formación ejecutiva; no es un grado de magíster</li>
         </ul>
         <div class="pie-formato">$865.000 la ruta completa · hasta 12 cuotas</div>
@@ -748,78 +823,381 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
         <div><b>Publicación.</b> El paper se somete a evaluación por pares del Cuaderno Multidisciplinar de Investigación Aplicada (CMIA).</div>
       </div>
       <div class="aviso-parrilla">
-        <p>Ocho Masters Profesionales y veinticuatro diplomados, cada uno con su brochure.</p>
-        <a class="btn btn-naranja" href="#masters">Ver Masters Profesionales y diplomados</a>
+        <p>Treinta diplomados en diez áreas, cada uno con su brochure, y un Master Profesional por área.</p>
+        <a class="btn btn-naranja" href="#diplomados">Ver los 30 diplomados</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- MASTERS -->
-<section class="seccion masters-sec" id="masters">
-  <div class="contenedor">
-    <span class="ceja">Masters Profesionales y diplomados</span>
-    <h2 class="titulo">Ocho rutas de especialización</h2>
-    <p class="bajada">Cada Master Profesional se compone de tres diplomados que también puedes cursar por separado, más el Diplomado en Metodología y el paper. Elige una ruta, revisa su brochure y parte por el diplomado que más te sirva hoy.</p>
-    <div class="grilla-masters">
-      <article class="master" style="--c:#0F2747" data-master="m1" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Administración y Dirección de Empresas (MBA)">
-        <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg></span><small>Master Profesional</small></div>
-        <h3>Administración y Dirección de Empresas (MBA)</h3>
-        <p>Visión integral de la empresa: estrategia, personas, mercado, finanzas y operaciones, para quienes dirigen o aspiran a dirigir.</p>
-        <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Dirección Estratégica y Personas</li><li><span>2</span>Marketing y Finanzas para la Dirección</li><li><span>3</span>Operaciones, Proyectos e Innovación</li></ol></div>
-        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
-      </article>
-      <article class="master" style="--c:#6E3A9C" data-master="m2" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Gestión Estratégica de Capital Humano">
-        <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c3 .2 5.5 2.3 5.5 5.8"/></svg></span><small>Master Profesional</small></div>
-        <h3>Gestión Estratégica de Capital Humano</h3>
-        <p>Gestión estratégica de las personas: atracción, desarrollo, compensaciones, relaciones laborales y cambio organizacional.</p>
-        <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Dirección del Talento y Cultura Organizacional</li><li><span>2</span>Gestión Operativa de Personas</li><li><span>3</span>Relaciones Laborales y Cambio Organizacional</li></ol></div>
-        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
-      </article>
-      <article class="master" style="--c:#F07C1B" data-master="m3" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Marketing y Gestión Comercial">
-        <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/></svg></span><small>Master Profesional</small></div>
-        <h3>Marketing y Gestión Comercial</h3>
-        <p>Marketing y gestión comercial basados en datos: marca, investigación de mercados, consumidor, innovación y canales digitales.</p>
-        <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Gerencia de Marketing y Marca</li><li><span>2</span>Investigación de Mercados y Analítica del Consumidor</li><li><span>3</span>Gestión Comercial, Innovación y Canales Digitales</li></ol></div>
-        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
-      </article>
-      <article class="master" style="--c:#1D4E89" data-master="m4" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Auditoría, Contabilidad y Control de Gestión">
-        <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span><small>Master Profesional</small></div>
-        <h3>Auditoría, Contabilidad y Control de Gestión</h3>
-        <p>Contabilidad, normas IFRS, auditoría, control interno y control de gestión para resguardar y dirigir la organización.</p>
-        <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Contabilidad e IFRS</li><li><span>2</span>Auditoría y Control Interno</li><li><span>3</span>Control de Gestión</li></ol></div>
-        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
-      </article>
-      <article class="master" style="--c:#0E7C9E" data-master="m5" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Finanzas Aplicadas">
-        <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><small>Master Profesional</small></div>
-        <h3>Finanzas Aplicadas</h3>
-        <p>Finanzas aplicadas a la toma de decisiones: análisis, valoración, financiamiento, inversiones y mercados.</p>
-        <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Fundamentos de Finanzas</li><li><span>2</span>Finanzas Corporativas</li><li><span>3</span>Inversiones y Mercados Financieros</li></ol></div>
-        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
-      </article>
-      <article class="master" style="--c:#14947F" data-master="m6" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Gestión Logística Estratégica">
-        <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 6h12v10H2zM14 9h4l4 4v3h-8z"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></span><small>Master Profesional</small></div>
-        <h3>Gestión Logística Estratégica</h3>
-        <p>Dirección de la cadena logística: inventario, almacenamiento, transporte, distribución y control de la operación.</p>
-        <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Inventario y Almacenamiento</li><li><span>2</span>Transporte y Distribución</li><li><span>3</span>Dirección Logística y Control</li></ol></div>
-        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
-      </article>
-      <article class="master" style="--c:#5B8C2A" data-master="m7" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Gestión Integrada, Prevención, Higiene, Seguridad y Medio Ambiente">
-        <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c4 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2-6 6-10z"/><path d="M12 21v-7"/></svg></span><small>Master Profesional</small></div>
-        <h3>Gestión Integrada, Prevención, Higiene, Seguridad y Medio Ambiente</h3>
-        <p>Sistemas integrados de gestión: prevención de riesgos, higiene y seguridad, calidad, responsabilidad social y medio ambiente.</p>
-        <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Prevención de Riesgos, Higiene y Seguridad</li><li><span>2</span>Gestión de la Calidad y Responsabilidad Social</li><li><span>3</span>Gestión Ambiental y Sistemas Integrados</li></ol></div>
-        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
-      </article>
-      <article class="master" style="--c:#B4530A" data-master="m8" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Formulación, Evaluación y Dirección de Proyectos">
-        <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h6M7 13h10M7 17h4"/></svg></span><small>Master Profesional</small></div>
-        <h3>Formulación, Evaluación y Dirección de Proyectos</h3>
-        <p>Formulación, evaluación y dirección de proyectos con estándares profesionales, desde la idea hasta el control.</p>
-        <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Formulación de Proyectos</li><li><span>2</span>Evaluación de Proyectos</li><li><span>3</span>Dirección y Control de Proyectos</li></ol></div>
-        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
-      </article>
-    </div>
-    <p class="nota-masters">Cada diplomado vale $240.000 y el paper $145.000; el Diplomado en Metodología va incluido. Todo es pagadero hasta en 12 cuotas a precio contado con Mercado Pago. Los Masters Profesionales son títulos propios de formación ejecutiva de IDEAX y no constituyen un grado académico de magíster.</p>
+<!-- DIPLOMADOS -->
+<section class="seccion masters-sec" id="diplomados">
+  <div class="contenedor" id="masters">
+    <span class="ceja">Diplomados y Masters Profesionales</span>
+    <h2 class="titulo">30 diplomados en 10 áreas</h2>
+    <p class="bajada">Diplomados asincrónicos de 4 meses, con 5 materias y un caso aplicado cada semana. Cada uno se cursa y certifica por sí solo; tres diplomados de una misma área, más la Metodología y el paper, completan un Master Profesional.</p>
+    <div class="area-tabs" role="tablist" aria-label="Áreas"><button type="button" class="area-tab activa" role="tab" aria-selected="true" data-area="m1" style="--c:#0F2747">Administración (MBA)</button><button type="button" class="area-tab" role="tab" aria-selected="false" data-area="m2" style="--c:#6E3A9C">Capital Humano</button><button type="button" class="area-tab" role="tab" aria-selected="false" data-area="m3" style="--c:#F07C1B">Marketing</button><button type="button" class="area-tab" role="tab" aria-selected="false" data-area="m4" style="--c:#1D4E89">Auditoría y Contabilidad</button><button type="button" class="area-tab" role="tab" aria-selected="false" data-area="m5" style="--c:#0E7C9E">Finanzas</button><button type="button" class="area-tab" role="tab" aria-selected="false" data-area="m6" style="--c:#14947F">Logística</button><button type="button" class="area-tab" role="tab" aria-selected="false" data-area="m7" style="--c:#5B8C2A">Prevención y Medio Ambiente</button><button type="button" class="area-tab" role="tab" aria-selected="false" data-area="m8" style="--c:#B4530A">Proyectos</button><button type="button" class="area-tab" role="tab" aria-selected="false" data-area="m9" style="--c:#A23B5F">Economía</button><button type="button" class="area-tab" role="tab" aria-selected="false" data-area="m10" style="--c:#8C6A12">Gestión Pública</button></div>
+      <div class="area-panel activa" role="tabpanel" data-area="m1" style="--c:#0F2747">
+        <span class="desliza">Desliza para ver los tres diplomados</span>
+        <div class="grilla-dips">
+        <article class="dip" style="--c:#0F2747">
+          <small>Diplomado en</small>
+          <h3>Dirección Estratégica y Personas</h3>
+          <p>Los fundamentos para conducir una empresa: cómo se define la estrategia y cómo se lidera y desarrolla a las personas que la llevan a cabo.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Introducción a los negocios</li><li>Gestión estratégica</li><li>Gestión del capital humano</li><li>Liderazgo y coaching</li><li>Desarrollo organizacional</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m1-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m1-d1">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m1-d1">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#0F2747">
+          <small>Diplomado en</small>
+          <h3>Marketing y Finanzas para la Dirección</h3>
+          <p>Las dos lecturas que todo directivo necesita: entender al mercado y al consumidor, y leer las finanzas para decidir dónde invertir.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Introducción a la ciencia del mercado</li><li>Investigación de mercado y conducta del consumidor</li><li>Marketing digital</li><li>Economía y gestión financiera</li><li>Finanzas corporativas</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m1-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m1-d2">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m1-d2">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#0F2747">
+          <small>Diplomado en</small>
+          <h3>Operaciones, Proyectos e Innovación</h3>
+          <p>Cómo producir y entregar con eficiencia, formular y evaluar proyectos, e innovar con método.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gestión de operaciones</li><li>Logística</li><li>Project management</li><li>Evaluación de proyectos</li><li>Innovar y emprender</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m1-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m1-d3">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m1-d3">Quiero más información</a>
+        </article>
+        </div>
+        <div class="area-master">
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Administración y Dirección de Empresas (MBA)</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m1">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m1">Quiero más información</a></div>
+        </div>
+      </div>
+      <div class="area-panel" role="tabpanel" data-area="m2" style="--c:#6E3A9C">
+        <span class="desliza">Desliza para ver los tres diplomados</span>
+        <div class="grilla-dips">
+        <article class="dip" style="--c:#6E3A9C">
+          <small>Diplomado en</small>
+          <h3>Dirección del Talento y Cultura Organizacional</h3>
+          <p>La gestión de personas como función estratégica: liderazgo, desarrollo organizacional y comunicación interna para construir cultura.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gestión del capital humano</li><li>Dirección estratégica</li><li>Liderazgo y coaching</li><li>Desarrollo organizacional</li><li>Comunicación organizacional</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m2-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m2-d1">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m2-d1">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#6E3A9C">
+          <small>Diplomado en</small>
+          <h3>Gestión Operativa de Personas</h3>
+          <p>Los procesos que sostienen el área de personas: reclutamiento y selección, evaluación del desempeño, carrera, compensaciones y presupuesto.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Selección y reclutamiento</li><li>Evaluación del desempeño</li><li>Desarrollo de carrera</li><li>Compensación y beneficios</li><li>Presupuesto de RRHH</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m2-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m2-d2">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m2-d2">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#6E3A9C">
+          <small>Diplomado en</small>
+          <h3>Relaciones Laborales y Cambio Organizacional</h3>
+          <p>Legislación laboral, negociación y manejo de conflictos, clima y cultura, y procesos de desvinculación bien conducidos.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Legislación laboral</li><li>Conflicto y negociación</li><li>Clima organizacional</li><li>Cultura organizacional</li><li>Desvinculación y outplacement</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m2-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m2-d3">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m2-d3">Quiero más información</a>
+        </article>
+        </div>
+        <div class="area-master">
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Gestión Estratégica de Capital Humano</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m2">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m2">Quiero más información</a></div>
+        </div>
+      </div>
+      <div class="area-panel" role="tabpanel" data-area="m3" style="--c:#F07C1B">
+        <span class="desliza">Desliza para ver los tres diplomados</span>
+        <div class="grilla-dips">
+        <article class="dip" style="--c:#F07C1B">
+          <small>Diplomado en</small>
+          <h3>Gerencia de Marketing y Marca</h3>
+          <p>Dirigir el marketing de una empresa: segmentar, posicionar, construir marca y llevarlo todo a un plan de marketing.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gerencia de marketing</li><li>Segmentación y posicionamiento</li><li>Gerencia de marca</li><li>Plan de marketing</li><li>Marketing de consumo y servicios</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m3-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m3-d1">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m3-d1">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#F07C1B">
+          <small>Diplomado en</small>
+          <h3>Investigación de Mercados y Analítica del Consumidor</h3>
+          <p>Diseñar investigaciones de mercado y analizar datos del consumidor con métodos estadísticos y herramientas de data science.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Inteligencia de mercado</li><li>Métodos estadísticos</li><li>Técnicas de investigación de mercados</li><li>Conducta del consumidor</li><li>Data science</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m3-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m3-d2">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m3-d2">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#F07C1B">
+          <small>Diplomado en</small>
+          <h3>Gestión Comercial, Innovación y Canales Digitales</h3>
+          <p>Dirigir la gestión comercial, desarrollar nuevos productos y servicios, y vender en canales digitales y omnicanal.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gerencia comercial</li><li>Desarrollo de nuevos productos</li><li>Desarrollo de nuevos servicios</li><li>eCommerce y omnicanalidad</li><li>Gestión digital y analítica web</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m3-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m3-d3">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m3-d3">Quiero más información</a>
+        </article>
+        </div>
+        <div class="area-master">
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Marketing y Gestión Comercial</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m3">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m3">Quiero más información</a></div>
+        </div>
+      </div>
+      <div class="area-panel" role="tabpanel" data-area="m4" style="--c:#1D4E89">
+        <span class="desliza">Desliza para ver los tres diplomados</span>
+        <div class="grilla-dips">
+        <article class="dip" style="--c:#1D4E89">
+          <small>Diplomado en</small>
+          <h3>Contabilidad e IFRS</h3>
+          <p>Contabilidad para la gestión, normas IFRS para grandes empresas y pymes, y tributación de la empresa.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Contabilidad para la gestión</li><li>Contabilidades especiales</li><li>IFRS grandes empresas</li><li>IFRS PYMEs</li><li>Tributación para la empresa</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m4-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m4-d1">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m4-d1">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#1D4E89">
+          <small>Diplomado en</small>
+          <h3>Auditoría y Control Interno</h3>
+          <p>Auditoría interna y financiera, control interno, riesgos y cumplimiento, con análisis de datos y gobierno corporativo.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Auditoría interna y control interno</li><li>Auditoría financiera</li><li>Gestión de riesgos y cumplimiento</li><li>Auditoría con análisis de datos</li><li>Ética y gobierno corporativo</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m4-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m4-d2">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m4-d2">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#1D4E89">
+          <small>Diplomado en</small>
+          <h3>Control de Gestión</h3>
+          <p>Del plan estratégico a los indicadores: costos, presupuestos, balanced scorecard y tableros para controlar la gestión.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Planificación estratégica</li><li>Costos y presupuestos</li><li>Control de gestión</li><li>Balanced scorecard</li><li>Indicadores y tableros de gestión</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m4-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m4-d3">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m4-d3">Quiero más información</a>
+        </article>
+        </div>
+        <div class="area-master">
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Auditoría, Contabilidad y Control de Gestión</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m4">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m4">Quiero más información</a></div>
+        </div>
+      </div>
+      <div class="area-panel" role="tabpanel" data-area="m5" style="--c:#0E7C9E">
+        <span class="desliza">Desliza para ver los tres diplomados</span>
+        <div class="grilla-dips">
+        <article class="dip" style="--c:#0E7C9E">
+          <small>Diplomado en</small>
+          <h3>Fundamentos de Finanzas</h3>
+          <p>La base financiera para decidir: matemáticas financieras, análisis de estados financieros, finanzas de corto plazo y modelos en Excel con apoyo de IA.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gerencia de finanzas</li><li>Matemáticas financieras</li><li>Análisis de estados financieros</li><li>Finanzas a corto plazo</li><li>Modelamiento financiero con Excel e IA</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m5-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m5-d1">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m5-d1">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#0E7C9E">
+          <small>Diplomado en</small>
+          <h3>Finanzas Corporativas</h3>
+          <p>Decisiones financieras de largo plazo: financiamiento, evaluación de proyectos y valoración de empresas, también en pymes y emprendimientos.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Finanzas corporativas</li><li>Finanzas a largo plazo</li><li>Formulación, evaluación y gestión de proyectos</li><li>Valoración de empresas</li><li>Finanzas para pymes y emprendimientos</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m5-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m5-d2">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m5-d2">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#0E7C9E">
+          <small>Diplomado en</small>
+          <h3>Inversiones y Mercados Financieros</h3>
+          <p>Mercado de capitales, finanzas internacionales, riesgo y derivados, gestión de portafolios y finanzas digitales.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Mercado de capitales e inversiones</li><li>Finanza internacional</li><li>Riesgo financiero y derivados</li><li>Gestión de portafolios</li><li>Fintech y finanzas digitales</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m5-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m5-d3">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m5-d3">Quiero más información</a>
+        </article>
+        </div>
+        <div class="area-master">
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Finanzas Aplicadas</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m5">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m5">Quiero más información</a></div>
+        </div>
+      </div>
+      <div class="area-panel" role="tabpanel" data-area="m6" style="--c:#14947F">
+        <span class="desliza">Desliza para ver los tres diplomados</span>
+        <div class="grilla-dips">
+        <article class="dip" style="--c:#14947F">
+          <small>Diplomado en</small>
+          <h3>Inventario y Almacenamiento</h3>
+          <p>Gestionar inventarios y centros de distribución: control de stock, prevención de pérdidas, infraestructura de almacenaje y sistemas ERP.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gestión del inventario</li><li>Prevención de pérdidas</li><li>Gestión de centros de distribución</li><li>Infraestructura del almacenaje</li><li>Sistemas ERP y automatización</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m6-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m6-d1">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m6-d1">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#14947F">
+          <small>Diplomado en</small>
+          <h3>Transporte y Distribución</h3>
+          <p>Transporte terrestre, marítimo, aéreo y multimodal, redes de distribución, costeo e indicadores de eficiencia.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Transporte terrestre y marítimo</li><li>Transporte aéreo y multimodal</li><li>Transporte y distribución</li><li>Sistemas de costeo</li><li>Indicadores de eficiencia</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m6-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m6-d2">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m6-d2">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#14947F">
+          <small>Diplomado en</small>
+          <h3>Dirección Logística y Control</h3>
+          <p>Dirigir la logística con visión estratégica: finanzas, evaluación de proyectos y externalización, y control de gestión con BSC.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gestión logística estratégica</li><li>Gerencia de finanzas</li><li>Formulación, evaluación y gestión de proyectos</li><li>Evaluación de proyectos y externalización</li><li>Control de gestión y BSC</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m6-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m6-d3">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m6-d3">Quiero más información</a>
+        </article>
+        </div>
+        <div class="area-master">
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Gestión Logística Estratégica</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m6">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m6">Quiero más información</a></div>
+        </div>
+      </div>
+      <div class="area-panel" role="tabpanel" data-area="m7" style="--c:#5B8C2A">
+        <span class="desliza">Desliza para ver los tres diplomados</span>
+        <div class="grilla-dips">
+        <article class="dip" style="--c:#5B8C2A">
+          <small>Diplomado en</small>
+          <h3>Prevención de Riesgos, Higiene y Seguridad</h3>
+          <p>Seguridad e higiene en el trabajo, gestión de la prevención de riesgos y sistemas de información para el área.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Seguridad en el trabajo</li><li>Higiene en el trabajo</li><li>Gestión de la prevención de riesgos</li><li>Gestión de personas</li><li>Sistemas de información y gestión</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m7-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m7-d1">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m7-d1">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#5B8C2A">
+          <small>Diplomado en</small>
+          <h3>Gestión de la Calidad y Responsabilidad Social</h3>
+          <p>Normas y modelos de calidad, auditorías, modelos de excelencia y responsabilidad social empresarial.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Modelos y normativa de calidad</li><li>Auditorías de calidad</li><li>Modelos de excelencia</li><li>Responsabilidad social empresarial</li><li>Gestión de proyectos</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m7-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m7-d2">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m7-d2">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#5B8C2A">
+          <small>Diplomado en</small>
+          <h3>Gestión Ambiental y Sistemas Integrados</h3>
+          <p>Evaluación de impacto ambiental, gestión de residuos, auditorías ambientales e integración de sistemas de gestión.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Evaluación de impacto ambiental</li><li>Gestión de residuos</li><li>Auditorías ambientales</li><li>Sistemas integrados de gestión</li><li>Metodologías de integración</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m7-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m7-d3">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m7-d3">Quiero más información</a>
+        </article>
+        </div>
+        <div class="area-master">
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Gestión Integrada, Prevención, Higiene, Seguridad y Medio Ambiente</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m7">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m7">Quiero más información</a></div>
+        </div>
+      </div>
+      <div class="area-panel" role="tabpanel" data-area="m8" style="--c:#B4530A">
+        <span class="desliza">Desliza para ver los tres diplomados</span>
+        <div class="grilla-dips">
+        <article class="dip" style="--c:#B4530A">
+          <small>Diplomado en</small>
+          <h3>Formulación de Proyectos</h3>
+          <p>Convertir una idea en un proyecto: formulación estratégica, estudios de factibilidad, costos, presupuesto y calidad.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Formulación estratégica</li><li>Formulación de proyectos</li><li>Análisis de factibilidad</li><li>Costos y presupuestos</li><li>Gestión de calidad</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m8-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m8-d1">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m8-d1">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#B4530A">
+          <small>Diplomado en</small>
+          <h3>Evaluación de Proyectos</h3>
+          <p>Evaluar proyectos desde lo económico, financiero, social y ambiental, con herramientas de finanzas corporativas.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Análisis financiero</li><li>Evaluación económica, financiera y social</li><li>Evaluación de impacto ambiental</li><li>Finanzas corporativas</li><li>Mercado de capitales</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m8-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m8-d2">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m8-d2">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#B4530A">
+          <small>Diplomado en</small>
+          <h3>Dirección y Control de Proyectos</h3>
+          <p>Dirigir y controlar proyectos con estándares PMI, control de gestión, balanced scorecard y gobierno corporativo.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Estándares PMI</li><li>Control de gestión</li><li>Balanced scorecard</li><li>Dirección de empresas</li><li>Gobiernos corporativos</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m8-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m8-d3">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m8-d3">Quiero más información</a>
+        </article>
+        </div>
+        <div class="area-master">
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Formulación, Evaluación y Dirección de Proyectos</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m8">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m8">Quiero más información</a></div>
+        </div>
+      </div>
+      <div class="area-panel" role="tabpanel" data-area="m9" style="--c:#A23B5F">
+        <span class="desliza">Desliza para ver los tres diplomados</span>
+        <div class="grilla-dips">
+        <article class="dip" style="--c:#A23B5F">
+          <small>Diplomado en</small>
+          <h3>Economía para la Dirección</h3>
+          <p>Leer la economía para decidir: cómo se forman los precios, qué mueve el ciclo económico, cómo actúan el Banco Central y el fisco, y qué dicen los indicadores de Chile.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Microeconomía aplicada: demanda, costos y precios</li><li>Macroeconomía y ciclo económico</li><li>Política monetaria y fiscal</li><li>Indicadores económicos de Chile</li><li>Economía internacional y tipo de cambio</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m9-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m9-d1">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m9-d1">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#A23B5F">
+          <small>Diplomado en</small>
+          <h3>Mercados, Competencia y Regulación</h3>
+          <p>Cómo funcionan los mercados reales: estructura de las industrias, libre competencia, regulación de servicios básicos, mercado laboral y recursos naturales.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Organización industrial</li><li>Libre competencia</li><li>Regulación de servicios básicos</li><li>Economía laboral</li><li>Recursos naturales y energía</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m9-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m9-d2">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m9-d2">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#A23B5F">
+          <small>Diplomado en</small>
+          <h3>Análisis Económico de Datos y Economía del Comportamiento</h3>
+          <p>Medir y anticipar con datos económicos: estadística, econometría y pronósticos, junto a la economía del comportamiento y el análisis asistido con IA.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Estadística aplicada</li><li>Econometría aplicada</li><li>Pronósticos y series de tiempo</li><li>Economía del comportamiento</li><li>Análisis de datos económicos con IA</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m9-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m9-d3">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m9-d3">Quiero más información</a>
+        </article>
+        </div>
+        <div class="area-master">
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Economía Aplicada</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m9">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m9">Quiero más información</a></div>
+        </div>
+      </div>
+      <div class="area-panel" role="tabpanel" data-area="m10" style="--c:#8C6A12">
+        <span class="desliza">Desliza para ver los tres diplomados</span>
+        <div class="grilla-dips">
+        <article class="dip" style="--c:#8C6A12">
+          <small>Diplomado en</small>
+          <h3>Estado, Políticas Públicas y Gestión de Personas</h3>
+          <p>Cómo se organiza el Estado en Chile, cómo se diseñan e implementan las políticas públicas y cómo se gestionan las personas en el sector público, con probidad y transparencia.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>El Estado y la administración pública en Chile</li><li>Diseño de políticas públicas</li><li>Implementación y evaluación de programas</li><li>Gestión de personas en el sector público</li><li>Probidad, transparencia y gobierno digital</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m10-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m10-d1">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m10-d1">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#8C6A12">
+          <small>Diplomado en</small>
+          <h3>Finanzas Públicas, Compras y Control</h3>
+          <p>El recorrido del dinero público: presupuesto, contabilidad gubernamental, compras públicas, evaluación social de proyectos y control interno.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Presupuesto público</li><li>Contabilidad gubernamental</li><li>Compras públicas y Mercado Público</li><li>Evaluación social de proyectos</li><li>Control interno y auditoría en el sector público</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m10-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m10-d2">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m10-d2">Quiero más información</a>
+        </article>
+        <article class="dip" style="--c:#8C6A12">
+          <small>Diplomado en</small>
+          <h3>Gestión Municipal y Desarrollo Territorial</h3>
+          <p>Gestionar una municipalidad y su territorio: marco legal, planificación comunal, servicios a la comunidad, fomento productivo y financiamiento de proyectos.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <details class="dip-materias"><summary>Ver las materias</summary><ol><li>La municipalidad y su marco legal</li><li>Planificación comunal: PLADECO y plan regulador</li><li>Servicios municipales y atención ciudadana</li><li>Fomento productivo y desarrollo económico local</li><li>Financiamiento municipal y proyectos de inversión</li></ol></details>
+          <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m10-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m10-d3">Inscribirme</a></div>
+          <a class="dip-info" href="#inscripcion" data-info="m10-d3">Quiero más información</a>
+        </article>
+        </div>
+        <div class="area-master">
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Gestión Pública</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m10">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m10">Quiero más información</a></div>
+        </div>
+      </div>
+    <p class="nota-masters">Cada diplomado vale $240.000, pagaderos hasta en 12 cuotas a precio contado con Mercado Pago. El Master Profesional completo vale $865.000 e incluye el Diplomado en Metodología. Los Masters Profesionales son títulos propios de formación ejecutiva de IDEAX y no constituyen un grado académico de magíster.</p>
   </div>
 </section>
 
@@ -830,6 +1208,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
     <h2 class="titulo">Cursos de formación ejecutiva</h2>
     <p class="bajada">Cuatro cursos de 8 semanas, con una sesión en vivo cada semana, para desarrollar competencias clave en la gestión actual.</p>
 
+    <span class="desliza">Desliza para ver más</span>
     <div class="grilla-programas">
       <article class="programa revela" data-programa="ia" tabindex="0" role="button" aria-label="Ver programa IA Aplicada a los Negocios">
         <div class="programa-foto"><img src="img/prog-ia.jpg" alt=""></div>
@@ -917,6 +1296,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
       <div class="cifra"><strong>1</strong><span>entregable concreto por curso</span></div>
     </div>
 
+    <span class="desliza">Desliza para ver más</span>
     <div class="modulos">
       <article class="modulo" style="--c:#F07C1B">
         <div class="modulo-cabeza"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/><path d="M18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9z"/></svg></span><div><small>Módulo 1</small><h3>Emprendimiento e IA</h3></div></div>
@@ -931,7 +1311,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
           <li class="curso"><b>Planes de Negocio con ChatGPT y Herramientas Digitales</b><em>16 h</em><span>Borrador de plan de negocio editable</span></li>
           <li class="curso"><b>Automatización de Tareas Administrativas con IA</b><em>12 h</em><span>Rutina administrativa simplificada</span></li>
         </ul>
-        <div class="modulo-pie"><a class="btn btn-noche" href="#inscripcion" data-preseleccion="emp-m1">Inscribirme en este módulo</a></div>
+        <div class="modulo-pie"><a class="btn btn-noche" href="#inscripcion" data-preseleccion="emp-m1">Solicitar este módulo</a></div>
       </article>
       <article class="modulo" style="--c:#D9467A">
         <div class="modulo-cabeza"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/></svg></span><div><small>Módulo 2</small><h3>Marketing digital y Canva</h3></div></div>
@@ -946,7 +1326,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
           <li class="curso"><b>Cómo Crear Videos Publicitarios con Inteligencia Artificial</b><em>12 h</em><span>Videos cortos promocionales</span></li>
           <li class="curso"><b>Marketing Digital y Publicidad para Pequeños Negocios</b><em>16 h</em><span>Plan simple de marketing y publicidad</span></li>
         </ul>
-        <div class="modulo-pie"><a class="btn btn-noche" href="#inscripcion" data-preseleccion="emp-m2">Inscribirme en este módulo</a></div>
+        <div class="modulo-pie"><a class="btn btn-noche" href="#inscripcion" data-preseleccion="emp-m2">Solicitar este módulo</a></div>
       </article>
       <article class="modulo" style="--c:#1D4E89">
         <div class="modulo-cabeza"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></span><div><small>Módulo 3</small><h3>Ventas y clientes</h3></div></div>
@@ -960,7 +1340,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
           <li class="curso"><b>Estrategias de Ventas por Redes Sociales</b><em>12 h</em><span>Embudo de venta simple para redes sociales</span></li>
           <li class="curso"><b>Negociación Comercial y Cierre de Ventas</b><em>12 h</em><span>Guía de negociación y práctica de cierre</span></li>
         </ul>
-        <div class="modulo-pie"><a class="btn btn-noche" href="#inscripcion" data-preseleccion="emp-m3">Inscribirme en este módulo</a></div>
+        <div class="modulo-pie"><a class="btn btn-noche" href="#inscripcion" data-preseleccion="emp-m3">Solicitar este módulo</a></div>
       </article>
       <article class="modulo" style="--c:#14947F">
         <div class="modulo-cabeza"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M8 18h8"/></svg></span><div><small>Módulo 4</small><h3>Administración y finanzas</h3></div></div>
@@ -975,7 +1355,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
           <li class="curso"><b>Educación Financiera para Emprendedores</b><em>12 h</em><span>Presupuesto personal y del negocio</span></li>
           <li class="curso"><b>Cómo Mejorar la Rentabilidad de un Negocio con IA</b><em>16 h</em><span>Análisis de rentabilidad y plan de mejoras</span></li>
         </ul>
-        <div class="modulo-pie"><a class="btn btn-noche" href="#inscripcion" data-preseleccion="emp-m4">Inscribirme en este módulo</a></div>
+        <div class="modulo-pie"><a class="btn btn-noche" href="#inscripcion" data-preseleccion="emp-m4">Solicitar este módulo</a></div>
       </article>
       <article class="modulo" style="--c:#6E3A9C">
         <div class="modulo-cabeza"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M9 14l2 2 4-4"/></svg></span><div><small>Módulo 5</small><h3>Formalización y proyectos</h3></div></div>
@@ -989,7 +1369,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
           <li class="curso"><b>Cómo Preparar un Pitch de Negocios con Inteligencia Artificial</b><em>8 h</em><span>Presentación breve y guion de pitch</span></li>
           <li class="curso"><b>Evaluación Básica de Proyectos de Emprendimiento</b><em>16 h</em><span>Evaluación simplificada de costos y beneficios</span></li>
         </ul>
-        <div class="modulo-pie"><a class="btn btn-noche" href="#inscripcion" data-preseleccion="emp-m5">Inscribirme en este módulo</a></div>
+        <div class="modulo-pie"><a class="btn btn-noche" href="#inscripcion" data-preseleccion="emp-m5">Solicitar este módulo</a></div>
       </article>
       <article class="modulo" style="--c:#0E7C9E">
         <div class="modulo-cabeza"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h9.6a1 1 0 0 0 1-.8L21 7H6"/></svg></span><div><small>Módulo 6</small><h3>Comercio electrónico</h3></div></div>
@@ -1004,13 +1384,13 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
           <li class="curso"><b>Análisis de Ventas y Toma de Decisiones con Excel e IA</b><em>16 h</em><span>Tablero básico de ventas y decisiones</span></li>
           <li class="curso"><b>Productividad y Organización del Emprendedor con IA</b><em>8 h</em><span>Agenda de trabajo y sistema de tareas</span></li>
         </ul>
-        <div class="modulo-pie"><a class="btn btn-noche" href="#inscripcion" data-preseleccion="emp-m6">Inscribirme en este módulo</a></div>
+        <div class="modulo-pie"><a class="btn btn-noche" href="#inscripcion" data-preseleccion="emp-m6">Solicitar este módulo</a></div>
       </article>
     </div>
 
     <p class="nota-emp">También dictamos el programa o módulos específicos para municipalidades, oficinas de fomento productivo y programas comunales de emprendimiento, con contenidos y horarios ajustados a cada grupo.</p>
     <div class="cta-emp">
-      <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="emp-total">Inscribirme en el programa completo
+      <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="emp-total">Solicitar el programa completo
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
       <a class="btn btn-noche" href="#inscripcion" data-preseleccion="empresa">Solicitar para mi municipio u organización</a>
     </div>
@@ -1024,6 +1404,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
     <h2 class="titulo">Aprender haciendo, semana a semana</h2>
     <p class="bajada">Programas diseñados para profesionales que trabajan: una sesión en vivo ordena el avance y el resto se desarrolla a tu ritmo, con material concreto y entregables revisados por el docente.</p>
 
+    <span class="desliza">Desliza para ver más</span>
     <div class="pasos">
       <div class="paso revela">
         <span class="num">01</span>
@@ -1079,10 +1460,6 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
 <section class="seccion" id="historia">
   <div class="contenedor">
     <div class="historia-grid">
-      <div class="historia-foto revela">
-        <img src="img/antorcha.jpg" alt="Antorcha frente a un muro con las palabras conocimiento, estrategia, gestión e innovación">
-        <div class="historia-placa"><strong>2013</strong><span>Formando profesionales en línea</span></div>
-      </div>
       <div class="historia-texto revela">
         <span class="ceja">Nuestra historia</span>
         <h2 class="titulo">Más de una década de formación ejecutiva en línea</h2>
@@ -1096,7 +1473,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
       <div class="hito revela"><span class="punto"></span><div class="anio">2013</div><h4>Nace IADE Business School</h4><p>Escuela de negocios basada en metodologías pedagógicas en línea.</p></div>
       <div class="hito revela"><span class="punto"></span><div class="anio">2018</div><h4>Masters Profesionales</h4><p>Títulos propios en MBA, Business &amp; Law, Capital Humano, Marketing, Finanzas, Logística, Prevención y Proyectos.</p></div>
       <div class="hito revela"><span class="punto"></span><div class="anio">2020</div><h4>Cierre de un ciclo</h4><p>IADE concluye sus actividades después de siete años de formación.</p></div>
-      <div class="hito revela"><span class="punto"></span><div class="anio">Hoy</div><h4>IDEAX</h4><p>Formación ejecutiva virtual con programas abiertos de 8 semanas.</p></div>
+      <div class="hito revela"><span class="punto"></span><div class="anio">Hoy</div><h4>IDEAX</h4><p>Cursos, diplomados y Masters Profesionales en la Facultad Virtual.</p></div>
     </div>
 
     <div class="paises revela">
@@ -1115,7 +1492,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
       <div>
         <h3>Naturaleza institucional</h3>
         <p><strong>IDEAX Chile, Instituto de Administración y Dirección Ejecutiva</strong>, es una institución autónoma dedicada a la formación ejecutiva y continua. Diseña y dicta sus propios programas para profesionales, directivos y emprendedores.</p>
-        <div class="oferta-tipos"><span>Cursos ejecutivos</span><span>Diplomados</span><span>Masters Profesionales</span><span>Programas cerrados para organizaciones</span></div>
+        
         <p>IDEAX no es una universidad ni un instituto profesional, y sus programas no conducen a grados académicos ni a títulos profesionales. Al aprobar un programa se recibe un certificado emitido por IDEAX.</p>
         <div class="aclaracion"><p><strong style="color:#7A3E0A">Masters Profesionales:</strong> los Masters Profesionales que dictó IADE Business School, y los que IDEAX pueda ofrecer en el futuro, son títulos propios orientados a la especialización profesional. No son un magíster ni equivalen a un grado académico universitario, y no habilitan por sí mismos para continuar estudios de doctorado.</p></div>
       </div>
@@ -1151,6 +1528,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
     </div>
 
     <h3 class="subtitulo-equipo">Cuerpo docente</h3>
+    <span class="desliza">Desliza para ver más</span>
     <div class="docentes">
       <article class="docente revela" style="--c:#F07C1B">
         <div class="docente-cabeza"><span class="avatar" aria-hidden="true">JA</span><div><h4>Jhonny Atila Lijerón</h4><span class="area">Gestión Empresarial</span></div></div>
@@ -1257,14 +1635,15 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
       <details><summary>¿Cómo pago el programa?</summary><p>En línea, a través de Mercado Pago, con tarjeta de débito, crédito o transferencia, y hasta en 12 cuotas a precio contado. Los cursos ejecutivos valen $135.000, salvo IA Aplicada a los Negocios, que vale $165.000. Cada diplomado vale $240.000, y el Master Profesional completo $865.000, con sus tres diplomados, el Diplomado en Metodología y el paper. Al inscribirte recibes por correo el brochure con el valor y el enlace de pago; una vez confirmado el pago, te llegan el manual del estudiante, el primer material de estudio y tu fecha de inicio.</p></details>
       <details><summary>¿Qué certificado recibo?</summary><p>Al aprobar el programa recibes un certificado de aprobación emitido por IDEAX, Instituto de Administración y Dirección Ejecutiva. IDEAX es una institución autónoma de formación ejecutiva y continua: sus programas no conducen a grados académicos ni a títulos profesionales.</p></details>
       <details><summary>¿Un Master Profesional de IDEAX o de IADE es un magíster?</summary><p>No. Los Masters Profesionales son títulos propios de formación ejecutiva, orientados a la especialización y al desempeño profesional. No son un grado académico de magíster, que en Chile solo otorgan las universidades, y no habilitan por sí mismos para cursar un doctorado. Un Master Profesional de IDEAX se obtiene aprobando tres diplomados de una misma ruta, el Diplomado en Metodología y un paper evaluado por pares.</p></details>
-      <details><summary>¿Cuánto dura un Master Profesional?</summary><p>La ruta estándar, con un diplomado a la vez y el Diplomado en Metodología en paralelo a uno de ellos, toma 12 meses. En la ruta intensiva, con dos o más diplomados en paralelo y 12 o más horas semanales, puedes terminar desde 6 a 8 meses. La evaluación por pares del paper en la revista CMIA toma habitualmente entre 2 y 4 meses. El plazo máximo es de 18 meses, con posibilidad de prórroga y de congelamiento por fuerza mayor.</p></details>
-      <details><summary>¿Puedo convalidar un diplomado?</summary><p>Sí. Los diplomados aprobados son convalidables con otros programas de IDEAX: se convalidan si luego te inscribes en el Master Profesional que los incluye. Si ya pagaste el Diplomado en Metodología por separado, ese monto queda como saldo a favor para tu inscripción en el Master Profesional.</p></details>
-      <details><summary>¿Cómo me comunico con mi docente y con IDEAX?</summary><p>Toda consulta, académica o administrativa, se hace por la mensajería de la Facultad Virtual. Los mensajes se acumulan y recibes un resumen diario por correo, uno académico y otro administrativo; respondes por el mismo medio. Te respondemos en un plazo de hasta dos días hábiles, de lunes a viernes, de 9:00 a 18:00, hora de Chile continental. No atendemos consultas por WhatsApp.</p></details>
-      <details><summary>¿Qué son las Clases Magistrales?</summary><p>Una clase en línea al mes, abierta a todos los estudiantes vigentes de IDEAX y sin costo adicional. Su tema se elige según los programas que se están cursando ese mes. Queda grabada y disponible en la Facultad Virtual durante 30 días; la asistencia es voluntaria y no se evalúa.</p></details>
-      <details><summary>¿Puedo apostillar mi certificado?</summary><p>Sí, como servicio opcional con costo adicional. Lo solicitas desde la Facultad Virtual y te informamos el valor al momento de la solicitud.</p></details>
-      <details><summary>¿Cómo verifica una institución mi certificado?</summary><p>En la sección Verificación de certificados de este sitio, con el código impreso en el certificado o con tu RUT o pasaporte. También aplica a los certificados emitidos por IADE Business School entre 2013 y 2020.</p></details>
-      <details><summary>¿Necesito conocimientos previos?</summary><p>No se exigen requisitos formales. Cada programa entrega al inicio un material de nivelación con los conceptos que se usarán durante el programa.</p></details>
-      <details><summary>¿Debo pagar herramientas de inteligencia artificial?</summary><p>No. En IA Aplicada a los Negocios se trabaja con los tramos gratuitos de las herramientas disponibles.</p></details>
+      <details class="faq-extra"><summary>¿Cuánto dura un Master Profesional?</summary><p>La ruta estándar, con un diplomado a la vez y el Diplomado en Metodología en paralelo a uno de ellos, toma 12 meses. En la ruta intensiva, con dos o más diplomados en paralelo y 12 o más horas semanales, puedes terminar desde 6 a 8 meses. La evaluación por pares del paper en la revista CMIA toma habitualmente entre 2 y 4 meses. El plazo máximo es de 18 meses, con posibilidad de prórroga y de congelamiento por fuerza mayor.</p></details>
+      <details class="faq-extra"><summary>¿Puedo convalidar un diplomado?</summary><p>Sí. Los diplomados aprobados son convalidables con otros programas de IDEAX: se convalidan si luego te inscribes en el Master Profesional que los incluye. Si ya pagaste el Diplomado en Metodología por separado, ese monto queda como saldo a favor para tu inscripción en el Master Profesional.</p></details>
+      <details class="faq-extra"><summary>¿Cómo me comunico con mi docente y con IDEAX?</summary><p>Toda consulta, académica o administrativa, se hace por la mensajería de la Facultad Virtual. Los mensajes se acumulan y recibes un resumen diario por correo, uno académico y otro administrativo; respondes por el mismo medio. Te respondemos en un plazo de hasta dos días hábiles, de lunes a viernes, de 9:00 a 18:00, hora de Chile continental. No atendemos consultas por WhatsApp.</p></details>
+      <details class="faq-extra"><summary>¿Qué son las Clases Magistrales?</summary><p>Una clase en línea al mes, abierta a todos los estudiantes vigentes de IDEAX y sin costo adicional. Su tema se elige según los programas que se están cursando ese mes. Queda grabada y disponible en la Facultad Virtual durante 30 días; la asistencia es voluntaria y no se evalúa.</p></details>
+      <details class="faq-extra"><summary>¿Puedo apostillar mi certificado?</summary><p>Sí, como servicio opcional con costo adicional. Lo solicitas desde la Facultad Virtual y te informamos el valor al momento de la solicitud.</p></details>
+      <details class="faq-extra"><summary>¿Cómo verifica una institución mi certificado?</summary><p>En la sección Verificación de certificados de este sitio, con el código impreso en el certificado o con tu RUT o pasaporte. También aplica a los certificados emitidos por IADE Business School entre 2013 y 2020.</p></details>
+      <details class="faq-extra"><summary>¿Necesito conocimientos previos?</summary><p>No se exigen requisitos formales. Cada programa entrega al inicio un material de nivelación con los conceptos que se usarán durante el programa.</p></details>
+      <details class="faq-extra"><summary>¿Debo pagar herramientas de inteligencia artificial?</summary><p>No. En IA Aplicada a los Negocios se trabaja con los tramos gratuitos de las herramientas disponibles.</p></details>
+      <button type="button" class="btn btn-noche ver-faq" id="ver-faq">Ver las 14 preguntas</button>
     </div>
   </div>
 </section>
@@ -1287,6 +1666,11 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
         <p class="contacto-directo">O escríbenos directamente a <a id="correo-visible" href="#"></a></p>
       </div>
       <form id="formulario" novalidate>
+        <div class="campo ancho modo-form" role="radiogroup" aria-label="Qué quieres hacer">
+          <button type="button" class="activo" data-modo="inscribir" role="radio" aria-checked="true">Inscribirme</button>
+          <button type="button" data-modo="info" role="radio" aria-checked="false">Quiero más información</button>
+        </div>
+        <p class="modo-ayuda" id="modo-ayuda">Te enviaremos el brochure con el valor y el enlace de pago.</p>
         <div class="campo"><label for="f-nombre">Nombre y apellido</label><input id="f-nombre" name="nombre" autocomplete="name" required></div>
         <div class="campo"><label for="f-correo">Correo electrónico</label><input id="f-correo" name="correo" type="email" autocomplete="email" required></div>
         <div class="campo"><label for="f-fono">Teléfono</label><input id="f-fono" name="fono" type="tel" autocomplete="tel"></div>
@@ -1317,6 +1701,8 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
             <option value="m6">Master Profesional en Gestión Logística Estratégica</option>
             <option value="m7">Master Profesional en Gestión Integrada, Prevención, Higiene, Seguridad y Medio Ambiente</option>
             <option value="m8">Master Profesional en Formulación, Evaluación y Dirección de Proyectos</option>
+            <option value="m9">Master Profesional en Economía Aplicada</option>
+            <option value="m10">Master Profesional en Gestión Pública</option>
           </optgroup>
           <optgroup label="Diplomados">
             <option value="m1-d1">Diplomado en Dirección Estratégica y Personas</option>
@@ -1343,18 +1729,24 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
             <option value="m8-d1">Diplomado en Formulación de Proyectos</option>
             <option value="m8-d2">Diplomado en Evaluación de Proyectos</option>
             <option value="m8-d3">Diplomado en Dirección y Control de Proyectos</option>
+            <option value="m9-d1">Diplomado en Economía para la Dirección</option>
+            <option value="m9-d2">Diplomado en Mercados, Competencia y Regulación</option>
+            <option value="m9-d3">Diplomado en Análisis Económico de Datos y Economía del Comportamiento</option>
+            <option value="m10-d1">Diplomado en Estado, Políticas Públicas y Gestión de Personas</option>
+            <option value="m10-d2">Diplomado en Finanzas Públicas, Compras y Control</option>
+            <option value="m10-d3">Diplomado en Gestión Municipal y Desarrollo Territorial</option>
           </optgroup>
           <optgroup label="Otros">
             <option value="empresa">Programa cerrado para mi empresa u organización</option>
           </optgroup>
           </select>
         </div>
-        <div class="campo ancho"><label for="f-codigo">Código de descuento o beca (opcional)</label>
+        <div class="campo ancho solo-inscribir"><label for="f-codigo">Código de descuento o beca (opcional)</label>
           <div class="codigo-fila"><input id="f-codigo" name="codigo" autocomplete="off" maxlength="30"><button type="button" id="b-codigo">Aplicar</button></div>
           <p class="codigo-res" id="codigo-res" aria-live="polite"></p></div>
         <div class="campo ancho"><label for="f-mensaje">Comentarios</label><textarea id="f-mensaje" name="mensaje" placeholder="Cargo, organización o lo que quieras contarnos"></textarea></div>
         <p class="error-form" id="error-form" role="alert"></p>
-        <div class="campo ancho"><button class="btn btn-naranja" type="submit" style="justify-content:center">Inscribirme
+        <div class="campo ancho"><button class="btn btn-naranja" type="submit" style="justify-content:center"><span id="txt-enviar">Inscribirme</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></div>
         <div class="mensaje-ok" id="ok-form" role="status"></div>
       </form>
@@ -1395,7 +1787,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
         <li><a href="#programas" data-abrir="op">Operaciones y Supply Chain</a></li>
         <li><a href="#programas" data-abrir="al">Artes Liberales Aplicadas</a></li>
         <li><a href="#emprendedores">Programa para Emprendedores</a></li>
-        <li><a href="#masters">Masters Profesionales</a></li>
+        <li><a href="#diplomados">Diplomados y Masters Profesionales</a></li>
       </ul>
     </div>
     <div>
@@ -1426,18 +1818,18 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
 <dialog id="brochure" aria-labelledby="bro-titulo">
   <div class="ficha-cabeza" id="bro-cabeza">
     <button class="cerrar no-imprimir" aria-label="Cerrar" data-cerrar-bro><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-    <span class="etiqueta">Master Profesional · IDEAX</span>
+    <span class="etiqueta" id="bro-etiqueta">Master Profesional · IDEAX</span>
     <h3 id="bro-titulo"></h3>
     <p id="bro-desc"></p>
   </div>
   <div class="ficha-cuerpo">
-    <div class="bro-datos">
+    <div class="bro-datos" id="bro-datos">
       <div><b>12 meses</b>Duración total</div>
       <div><b>3 diplomados</b>Más el Diplomado en Metodología</div>
       <div><b>Asincrónico</b>Facultad Virtual IDEAX</div>
       <div><b>Paper</b>Evaluado por pares, CMIA</div>
     </div>
-    <div class="bro-valor">
+    <div class="bro-valor" id="bro-valor">
       <div><b>$240.000</b>por diplomado</div>
       <div><b>$0</b>Diplomado en Metodología, incluido</div>
       <div><b>$145.000</b>paper final</div>
@@ -1445,7 +1837,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
     </div>
     <h4>Dirigido a</h4>
     <p class="texto" id="bro-dir"></p>
-    <h4>Estructura del programa</h4>
+    <h4 id="bro-est-t">Estructura del programa</h4>
     <div id="bro-dips"></div>
     <h4>Cómo se trabaja cada semana</h4>
     <div class="bro-semana">
@@ -1454,11 +1846,12 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
       <div><b>Consultas</b>Preguntas al docente durante el diplomado</div>
       <div><b>Video</b>Exposición al cerrar cada módulo</div>
     </div>
-    <h4>Ruta al Master Profesional</h4>
-    <p class="texto">Cada diplomado se puede cursar y certificar por separado, y es convalidable con otros programas de IDEAX. Quien aprueba los tres diplomados de esta ruta, el Diplomado en Metodología de la Investigación y Escritura Académica, incluido sin costo, y su trabajo final, un paper aplicado sometido a evaluación por pares del Cuaderno Multidisciplinar de Investigación Aplicada (CMIA), obtiene el Master Profesional. La ruta estándar toma 12 meses; el plazo máximo es de 18 meses.</p>
+    <h4 id="bro-ruta-t">Ruta al Master Profesional</h4>
+    <p class="texto" id="bro-ruta">Cada diplomado se puede cursar y certificar por separado, y es convalidable con otros programas de IDEAX. Quien aprueba los tres diplomados de esta ruta, el Diplomado en Metodología de la Investigación y Escritura Académica, incluido sin costo, y su trabajo final, un paper aplicado sometido a evaluación por pares del Cuaderno Multidisciplinar de Investigación Aplicada (CMIA), obtiene el Master Profesional. La ruta estándar toma 12 meses; el plazo máximo es de 18 meses.</p>
     <p class="bro-legal">IDEAX Chile, Instituto de Administración y Dirección Ejecutiva, es una institución autónoma de formación ejecutiva y continua. Los Masters Profesionales son títulos propios y no constituyen un grado académico de magíster. Valores en pesos chilenos. www.ideax.cl · contacto@ideax.cl</p>
     <div class="ficha-acciones no-imprimir">
-      <a class="btn btn-naranja" href="#inscripcion" id="bro-inscribir">Quiero información de este Master Profesional</a>
+      <a class="btn btn-naranja" href="#inscripcion" id="bro-inscribir">Inscribirme</a>
+      <a class="btn btn-blanco-borde" href="#inscripcion" id="bro-info">Quiero más información</a>
       <button class="btn btn-noche" id="bro-imprimir">Descargar brochure (PDF)</button>
     </div>
   </div>
@@ -1567,21 +1960,47 @@ $("#ficha-inscribir").addEventListener("click",()=>{ $("#f-programa").value = ac
 document.querySelectorAll("[data-preseleccion]").forEach(a=>a.addEventListener("click",()=>{ $("#f-programa").value = a.dataset.preseleccion; }));
 
 /* ===== Masters Profesionales: brochures ===== */
-const MASTERS = [{"id": "m1", "n": "Master Profesional en Administración y Dirección de Empresas (MBA)", "corto": "MBA", "c": "#0F2747", "desc": "Visión integral de la empresa: estrategia, personas, mercado, finanzas y operaciones, para quienes dirigen o aspiran a dirigir.", "dir": "Profesionales con responsabilidades de jefatura o gerencia, y emprendedores que necesitan una formación directiva completa.", "ico": "<path d=\"M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6\"/>", "d": [{"n": "Diplomado en Dirección Estratégica y Personas", "m": ["Introducción a los negocios", "Gestión estratégica", "Gestión del capital humano", "Liderazgo y coaching", "Desarrollo organizacional"]}, {"n": "Diplomado en Marketing y Finanzas para la Dirección", "m": ["Introducción a la ciencia del mercado", "Investigación de mercado y conducta del consumidor", "Marketing digital", "Economía y gestión financiera", "Finanzas corporativas"]}, {"n": "Diplomado en Operaciones, Proyectos e Innovación", "m": ["Gestión de operaciones", "Logística", "Project management", "Evaluación de proyectos", "Innovar y emprender"]}]}, {"id": "m2", "n": "Master Profesional en Gestión Estratégica de Capital Humano", "corto": "Capital Humano", "c": "#6E3A9C", "desc": "Gestión estratégica de las personas: atracción, desarrollo, compensaciones, relaciones laborales y cambio organizacional.", "dir": "Profesionales de recursos humanos, jefaturas de equipos y consultores en gestión de personas.", "ico": "<circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6\"/><circle cx=\"17\" cy=\"9\" r=\"2.5\"/><path d=\"M16 14.2c3 .2 5.5 2.3 5.5 5.8\"/>", "d": [{"n": "Diplomado en Dirección del Talento y Cultura Organizacional", "m": ["Gestión del capital humano", "Dirección estratégica", "Liderazgo y coaching", "Desarrollo organizacional", "Comunicación organizacional"]}, {"n": "Diplomado en Gestión Operativa de Personas", "m": ["Selección y reclutamiento", "Evaluación del desempeño", "Desarrollo de carrera", "Compensación y beneficios", "Presupuesto de RRHH"]}, {"n": "Diplomado en Relaciones Laborales y Cambio Organizacional", "m": ["Legislación laboral", "Conflicto y negociación", "Clima organizacional", "Cultura organizacional", "Desvinculación y outplacement"]}]}, {"id": "m3", "n": "Master Profesional en Marketing y Gestión Comercial", "corto": "Marketing", "c": "#F07C1B", "desc": "Marketing y gestión comercial basados en datos: marca, investigación de mercados, consumidor, innovación y canales digitales.", "dir": "Profesionales de marketing, ventas y producto, y emprendedores que buscan crecer con método.", "ico": "<path d=\"M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z\"/><path d=\"M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12\"/>", "d": [{"n": "Diplomado en Gerencia de Marketing y Marca", "m": ["Gerencia de marketing", "Segmentación y posicionamiento", "Gerencia de marca", "Plan de marketing", "Marketing de consumo y servicios"]}, {"n": "Diplomado en Investigación de Mercados y Analítica del Consumidor", "m": ["Inteligencia de mercado", "Métodos estadísticos", "Técnicas de investigación de mercados", "Conducta del consumidor", "Data science"]}, {"n": "Diplomado en Gestión Comercial, Innovación y Canales Digitales", "m": ["Gerencia comercial", "Desarrollo de nuevos productos", "Desarrollo de nuevos servicios", "eCommerce y omnicanalidad", "Gestión digital y analítica web"]}]}, {"id": "m4", "n": "Master Profesional en Auditoría, Contabilidad y Control de Gestión", "corto": "Auditoría y Control", "c": "#1D4E89", "desc": "Contabilidad, normas IFRS, auditoría, control interno y control de gestión para resguardar y dirigir la organización.", "dir": "Contadores, auditores, controllers y profesionales de administración y finanzas.", "ico": "<path d=\"M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z\"/><path d=\"M9 12l2 2 4-4\"/>", "d": [{"n": "Diplomado en Contabilidad e IFRS", "m": ["Contabilidad para la gestión", "Contabilidades especiales", "IFRS grandes empresas", "IFRS PYMEs", "Tributación para la empresa"]}, {"n": "Diplomado en Auditoría y Control Interno", "m": ["Auditoría interna y control interno", "Auditoría financiera", "Gestión de riesgos y cumplimiento", "Auditoría con análisis de datos", "Ética y gobierno corporativo"]}, {"n": "Diplomado en Control de Gestión", "m": ["Planificación estratégica", "Costos y presupuestos", "Control de gestión", "Balanced scorecard", "Indicadores y tableros de gestión"]}]}, {"id": "m5", "n": "Master Profesional en Finanzas Aplicadas", "corto": "Finanzas", "c": "#0E7C9E", "desc": "Finanzas aplicadas a la toma de decisiones: análisis, valoración, financiamiento, inversiones y mercados.", "dir": "Profesionales de finanzas, analistas, ejecutivos bancarios y emprendedores que gestionan recursos y deciden inversiones.", "ico": "<path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/>", "d": [{"n": "Diplomado en Fundamentos de Finanzas", "m": ["Gerencia de finanzas", "Matemáticas financieras", "Análisis de estados financieros", "Finanzas a corto plazo", "Modelamiento financiero con Excel e IA"]}, {"n": "Diplomado en Finanzas Corporativas", "m": ["Finanzas corporativas", "Finanzas a largo plazo", "Formulación, evaluación y gestión de proyectos", "Valoración de empresas", "Finanzas para pymes y emprendimientos"]}, {"n": "Diplomado en Inversiones y Mercados Financieros", "m": ["Mercado de capitales e inversiones", "Finanza internacional", "Riesgo financiero y derivados", "Gestión de portafolios", "Fintech y finanzas digitales"]}]}, {"id": "m6", "n": "Master Profesional en Gestión Logística Estratégica", "corto": "Logística", "c": "#14947F", "desc": "Dirección de la cadena logística: inventario, almacenamiento, transporte, distribución y control de la operación.", "dir": "Profesionales de logística, operaciones, compras y abastecimiento, de retail, industria y servicios.", "ico": "<path d=\"M2 6h12v10H2zM14 9h4l4 4v3h-8z\"/><circle cx=\"6\" cy=\"18\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>", "d": [{"n": "Diplomado en Inventario y Almacenamiento", "m": ["Gestión del inventario", "Prevención de pérdidas", "Gestión de centros de distribución", "Infraestructura del almacenaje", "Sistemas ERP y automatización"]}, {"n": "Diplomado en Transporte y Distribución", "m": ["Transporte terrestre y marítimo", "Transporte aéreo y multimodal", "Transporte y distribución", "Sistemas de costeo", "Indicadores de eficiencia"]}, {"n": "Diplomado en Dirección Logística y Control", "m": ["Gestión logística estratégica", "Gerencia de finanzas", "Formulación, evaluación y gestión de proyectos", "Evaluación de proyectos y externalización", "Control de gestión y BSC"]}]}, {"id": "m7", "n": "Master Profesional en Gestión Integrada, Prevención, Higiene, Seguridad y Medio Ambiente", "corto": "Prevención y Medio Ambiente", "c": "#5B8C2A", "desc": "Sistemas integrados de gestión: prevención de riesgos, higiene y seguridad, calidad, responsabilidad social y medio ambiente.", "dir": "Prevencionistas, encargados de calidad y medio ambiente, y jefaturas de operaciones.", "ico": "<path d=\"M12 3c4 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2-6 6-10z\"/><path d=\"M12 21v-7\"/>", "d": [{"n": "Diplomado en Prevención de Riesgos, Higiene y Seguridad", "m": ["Seguridad en el trabajo", "Higiene en el trabajo", "Gestión de la prevención de riesgos", "Gestión de personas", "Sistemas de información y gestión"]}, {"n": "Diplomado en Gestión de la Calidad y Responsabilidad Social", "m": ["Modelos y normativa de calidad", "Auditorías de calidad", "Modelos de excelencia", "Responsabilidad social empresarial", "Gestión de proyectos"]}, {"n": "Diplomado en Gestión Ambiental y Sistemas Integrados", "m": ["Evaluación de impacto ambiental", "Gestión de residuos", "Auditorías ambientales", "Sistemas integrados de gestión", "Metodologías de integración"]}]}, {"id": "m8", "n": "Master Profesional en Formulación, Evaluación y Dirección de Proyectos", "corto": "Proyectos", "c": "#B4530A", "desc": "Formulación, evaluación y dirección de proyectos con estándares profesionales, desde la idea hasta el control.", "dir": "Profesionales que formulan, evalúan o dirigen proyectos en empresas, instituciones públicas y consultoras.", "ico": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M7 9h6M7 13h10M7 17h4\"/>", "d": [{"n": "Diplomado en Formulación de Proyectos", "m": ["Formulación estratégica", "Formulación de proyectos", "Análisis de factibilidad", "Costos y presupuestos", "Gestión de calidad"]}, {"n": "Diplomado en Evaluación de Proyectos", "m": ["Análisis financiero", "Evaluación económica, financiera y social", "Evaluación de impacto ambiental", "Finanzas corporativas", "Mercado de capitales"]}, {"n": "Diplomado en Dirección y Control de Proyectos", "m": ["Estándares PMI", "Control de gestión", "Balanced scorecard", "Dirección de empresas", "Gobiernos corporativos"]}]}];
+const MASTERS = [{"id": "m1", "n": "Master Profesional en Administración y Dirección de Empresas (MBA)", "corto": "MBA", "c": "#0F2747", "desc": "Visión integral de la empresa: estrategia, personas, mercado, finanzas y operaciones, para quienes dirigen o aspiran a dirigir.", "dir": "Profesionales con responsabilidades de jefatura o gerencia, y emprendedores que necesitan una formación directiva completa.", "ico": "<path d=\"M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6\"/>", "d": [{"n": "Diplomado en Dirección Estratégica y Personas", "m": ["Introducción a los negocios", "Gestión estratégica", "Gestión del capital humano", "Liderazgo y coaching", "Desarrollo organizacional"], "id": "m1-d1", "desc": "Los fundamentos para conducir una empresa: cómo se define la estrategia y cómo se lidera y desarrolla a las personas que la llevan a cabo."}, {"n": "Diplomado en Marketing y Finanzas para la Dirección", "m": ["Introducción a la ciencia del mercado", "Investigación de mercado y conducta del consumidor", "Marketing digital", "Economía y gestión financiera", "Finanzas corporativas"], "id": "m1-d2", "desc": "Las dos lecturas que todo directivo necesita: entender al mercado y al consumidor, y leer las finanzas para decidir dónde invertir."}, {"n": "Diplomado en Operaciones, Proyectos e Innovación", "m": ["Gestión de operaciones", "Logística", "Project management", "Evaluación de proyectos", "Innovar y emprender"], "id": "m1-d3", "desc": "Cómo producir y entregar con eficiencia, formular y evaluar proyectos, e innovar con método."}], "area": "Administración (MBA)"}, {"id": "m2", "n": "Master Profesional en Gestión Estratégica de Capital Humano", "corto": "Capital Humano", "c": "#6E3A9C", "desc": "Gestión estratégica de las personas: atracción, desarrollo, compensaciones, relaciones laborales y cambio organizacional.", "dir": "Profesionales de recursos humanos, jefaturas de equipos y consultores en gestión de personas.", "ico": "<circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6\"/><circle cx=\"17\" cy=\"9\" r=\"2.5\"/><path d=\"M16 14.2c3 .2 5.5 2.3 5.5 5.8\"/>", "d": [{"n": "Diplomado en Dirección del Talento y Cultura Organizacional", "m": ["Gestión del capital humano", "Dirección estratégica", "Liderazgo y coaching", "Desarrollo organizacional", "Comunicación organizacional"], "id": "m2-d1", "desc": "La gestión de personas como función estratégica: liderazgo, desarrollo organizacional y comunicación interna para construir cultura."}, {"n": "Diplomado en Gestión Operativa de Personas", "m": ["Selección y reclutamiento", "Evaluación del desempeño", "Desarrollo de carrera", "Compensación y beneficios", "Presupuesto de RRHH"], "id": "m2-d2", "desc": "Los procesos que sostienen el área de personas: reclutamiento y selección, evaluación del desempeño, carrera, compensaciones y presupuesto."}, {"n": "Diplomado en Relaciones Laborales y Cambio Organizacional", "m": ["Legislación laboral", "Conflicto y negociación", "Clima organizacional", "Cultura organizacional", "Desvinculación y outplacement"], "id": "m2-d3", "desc": "Legislación laboral, negociación y manejo de conflictos, clima y cultura, y procesos de desvinculación bien conducidos."}], "area": "Capital Humano"}, {"id": "m3", "n": "Master Profesional en Marketing y Gestión Comercial", "corto": "Marketing", "c": "#F07C1B", "desc": "Marketing y gestión comercial basados en datos: marca, investigación de mercados, consumidor, innovación y canales digitales.", "dir": "Profesionales de marketing, ventas y producto, y emprendedores que buscan crecer con método.", "ico": "<path d=\"M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z\"/><path d=\"M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12\"/>", "d": [{"n": "Diplomado en Gerencia de Marketing y Marca", "m": ["Gerencia de marketing", "Segmentación y posicionamiento", "Gerencia de marca", "Plan de marketing", "Marketing de consumo y servicios"], "id": "m3-d1", "desc": "Dirigir el marketing de una empresa: segmentar, posicionar, construir marca y llevarlo todo a un plan de marketing."}, {"n": "Diplomado en Investigación de Mercados y Analítica del Consumidor", "m": ["Inteligencia de mercado", "Métodos estadísticos", "Técnicas de investigación de mercados", "Conducta del consumidor", "Data science"], "id": "m3-d2", "desc": "Diseñar investigaciones de mercado y analizar datos del consumidor con métodos estadísticos y herramientas de data science."}, {"n": "Diplomado en Gestión Comercial, Innovación y Canales Digitales", "m": ["Gerencia comercial", "Desarrollo de nuevos productos", "Desarrollo de nuevos servicios", "eCommerce y omnicanalidad", "Gestión digital y analítica web"], "id": "m3-d3", "desc": "Dirigir la gestión comercial, desarrollar nuevos productos y servicios, y vender en canales digitales y omnicanal."}], "area": "Marketing"}, {"id": "m4", "n": "Master Profesional en Auditoría, Contabilidad y Control de Gestión", "corto": "Auditoría y Control", "c": "#1D4E89", "desc": "Contabilidad, normas IFRS, auditoría, control interno y control de gestión para resguardar y dirigir la organización.", "dir": "Contadores, auditores, controllers y profesionales de administración y finanzas.", "ico": "<path d=\"M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z\"/><path d=\"M9 12l2 2 4-4\"/>", "d": [{"n": "Diplomado en Contabilidad e IFRS", "m": ["Contabilidad para la gestión", "Contabilidades especiales", "IFRS grandes empresas", "IFRS PYMEs", "Tributación para la empresa"], "id": "m4-d1", "desc": "Contabilidad para la gestión, normas IFRS para grandes empresas y pymes, y tributación de la empresa."}, {"n": "Diplomado en Auditoría y Control Interno", "m": ["Auditoría interna y control interno", "Auditoría financiera", "Gestión de riesgos y cumplimiento", "Auditoría con análisis de datos", "Ética y gobierno corporativo"], "id": "m4-d2", "desc": "Auditoría interna y financiera, control interno, riesgos y cumplimiento, con análisis de datos y gobierno corporativo."}, {"n": "Diplomado en Control de Gestión", "m": ["Planificación estratégica", "Costos y presupuestos", "Control de gestión", "Balanced scorecard", "Indicadores y tableros de gestión"], "id": "m4-d3", "desc": "Del plan estratégico a los indicadores: costos, presupuestos, balanced scorecard y tableros para controlar la gestión."}], "area": "Auditoría y Contabilidad"}, {"id": "m5", "n": "Master Profesional en Finanzas Aplicadas", "corto": "Finanzas", "c": "#0E7C9E", "desc": "Finanzas aplicadas a la toma de decisiones: análisis, valoración, financiamiento, inversiones y mercados.", "dir": "Profesionales de finanzas, analistas, ejecutivos bancarios y emprendedores que gestionan recursos y deciden inversiones.", "ico": "<path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/>", "d": [{"n": "Diplomado en Fundamentos de Finanzas", "m": ["Gerencia de finanzas", "Matemáticas financieras", "Análisis de estados financieros", "Finanzas a corto plazo", "Modelamiento financiero con Excel e IA"], "id": "m5-d1", "desc": "La base financiera para decidir: matemáticas financieras, análisis de estados financieros, finanzas de corto plazo y modelos en Excel con apoyo de IA."}, {"n": "Diplomado en Finanzas Corporativas", "m": ["Finanzas corporativas", "Finanzas a largo plazo", "Formulación, evaluación y gestión de proyectos", "Valoración de empresas", "Finanzas para pymes y emprendimientos"], "id": "m5-d2", "desc": "Decisiones financieras de largo plazo: financiamiento, evaluación de proyectos y valoración de empresas, también en pymes y emprendimientos."}, {"n": "Diplomado en Inversiones y Mercados Financieros", "m": ["Mercado de capitales e inversiones", "Finanza internacional", "Riesgo financiero y derivados", "Gestión de portafolios", "Fintech y finanzas digitales"], "id": "m5-d3", "desc": "Mercado de capitales, finanzas internacionales, riesgo y derivados, gestión de portafolios y finanzas digitales."}], "area": "Finanzas"}, {"id": "m6", "n": "Master Profesional en Gestión Logística Estratégica", "corto": "Logística", "c": "#14947F", "desc": "Dirección de la cadena logística: inventario, almacenamiento, transporte, distribución y control de la operación.", "dir": "Profesionales de logística, operaciones, compras y abastecimiento, de retail, industria y servicios.", "ico": "<path d=\"M2 6h12v10H2zM14 9h4l4 4v3h-8z\"/><circle cx=\"6\" cy=\"18\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>", "d": [{"n": "Diplomado en Inventario y Almacenamiento", "m": ["Gestión del inventario", "Prevención de pérdidas", "Gestión de centros de distribución", "Infraestructura del almacenaje", "Sistemas ERP y automatización"], "id": "m6-d1", "desc": "Gestionar inventarios y centros de distribución: control de stock, prevención de pérdidas, infraestructura de almacenaje y sistemas ERP."}, {"n": "Diplomado en Transporte y Distribución", "m": ["Transporte terrestre y marítimo", "Transporte aéreo y multimodal", "Transporte y distribución", "Sistemas de costeo", "Indicadores de eficiencia"], "id": "m6-d2", "desc": "Transporte terrestre, marítimo, aéreo y multimodal, redes de distribución, costeo e indicadores de eficiencia."}, {"n": "Diplomado en Dirección Logística y Control", "m": ["Gestión logística estratégica", "Gerencia de finanzas", "Formulación, evaluación y gestión de proyectos", "Evaluación de proyectos y externalización", "Control de gestión y BSC"], "id": "m6-d3", "desc": "Dirigir la logística con visión estratégica: finanzas, evaluación de proyectos y externalización, y control de gestión con BSC."}], "area": "Logística"}, {"id": "m7", "n": "Master Profesional en Gestión Integrada, Prevención, Higiene, Seguridad y Medio Ambiente", "corto": "Prevención y Medio Ambiente", "c": "#5B8C2A", "desc": "Sistemas integrados de gestión: prevención de riesgos, higiene y seguridad, calidad, responsabilidad social y medio ambiente.", "dir": "Prevencionistas, encargados de calidad y medio ambiente, y jefaturas de operaciones.", "ico": "<path d=\"M12 3c4 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2-6 6-10z\"/><path d=\"M12 21v-7\"/>", "d": [{"n": "Diplomado en Prevención de Riesgos, Higiene y Seguridad", "m": ["Seguridad en el trabajo", "Higiene en el trabajo", "Gestión de la prevención de riesgos", "Gestión de personas", "Sistemas de información y gestión"], "id": "m7-d1", "desc": "Seguridad e higiene en el trabajo, gestión de la prevención de riesgos y sistemas de información para el área."}, {"n": "Diplomado en Gestión de la Calidad y Responsabilidad Social", "m": ["Modelos y normativa de calidad", "Auditorías de calidad", "Modelos de excelencia", "Responsabilidad social empresarial", "Gestión de proyectos"], "id": "m7-d2", "desc": "Normas y modelos de calidad, auditorías, modelos de excelencia y responsabilidad social empresarial."}, {"n": "Diplomado en Gestión Ambiental y Sistemas Integrados", "m": ["Evaluación de impacto ambiental", "Gestión de residuos", "Auditorías ambientales", "Sistemas integrados de gestión", "Metodologías de integración"], "id": "m7-d3", "desc": "Evaluación de impacto ambiental, gestión de residuos, auditorías ambientales e integración de sistemas de gestión."}], "area": "Prevención y Medio Ambiente"}, {"id": "m8", "n": "Master Profesional en Formulación, Evaluación y Dirección de Proyectos", "corto": "Proyectos", "c": "#B4530A", "desc": "Formulación, evaluación y dirección de proyectos con estándares profesionales, desde la idea hasta el control.", "dir": "Profesionales que formulan, evalúan o dirigen proyectos en empresas, instituciones públicas y consultoras.", "ico": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M7 9h6M7 13h10M7 17h4\"/>", "d": [{"n": "Diplomado en Formulación de Proyectos", "m": ["Formulación estratégica", "Formulación de proyectos", "Análisis de factibilidad", "Costos y presupuestos", "Gestión de calidad"], "id": "m8-d1", "desc": "Convertir una idea en un proyecto: formulación estratégica, estudios de factibilidad, costos, presupuesto y calidad."}, {"n": "Diplomado en Evaluación de Proyectos", "m": ["Análisis financiero", "Evaluación económica, financiera y social", "Evaluación de impacto ambiental", "Finanzas corporativas", "Mercado de capitales"], "id": "m8-d2", "desc": "Evaluar proyectos desde lo económico, financiero, social y ambiental, con herramientas de finanzas corporativas."}, {"n": "Diplomado en Dirección y Control de Proyectos", "m": ["Estándares PMI", "Control de gestión", "Balanced scorecard", "Dirección de empresas", "Gobiernos corporativos"], "id": "m8-d3", "desc": "Dirigir y controlar proyectos con estándares PMI, control de gestión, balanced scorecard y gobierno corporativo."}], "area": "Proyectos"}, {"id": "m9", "n": "Master Profesional en Economía Aplicada", "corto": "Economía", "c": "#A23B5F", "area": "Economía", "desc": "Economía aplicada a la toma de decisiones: mercados, ciclo económico, competencia, regulación y análisis de datos económicos.", "dir": "Profesionales de empresas, consultoras, gremios y organismos públicos que necesitan leer la economía y sus datos para decidir.", "ico": "<path d=\"M3 3v18h18\"/><path d=\"M7 15l4-4 3 3 5-6\"/>", "d": [{"n": "Diplomado en Economía para la Dirección", "m": ["Microeconomía aplicada: demanda, costos y precios", "Macroeconomía y ciclo económico", "Política monetaria y fiscal", "Indicadores económicos de Chile", "Economía internacional y tipo de cambio"], "desc": "Leer la economía para decidir: cómo se forman los precios, qué mueve el ciclo económico, cómo actúan el Banco Central y el fisco, y qué dicen los indicadores de Chile.", "id": "m9-d1"}, {"n": "Diplomado en Mercados, Competencia y Regulación", "m": ["Organización industrial", "Libre competencia", "Regulación de servicios básicos", "Economía laboral", "Recursos naturales y energía"], "desc": "Cómo funcionan los mercados reales: estructura de las industrias, libre competencia, regulación de servicios básicos, mercado laboral y recursos naturales.", "id": "m9-d2"}, {"n": "Diplomado en Análisis Económico de Datos y Economía del Comportamiento", "m": ["Estadística aplicada", "Econometría aplicada", "Pronósticos y series de tiempo", "Economía del comportamiento", "Análisis de datos económicos con IA"], "desc": "Medir y anticipar con datos económicos: estadística, econometría y pronósticos, junto a la economía del comportamiento y el análisis asistido con IA.", "id": "m9-d3"}]}, {"id": "m10", "n": "Master Profesional en Gestión Pública", "corto": "Gestión Pública", "c": "#8C6A12", "area": "Gestión Pública", "desc": "Dirección y gestión de organismos públicos: políticas públicas, personas, presupuesto, compras, control y gestión municipal.", "dir": "Funcionarios y profesionales de ministerios, servicios públicos, gobiernos regionales y municipalidades, y consultores que trabajan con el Estado.", "ico": "<path d=\"M3 21h18M4 10h16M12 3l8 5H4z\"/><path d=\"M6 10v8M10 10v8M14 10v8M18 10v8\"/>", "d": [{"n": "Diplomado en Estado, Políticas Públicas y Gestión de Personas", "m": ["El Estado y la administración pública en Chile", "Diseño de políticas públicas", "Implementación y evaluación de programas", "Gestión de personas en el sector público", "Probidad, transparencia y gobierno digital"], "desc": "Cómo se organiza el Estado en Chile, cómo se diseñan e implementan las políticas públicas y cómo se gestionan las personas en el sector público, con probidad y transparencia.", "id": "m10-d1"}, {"n": "Diplomado en Finanzas Públicas, Compras y Control", "m": ["Presupuesto público", "Contabilidad gubernamental", "Compras públicas y Mercado Público", "Evaluación social de proyectos", "Control interno y auditoría en el sector público"], "desc": "El recorrido del dinero público: presupuesto, contabilidad gubernamental, compras públicas, evaluación social de proyectos y control interno.", "id": "m10-d2"}, {"n": "Diplomado en Gestión Municipal y Desarrollo Territorial", "m": ["La municipalidad y su marco legal", "Planificación comunal: PLADECO y plan regulador", "Servicios municipales y atención ciudadana", "Fomento productivo y desarrollo económico local", "Financiamiento municipal y proyectos de inversión"], "desc": "Gestionar una municipalidad y su territorio: marco legal, planificación comunal, servicios a la comunidad, fomento productivo y financiamiento de proyectos.", "id": "m10-d3"}]}];
 const bro = $("#brochure");
 let masterActual = "";
+const BRO_ORIG = {}; ["bro-etiqueta","bro-datos","bro-valor","bro-ruta-t","bro-ruta","bro-est-t"].forEach(i=>BRO_ORIG[i]=document.getElementById(i).innerHTML);
+function restaurarBro(){ Object.keys(BRO_ORIG).forEach(i=>document.getElementById(i).innerHTML=BRO_ORIG[i]); }
+function abrirDiplomado(did){
+  const m = MASTERS.find(x=>did.startsWith(x.id+"-")); if(!m) return;
+  const d = m.d.find(x=>x.id===did); if(!d) return;
+  masterActual = did; restaurarBro();
+  bro.style.setProperty("--c", m.c);
+  $("#bro-etiqueta").textContent = "Diplomado · IDEAX";
+  $("#bro-titulo").textContent = d.n;
+  $("#bro-desc").textContent = d.desc;
+  $("#bro-dir").textContent = m.dir;
+  $("#bro-datos").innerHTML = `<div><b>4 meses</b>Duración total</div><div><b>5 materias</b>De 3 semanas cada una</div><div><b>Asincrónico</b>Facultad Virtual IDEAX</div><div><b>Certificado</b>De diplomado IDEAX</div>`;
+  $("#bro-valor").innerHTML = `<div><b>$240.000</b>valor del diplomado</div><div><b>12 cuotas</b>a precio contado con Mercado Pago</div><div><b>Lunes</b>inicio, 7 días después del pago</div><div class="total"><b>Convalidable</b>en el ${esc(m.n)}</div>`;
+  $("#bro-est-t").textContent = "Materias del diplomado";
+  $("#bro-dips").innerHTML = `<div class="bro-dip"><div class="bro-dip-cab"><b>${esc(d.n)}</b><small>4 meses · $240.000</small></div><ul>${d.m.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
+  $("#bro-ruta-t").textContent = "Continuidad hacia el Master Profesional";
+  $("#bro-ruta").textContent = `Este diplomado se cursa y certifica por sí solo. Si luego cursas los otros dos diplomados del área, el Diplomado en Metodología de la Investigación y Escritura Académica, incluido sin costo, y el paper evaluado por pares en la revista CMIA, obtienes el ${m.n}. Lo que ya aprobaste se convalida.`;
+  if(typeof bro.showModal==="function") bro.showModal(); else bro.setAttribute("open","");
+  bro.scrollTop = 0;
+}
 function abrirBrochure(id){
   const m = MASTERS.find(x=>x.id===id); if(!m) return;
-  masterActual = id;
+  masterActual = id; restaurarBro();
   bro.style.setProperty("--c", m.c);
   $("#bro-titulo").textContent = m.n;
   $("#bro-desc").textContent = m.desc;
   $("#bro-dir").textContent = m.dir;
-  $("#bro-dips").innerHTML = m.d.map((d,k)=>`<div class="bro-dip"><div class="bro-dip-cab"><span>${k+1}</span><b>${esc(d.n)}</b><small>4 meses · 5 módulos · $240.000</small></div><ul>${d.m.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`).join("");
+  $("#bro-dips").innerHTML = m.d.map((d,k)=>`<div class="bro-dip"><div class="bro-dip-cab"><span>${k+1}</span><b>${esc(d.n)}</b><small>4 meses · 5 materias · $240.000</small></div><ul>${d.m.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`).join("");
   if(typeof bro.showModal==="function") bro.showModal(); else bro.setAttribute("open","");
   bro.scrollTop = 0;
 }
 function cerrarBrochure(){ if(bro.open){ bro.close ? bro.close() : bro.removeAttribute("open"); } }
+document.querySelectorAll("[data-dip]").forEach(b=>b.addEventListener("click",()=>abrirDiplomado(b.dataset.dip)));
+document.querySelectorAll("[data-master-bro]").forEach(b=>b.addEventListener("click",()=>abrirBrochure(b.dataset.masterBro)));
+document.querySelectorAll(".area-tab").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".area-tab").forEach(x=>{ const on=x===b; x.classList.toggle("activa",on); x.setAttribute("aria-selected",on); });
+  document.querySelectorAll(".area-panel").forEach(p=>p.classList.toggle("activa",p.dataset.area===b.dataset.area));
+}));
 document.querySelectorAll(".master").forEach(c=>{
   c.addEventListener("click",()=>abrirBrochure(c.dataset.master));
   c.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); abrirBrochure(c.dataset.master); } });
@@ -1707,6 +2126,21 @@ $("#b-codigo").addEventListener("click", revisarCodigo);
 $("#f-codigo").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); revisarCodigo(); } });
 $("#f-programa").addEventListener("change", ()=>{ if($("#f-codigo").value.trim()) revisarCodigo(); });
 
+/* Modo del formulario: inscribirme o solo información */
+let modoForm = "inscribir";
+function ponerModo(m){
+  modoForm = m;
+  const f = $("#formulario"); f.classList.toggle("modo-info", m==="info");
+  f.querySelectorAll(".modo-form button").forEach(b=>{ const on=b.dataset.modo===m; b.classList.toggle("activo",on); b.setAttribute("aria-checked",on); });
+  $("#txt-enviar").textContent = m==="info" ? "Enviarme la información" : "Inscribirme";
+  $("#modo-ayuda").textContent = m==="info" ? "Te enviaremos el manual del estudiante y el brochure completo del programa, sin compromiso." : "Te enviaremos el brochure con el valor y el enlace de pago.";
+}
+document.querySelectorAll(".modo-form button").forEach(b=>b.addEventListener("click",()=>ponerModo(b.dataset.modo)));
+document.querySelectorAll("[data-preseleccion]").forEach(a=>a.addEventListener("click",()=>ponerModo("inscribir")));
+document.querySelectorAll("[data-info]").forEach(a=>a.addEventListener("click",()=>{ $("#f-programa").value = a.dataset.info; ponerModo("info"); }));
+$("#bro-info").addEventListener("click",()=>{ $("#f-programa").value = masterActual; ponerModo("info"); cerrarBrochure(); });
+$("#bro-inscribir").addEventListener("click",()=>ponerModo("inscribir"));
+
 /* Formulario de inscripción */
 $("#formulario").addEventListener("submit", async e=>{
   e.preventDefault();
@@ -1717,7 +2151,7 @@ $("#formulario").addEventListener("submit", async e=>{
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)){ err.textContent = "Revisa el correo: debe tener la forma nombre@dominio.cl."; f.correo.focus(); return; }
   if(!prog){ err.textContent = "Selecciona el programa que te interesa."; f.programa.focus(); return; }
   const nombreProg = f.programa.options[f.programa.selectedIndex].text;
-  const datos = { nombre, correo, fono: f.fono.value.trim(), pais: f.pais.value.trim(), programa: prog, programaNombre: nombreProg, codigo: f.codigo.value.trim().toUpperCase(), mensaje: f.mensaje.value.trim(), origen: location.href };
+  const datos = { accion: modoForm==="info" ? "informacion" : "inscripcion", nombre, correo, fono: f.fono.value.trim(), pais: f.pais.value.trim(), programa: prog, programaNombre: nombreProg, codigo: modoForm==="info" ? "" : f.codigo.value.trim().toUpperCase(), mensaje: f.mensaje.value.trim(), origen: location.href };
 
   if(CONFIG.inscripcionURL){
     boton.disabled = true; boton.style.opacity = ".7";
@@ -1725,21 +2159,23 @@ $("#formulario").addEventListener("submit", async e=>{
       const r = await llamarServicio(datos);
       if(r && r.ok === false){ err.textContent = r.error || `No pudimos registrar tu inscripción. Escribe a ${CONFIG.correo}.`; return; }
       let texto;
-      if(r && r.estado === "Becado") texto = `<b>¡Inscripción confirmada!</b> Tienes beca completa en <b>${esc(nombreProg)}</b>. Te enviamos a <b>${esc(correo)}</b> el material y las indicaciones para comenzar.`;
+      if(modoForm === "info") texto = `<b>¡Listo!</b> Te enviamos a <b>${esc(correo)}</b> el manual del estudiante y el brochure completo de <b>${esc(nombreProg)}</b>. Cuando quieras inscribirte, vuelve a este formulario.`;
+      else if(r && r.estado === "Becado") texto = `<b>¡Inscripción confirmada!</b> Tienes beca completa en <b>${esc(nombreProg)}</b>. Te enviamos a <b>${esc(correo)}</b> el material y las indicaciones para comenzar.`;
       else if(r && r.estado === "Sin cobro en línea") texto = `<b>¡Solicitud recibida!</b> Te enviamos a <b>${esc(correo)}</b> la información de <b>${esc(nombreProg)}</b> y te contactaremos para los siguientes pasos.`;
       else texto = `<b>¡Inscripción recibida!</b> Te enviamos a <b>${esc(correo)}</b> el brochure de <b>${esc(nombreProg)}</b>${r && r.monto ? `, con el valor de <b>${fmtCLP(r.monto)}</b>${r.descuento ? ` (descuento del ${r.descuento}%)` : ""}` : ""} y el enlace de pago de Mercado Pago, en hasta 12 cuotas.`;
       ok.innerHTML = texto + " Si no lo ves en unos minutos, revisa la carpeta de spam.";
-      ok.classList.add("visible"); f.reset(); codRes.textContent = "";
+      ok.classList.add("visible"); const mAct = modoForm; f.reset(); ponerModo(mAct); codRes.textContent = "";
     }catch(x){
       err.textContent = `No pudimos enviar tu inscripción. Intenta nuevamente o escribe a ${CONFIG.correo}.`;
     }finally{ boton.disabled = false; boton.style.opacity = ""; }
     return;
   }
   /* Respaldo mientras el servicio no esté conectado: correo a contacto@ideax.cl */
+  const asunto = (modoForm==="info" ? "Solicitud de información IDEAX: " : "Inscripción IDEAX: ") + nombreProg;
   const cuerpo = `Nombre: ${nombre}\nCorreo: ${correo}\nTeléfono: ${datos.fono}\nPaís: ${datos.pais}\nPrograma: ${nombreProg}\n\n${datos.mensaje}`;
   ok.innerHTML = `Se abrirá tu correo con la inscripción lista para enviar. Si no se abre, escribe a <b>${CONFIG.correo}</b> indicando el programa <b>${esc(nombreProg)}</b>.`;
   ok.classList.add("visible");
-  window.location.href = `mailto:${CONFIG.correo}?subject=${encodeURIComponent("Inscripción IDEAX: " + nombreProg)}&body=${encodeURIComponent(cuerpo)}`;
+  window.location.href = `mailto:${CONFIG.correo}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
 });
 
 /* Regreso desde Mercado Pago: www.ideax.cl/?pago=aprobado | pendiente | rechazado */
@@ -1758,6 +2194,22 @@ $("#formulario").addEventListener("submit", async e=>{
   document.body.appendChild(d);
   try{ history.replaceState(null, "", location.pathname + location.hash); }catch(e){}
 })();
+</script>
+
+<script>
+document.querySelectorAll(".modulo").forEach(m=>{
+  const n=m.querySelectorAll(".curso").length, b=document.createElement("button");
+  b.type="button"; b.className="ver-cursos"; b.textContent=`Ver los ${n} cursos`;
+  m.querySelector(".cursos").before(b);
+  b.addEventListener("click",()=>{ const a=m.classList.toggle("abierto"); b.textContent=a?"Ocultar cursos":`Ver los ${n} cursos`; });
+});
+document.querySelectorAll(".docente").forEach(d=>{
+  const s=document.createElement("div"); s.className="mas"; s.textContent="Ver trayectoria"; d.append(s);
+  d.tabIndex=0;
+  const tog=()=>{ const a=d.classList.toggle("abierto"); s.textContent=a?"Ocultar":"Ver trayectoria"; };
+  d.addEventListener("click",tog); d.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); tog(); } });
+});
+document.getElementById("ver-faq").addEventListener("click",()=>document.getElementById("preguntas").classList.add("todas"));
 </script>
 </body>
 </html>
