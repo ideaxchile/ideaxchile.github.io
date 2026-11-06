@@ -67,8 +67,9 @@ p{margin:0 0 1em}
 .menu a.enlace:hover::after,.menu a.enlace.activo::after{transform:scaleX(1)}
 .menu .btn{padding:11px 20px;font-size:.98rem;box-shadow:none}
 .hamburguesa{display:none;background:none;border:0;color:var(--noche);cursor:pointer;padding:8px}
-@media (max-width:2100px){.marca-sub{display:none}.menu{gap:24px}}
-@media (max-width:1500px){.menu{gap:18px}.menu a.enlace{font-size:.94rem}}
+@media (max-width:2300px){.marca-sub{display:none}.menu{gap:24px}}
+@media (max-width:1760px){.menu{gap:18px}.menu a.enlace{font-size:.94rem}}
+@media (max-width:1440px){.menu{gap:13px}.menu a.enlace{font-size:.9rem}}
 @media (max-width:1360px){
   .hamburguesa{display:block}
   .menu{display:none;position:absolute;top:86px;left:0;right:0;background:#fff;flex-direction:column;align-items:flex-start;padding:12px 32px 28px;gap:6px;box-shadow:0 14px 24px rgba(15,39,71,.12)}
@@ -135,11 +136,12 @@ p{margin:0 0 1em}
 .ruta-master h3{font-size:1.25rem;color:var(--noche);margin-bottom:6px}
 .ruta-master>p{color:var(--gris);margin:0 0 22px;max-width:80ch}
 .ecuacion{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap}
-.pieza{flex:1 1 150px;background:#fff;border:1.5px solid var(--linea);border-radius:12px;padding:16px 14px;text-align:center}
+.pieza{flex:1 1 118px;background:#fff;border:1.5px solid var(--linea);border-radius:12px;padding:16px 14px;text-align:center}
 .pieza b{display:block;color:var(--noche);font-size:1rem}
 .pieza span{display:block;font-size:.8rem;color:var(--gris);margin-top:3px}
 .pieza.paper{border-color:var(--naranja);background:#FFF7F0}
-.pieza.total{flex-basis:200px;background:var(--noche);border-color:var(--noche)}
+.pieza.met{border-style:dashed;border-color:#14947F;background:#F0FAF8}
+.pieza.total{flex-basis:160px;background:var(--noche);border-color:var(--noche)}
 .pieza.total b{color:#fff;font-size:1.08rem}
 .pieza.total span{color:rgba(255,255,255,.8)}
 .op{align-self:center;font-size:1.6rem;font-weight:700;color:var(--naranja);flex:0 0 auto}
@@ -150,7 +152,7 @@ p{margin:0 0 1em}
 .aviso-parrilla p{margin:0;color:var(--gris);font-size:.93rem}
 .aviso-parrilla .btn{box-shadow:none;padding:11px 18px;font-size:.92rem}
 @media (max-width:1000px){.formatos{grid-template-columns:1fr}.notas-ruta{grid-template-columns:1fr}}
-@media (max-width:700px){.ruta-master{padding:24px 20px}.ecuacion{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.op{display:none}.pieza{padding:12px 8px}.pieza b{font-size:.82rem;overflow-wrap:anywhere}.pieza span{font-size:.74rem}.pieza.paper,.pieza.total{grid-column:span 3}.pieza.paper::before{content:"+ ";color:var(--naranja);font-weight:800}}
+@media (max-width:700px){.ruta-master{padding:24px 20px}.ecuacion{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.op{display:none}.pieza{padding:12px 8px}.pieza b{font-size:.82rem;overflow-wrap:anywhere}.pieza span{font-size:.74rem}.pieza.met,.pieza.paper,.pieza.total{grid-column:span 3}.pieza b{white-space:nowrap;overflow-wrap:normal}}
 
 
 /* ============ Masters ============ */
@@ -288,6 +290,16 @@ p{margin:0 0 1em}
 .destacado-ia .icono{background:rgba(255,255,255,.2);width:58px;height:58px}
 .destacado-ia h3{font-size:1.15rem;margin-bottom:4px}
 .destacado-ia p{margin:0;color:rgba(255,255,255,.95)}
+.clases-magistrales{margin-top:18px;display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;border:1.5px solid rgba(255,255,255,.22);background:rgba(255,255,255,.05);border-radius:12px;padding:24px 28px}
+.clases-magistrales .icono{background:rgba(240,124,27,.2);color:var(--naranja);width:58px;height:58px}
+.clases-magistrales small{display:block;font-size:.72rem;letter-spacing:1.6px;text-transform:uppercase;font-weight:700;color:var(--naranja);margin-bottom:4px}
+.clases-magistrales h3{font-size:1.15rem;margin-bottom:6px;color:#fff}
+.clases-magistrales p{margin:0;color:rgba(255,255,255,.82);font-size:.93rem}
+.clases-magistrales ul{list-style:none;margin:0;padding:0;display:flex;gap:10px}
+.clases-magistrales li{text-align:center;min-width:86px;background:rgba(255,255,255,.07);border-radius:10px;padding:10px 8px;font-size:.74rem;color:rgba(255,255,255,.75);line-height:1.3}
+.clases-magistrales li b{display:block;font-size:1.2rem;color:#fff}
+@media (max-width:900px){.clases-magistrales{grid-template-columns:auto 1fr}.clases-magistrales ul{grid-column:1/-1}}
+@media (max-width:560px){.clases-magistrales{grid-template-columns:1fr;padding:22px}.clases-magistrales li{flex:1;min-width:0}}
 @media (max-width:1000px){.pasos{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.pasos{grid-template-columns:1fr}.destacado-ia{flex-direction:column;align-items:flex-start}}
 
@@ -610,7 +622,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
     <nav class="menu" id="menu" aria-label="Principal">
       <a class="enlace activo" href="#inicio">Inicio</a>
       <a class="enlace" href="#formatos">Programas</a>
-      <a class="enlace" href="#masters">Masters</a>
+      <a class="enlace" href="#masters">Masters Profesionales</a>
       <a class="enlace" href="#emprendedores">Emprendedores</a>
       <a class="enlace" href="#metodologia">Metodología</a>
       <a class="enlace" href="#historia">Nuestra Historia</a>
@@ -654,7 +666,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
     </div>
     <div class="dato">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 9l9-5 9 5-9 5z"/><path d="M7 11.5V16c0 1.5 2.2 3 5 3s5-1.5 5-3v-4.5M21 9v6"/></svg>
-      <div><strong>Masters de 12 meses</strong><span>Tres diplomados más un paper</span></div>
+      <div><strong>Masters Profesionales</strong><span>12 meses: tres diplomados, Metodología y paper</span></div>
     </div>
     <div class="dato">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>
@@ -668,7 +680,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
   <div class="contenedor">
     <span class="ceja">Oferta académica</span>
     <h2 class="titulo">Tres formatos para avanzar a tu ritmo</h2>
-    <p class="bajada">Un curso para una necesidad puntual, un diplomado para especializarte, o tres diplomados y un paper para obtener un master profesional. Todo se desarrolla en la Facultad Virtual de IDEAX.</p>
+    <p class="bajada">Un curso para una necesidad puntual, un diplomado para especializarte, o una ruta completa para obtener un Master Profesional. Todo se desarrolla en la Facultad Virtual de IDEAX.</p>
 
     <div class="formatos">
       <article class="formato" style="--c:#F07C1B">
@@ -682,7 +694,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
           <li>Proyecto aplicado a tu organización o negocio</li>
           <li>Incluye el programa para emprendedores, completo o por módulo</li>
         </ul>
-        <div class="pie-formato">Certificado de aprobación IDEAX</div>
+        <div class="pie-formato">$135.000 · IA Aplicada a los Negocios $165.000</div>
       </article>
       <article class="formato" style="--c:#14947F">
         <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-1.5zM4 19.5A2 2 0 0 1 6 17.5h13"/><path d="M9 8h6M9 11.5h4"/></svg></span>
@@ -696,45 +708,48 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
           <li>Al cerrar cada módulo, una exposición en video para su evaluación</li>
           <li>Convalidable con otros programas de IDEAX</li>
         </ul>
-        <div class="pie-formato">USD 300 · hasta 12 cuotas a precio contado</div>
+        <div class="pie-formato">$240.000 · hasta 12 cuotas a precio contado</div>
       </article>
       <article class="formato formato-master" style="--c:#FFB27A">
         <span class="icono" style="background:var(--naranja)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l9-5 9 5-9 5z"/><path d="M7 11.5V16c0 1.5 2.2 3 5 3s5-1.5 5-3v-4.5M21 9v6"/></svg></span>
         <small>Ruta de especialización</small>
-        <h3>Masters profesionales</h3>
+        <h3>Masters Profesionales</h3>
         <span class="dur">12 meses</span>
         <ul>
           <li>Tres diplomados de una misma ruta</li>
-          <li>Trabajo final de máster: un paper aplicado</li>
+          <li>Diplomado en Metodología de la Investigación y Escritura Académica, incluido</li>
+          <li>Trabajo final: un paper aplicado</li>
           <li>Evaluación por pares para su publicación en la revista CMIA</li>
           <li>Título propio de formación ejecutiva; no es un grado de magíster</li>
         </ul>
-        <div class="pie-formato">Sin costo adicional: 3 diplomados + paper USD 150</div>
+        <div class="pie-formato">$865.000 la ruta completa · hasta 12 cuotas</div>
       </article>
     </div>
 
     <div class="ruta-master">
-      <h3>Cómo se obtiene un master profesional</h3>
-      <p>Cada master reúne tres diplomados de una misma ruta y un paper como trabajo final. Puedes partir por un diplomado y decidir después si continúas. El master no tiene costo adicional: pagas solo los tres diplomados y el paper, hasta en 12 cuotas a precio contado con Mercado Pago.</p>
+      <h3>Cómo se obtiene un Master Profesional</h3>
+      <p>Cada Master Profesional reúne tres diplomados de una misma ruta, el Diplomado en Metodología de la Investigación y Escritura Académica, donde construyes paso a paso tu artículo, y el paper como trabajo final. El Diplomado en Metodología va incluido sin costo. Puedes partir por un diplomado y decidir después si continúas: lo aprobado se convalida. La ruta completa vale $865.000, pagaderos hasta en 12 cuotas a precio contado con Mercado Pago.</p>
       <div class="ecuacion">
-        <div class="pieza"><b>Diplomado 1</b><span>4 meses · USD 300</span></div>
+        <div class="pieza"><b>Diplomado 1</b><span>4 meses · $240.000</span></div>
         <div class="op">+</div>
-        <div class="pieza"><b>Diplomado 2</b><span>4 meses · USD 300</span></div>
+        <div class="pieza"><b>Diplomado 2</b><span>4 meses · $240.000</span></div>
         <div class="op">+</div>
-        <div class="pieza"><b>Diplomado 3</b><span>4 meses · USD 300</span></div>
+        <div class="pieza"><b>Diplomado 3</b><span>4 meses · $240.000</span></div>
         <div class="op">+</div>
-        <div class="pieza paper"><b>Paper</b><span>USD 150 · Evaluado por pares, CMIA</span></div>
+        <div class="pieza met"><b>Metodología</b><span>Diplomado incluido · $0</span></div>
+        <div class="op">+</div>
+        <div class="pieza paper"><b>Paper</b><span>$145.000 · Evaluado por pares, CMIA</span></div>
         <div class="op">=</div>
-        <div class="pieza total"><b>Master profesional</b><span>12 meses · USD 1.050 en total</span></div>
+        <div class="pieza total"><b>Master Profesional</b><span>12 meses · $865.000 en total</span></div>
       </div>
       <div class="notas-ruta">
-        <div><b>Opción de master.</b> Al inscribir tu tercer diplomado indicas que optarás al master, y desarrollas el paper en paralelo para completar la ruta en 12 meses.</div>
-        <div><b>Convalidación.</b> Los diplomados aprobados se convalidan dentro de las rutas de master de IDEAX que los incluyan.</div>
+        <div><b>Tiempos.</b> La ruta estándar toma 12 meses; en la intensiva, con diplomados en paralelo, desde 6 a 8 meses. El plazo máximo es de 18 meses.</div>
+        <div><b>Convalidación.</b> Los diplomados aprobados por separado se convalidan si luego te inscribes en el Master Profesional que los incluye.</div>
         <div><b>Publicación.</b> El paper se somete a evaluación por pares del Cuaderno Multidisciplinar de Investigación Aplicada (CMIA).</div>
       </div>
       <div class="aviso-parrilla">
-        <p>Ocho rutas de master profesional y veinticuatro diplomados, cada una con su brochure.</p>
-        <a class="btn btn-naranja" href="#masters">Ver masters y diplomados</a>
+        <p>Ocho Masters Profesionales y veinticuatro diplomados, cada uno con su brochure.</p>
+        <a class="btn btn-naranja" href="#masters">Ver Masters Profesionales y diplomados</a>
       </div>
     </div>
   </div>
@@ -743,68 +758,68 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
 <!-- MASTERS -->
 <section class="seccion masters-sec" id="masters">
   <div class="contenedor">
-    <span class="ceja">Masters profesionales y diplomados</span>
+    <span class="ceja">Masters Profesionales y diplomados</span>
     <h2 class="titulo">Ocho rutas de especialización</h2>
-    <p class="bajada">Cada master profesional se compone de tres diplomados que también puedes cursar por separado. Elige una ruta, revisa su brochure y parte por el diplomado que más te sirva hoy.</p>
+    <p class="bajada">Cada Master Profesional se compone de tres diplomados que también puedes cursar por separado, más el Diplomado en Metodología y el paper. Elige una ruta, revisa su brochure y parte por el diplomado que más te sirva hoy.</p>
     <div class="grilla-masters">
       <article class="master" style="--c:#0F2747" data-master="m1" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Administración y Dirección de Empresas (MBA)">
         <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg></span><small>Master Profesional</small></div>
         <h3>Administración y Dirección de Empresas (MBA)</h3>
         <p>Visión integral de la empresa: estrategia, personas, mercado, finanzas y operaciones, para quienes dirigen o aspiran a dirigir.</p>
         <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Dirección Estratégica y Personas</li><li><span>2</span>Marketing y Finanzas para la Dirección</li><li><span>3</span>Operaciones, Proyectos e Innovación</li></ol></div>
-        <div class="master-pie"><span>USD 1.050 en total</span><span class="ver-brochure">Ver brochure</span></div>
+        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
       </article>
       <article class="master" style="--c:#6E3A9C" data-master="m2" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Gestión Estratégica de Capital Humano">
         <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c3 .2 5.5 2.3 5.5 5.8"/></svg></span><small>Master Profesional</small></div>
         <h3>Gestión Estratégica de Capital Humano</h3>
         <p>Gestión estratégica de las personas: atracción, desarrollo, compensaciones, relaciones laborales y cambio organizacional.</p>
         <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Dirección del Talento y Cultura Organizacional</li><li><span>2</span>Gestión Operativa de Personas</li><li><span>3</span>Relaciones Laborales y Cambio Organizacional</li></ol></div>
-        <div class="master-pie"><span>USD 1.050 en total</span><span class="ver-brochure">Ver brochure</span></div>
+        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
       </article>
       <article class="master" style="--c:#F07C1B" data-master="m3" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Marketing y Gestión Comercial">
         <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/></svg></span><small>Master Profesional</small></div>
         <h3>Marketing y Gestión Comercial</h3>
         <p>Marketing y gestión comercial basados en datos: marca, investigación de mercados, consumidor, innovación y canales digitales.</p>
         <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Gerencia de Marketing y Marca</li><li><span>2</span>Investigación de Mercados y Analítica del Consumidor</li><li><span>3</span>Gestión Comercial, Innovación y Canales Digitales</li></ol></div>
-        <div class="master-pie"><span>USD 1.050 en total</span><span class="ver-brochure">Ver brochure</span></div>
+        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
       </article>
       <article class="master" style="--c:#1D4E89" data-master="m4" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Auditoría, Contabilidad y Control de Gestión">
         <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span><small>Master Profesional</small></div>
         <h3>Auditoría, Contabilidad y Control de Gestión</h3>
         <p>Contabilidad, normas IFRS, auditoría, control interno y control de gestión para resguardar y dirigir la organización.</p>
         <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Contabilidad e IFRS</li><li><span>2</span>Auditoría y Control Interno</li><li><span>3</span>Control de Gestión</li></ol></div>
-        <div class="master-pie"><span>USD 1.050 en total</span><span class="ver-brochure">Ver brochure</span></div>
+        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
       </article>
       <article class="master" style="--c:#0E7C9E" data-master="m5" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Finanzas Aplicadas">
         <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><small>Master Profesional</small></div>
         <h3>Finanzas Aplicadas</h3>
         <p>Finanzas aplicadas a la toma de decisiones: análisis, valoración, financiamiento, inversiones y mercados.</p>
         <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Fundamentos de Finanzas</li><li><span>2</span>Finanzas Corporativas</li><li><span>3</span>Inversiones y Mercados Financieros</li></ol></div>
-        <div class="master-pie"><span>USD 1.050 en total</span><span class="ver-brochure">Ver brochure</span></div>
+        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
       </article>
       <article class="master" style="--c:#14947F" data-master="m6" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Gestión Logística Estratégica">
         <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 6h12v10H2zM14 9h4l4 4v3h-8z"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></span><small>Master Profesional</small></div>
         <h3>Gestión Logística Estratégica</h3>
         <p>Dirección de la cadena logística: inventario, almacenamiento, transporte, distribución y control de la operación.</p>
         <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Inventario y Almacenamiento</li><li><span>2</span>Transporte y Distribución</li><li><span>3</span>Dirección Logística y Control</li></ol></div>
-        <div class="master-pie"><span>USD 1.050 en total</span><span class="ver-brochure">Ver brochure</span></div>
+        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
       </article>
       <article class="master" style="--c:#5B8C2A" data-master="m7" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Gestión Integrada, Prevención, Higiene, Seguridad y Medio Ambiente">
         <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c4 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2-6 6-10z"/><path d="M12 21v-7"/></svg></span><small>Master Profesional</small></div>
         <h3>Gestión Integrada, Prevención, Higiene, Seguridad y Medio Ambiente</h3>
         <p>Sistemas integrados de gestión: prevención de riesgos, higiene y seguridad, calidad, responsabilidad social y medio ambiente.</p>
         <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Prevención de Riesgos, Higiene y Seguridad</li><li><span>2</span>Gestión de la Calidad y Responsabilidad Social</li><li><span>3</span>Gestión Ambiental y Sistemas Integrados</li></ol></div>
-        <div class="master-pie"><span>USD 1.050 en total</span><span class="ver-brochure">Ver brochure</span></div>
+        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
       </article>
       <article class="master" style="--c:#B4530A" data-master="m8" tabindex="0" role="button" aria-label="Ver brochure del Master Profesional en Formulación, Evaluación y Dirección de Proyectos">
         <div class="master-cab"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h6M7 13h10M7 17h4"/></svg></span><small>Master Profesional</small></div>
         <h3>Formulación, Evaluación y Dirección de Proyectos</h3>
         <p>Formulación, evaluación y dirección de proyectos con estándares profesionales, desde la idea hasta el control.</p>
         <div class="master-dips"><b>3 diplomados de 4 meses</b><ol><li><span>1</span>Formulación de Proyectos</li><li><span>2</span>Evaluación de Proyectos</li><li><span>3</span>Dirección y Control de Proyectos</li></ol></div>
-        <div class="master-pie"><span>USD 1.050 en total</span><span class="ver-brochure">Ver brochure</span></div>
+        <div class="master-pie"><span>$865.000 en total</span><span class="ver-brochure">Ver brochure</span></div>
       </article>
     </div>
-    <p class="nota-masters">Cada diplomado vale USD 300 y el paper USD 150, pagaderos hasta en 12 cuotas a precio contado con Mercado Pago; el master no tiene costo adicional. Los masters profesionales son títulos propios de formación ejecutiva de IDEAX y no constituyen un grado académico de magíster.</p>
+    <p class="nota-masters">Cada diplomado vale $240.000 y el paper $145.000; el Diplomado en Metodología va incluido. Todo es pagadero hasta en 12 cuotas a precio contado con Mercado Pago. Los Masters Profesionales son títulos propios de formación ejecutiva de IDEAX y no constituyen un grado académico de magíster.</p>
   </div>
 </section>
 
@@ -1043,6 +1058,20 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
         <p>Sesión personalizada con el docente para revisar tu proyecto, resolver problemas técnicos y avanzar hacia una versión funcional.</p>
       </div>
     </div>
+
+    <div class="clases-magistrales revela" id="clases-magistrales">
+      <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4M10 8.5l4 2-4 2z"/></svg></span>
+      <div>
+        <small>Para todos los estudiantes de IDEAX</small>
+        <h3>Clases Magistrales mensuales</h3>
+        <p>Una vez al mes, una clase magistral en línea abierta a todos los estudiantes vigentes, sin costo adicional. El tema se elige según los diplomados y materias que se están cursando ese mes. Cada clase queda grabada y disponible en la Facultad Virtual durante 30 días.</p>
+      </div>
+      <ul>
+        <li><b>1</b>al mes</li>
+        <li><b>$0</b>para estudiantes</li>
+        <li><b>30 días</b>de grabación disponible</li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -1058,14 +1087,14 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
         <span class="ceja">Nuestra historia</span>
         <h2 class="titulo">Más de una década de formación ejecutiva en línea</h2>
         <p class="bajada" style="margin-bottom:1em">IDEAX es la continuación de IADE Business School, escuela de negocios en línea fundada en Chile en 2013.</p>
-        <p>IADE se dedicó a la formación continua en ciencias económicas y empresariales, con programas en gestión, capital humano, economía y finanzas, marketing, operaciones y logística. Dictó masters profesionales como títulos propios, con tesis aplicada y tutoría docente, además de diplomados y cursos para estudiantes de Chile y Latinoamérica.</p>
+        <p>IADE se dedicó a la formación continua en ciencias económicas y empresariales, con programas en gestión, capital humano, economía y finanzas, marketing, operaciones y logística. Dictó Masters Profesionales como títulos propios, con tesis aplicada y tutoría docente, además de diplomados y cursos para estudiantes de Chile y Latinoamérica.</p>
         <p>Hoy, como Instituto de Administración y Dirección Ejecutiva, IDEAX retoma esa experiencia con programas abiertos, virtuales y aplicados a los desafíos actuales de la gestión.</p>
       </div>
     </div>
 
     <div class="hitos">
       <div class="hito revela"><span class="punto"></span><div class="anio">2013</div><h4>Nace IADE Business School</h4><p>Escuela de negocios basada en metodologías pedagógicas en línea.</p></div>
-      <div class="hito revela"><span class="punto"></span><div class="anio">2018</div><h4>Masters profesionales</h4><p>Títulos propios en MBA, Business &amp; Law, Capital Humano, Marketing, Finanzas, Logística, Prevención y Proyectos.</p></div>
+      <div class="hito revela"><span class="punto"></span><div class="anio">2018</div><h4>Masters Profesionales</h4><p>Títulos propios en MBA, Business &amp; Law, Capital Humano, Marketing, Finanzas, Logística, Prevención y Proyectos.</p></div>
       <div class="hito revela"><span class="punto"></span><div class="anio">2020</div><h4>Cierre de un ciclo</h4><p>IADE concluye sus actividades después de siete años de formación.</p></div>
       <div class="hito revela"><span class="punto"></span><div class="anio">Hoy</div><h4>IDEAX</h4><p>Formación ejecutiva virtual con programas abiertos de 8 semanas.</p></div>
     </div>
@@ -1086,9 +1115,9 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
       <div>
         <h3>Naturaleza institucional</h3>
         <p><strong>IDEAX Chile, Instituto de Administración y Dirección Ejecutiva</strong>, es una institución autónoma dedicada a la formación ejecutiva y continua. Diseña y dicta sus propios programas para profesionales, directivos y emprendedores.</p>
-        <div class="oferta-tipos"><span>Cursos ejecutivos</span><span>Diplomados</span><span>Masters profesionales</span><span>Programas cerrados para organizaciones</span></div>
+        <div class="oferta-tipos"><span>Cursos ejecutivos</span><span>Diplomados</span><span>Masters Profesionales</span><span>Programas cerrados para organizaciones</span></div>
         <p>IDEAX no es una universidad ni un instituto profesional, y sus programas no conducen a grados académicos ni a títulos profesionales. Al aprobar un programa se recibe un certificado emitido por IDEAX.</p>
-        <div class="aclaracion"><p><strong style="color:#7A3E0A">Masters profesionales:</strong> los masters que dictó IADE Business School, y los que IDEAX pueda ofrecer en el futuro, son títulos propios orientados a la especialización profesional. No son un magíster ni equivalen a un grado académico universitario, y no habilitan por sí mismos para continuar estudios de doctorado.</p></div>
+        <div class="aclaracion"><p><strong style="color:#7A3E0A">Masters Profesionales:</strong> los Masters Profesionales que dictó IADE Business School, y los que IDEAX pueda ofrecer en el futuro, son títulos propios orientados a la especialización profesional. No son un magíster ni equivalen a un grado académico universitario, y no habilitan por sí mismos para continuar estudios de doctorado.</p></div>
       </div>
     </div>
   </div>
@@ -1194,7 +1223,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
       <p>Ingresa el código impreso en el certificado o el RUT / pasaporte de la persona titular. Por resguardo de la privacidad, el documento se muestra parcialmente.</p>
       <div class="sellos-inst">
         <div class="sello-inst"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="9" r="6"/><path d="M8.5 14l-2 7 5.5-3 5.5 3-2-7"/></svg></span><div><b>Certificados IDEAX</b><span>Programas ejecutivos y para emprendedores</span></div></div>
-        <div class="sello-inst"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l9-5 9 5-9 5z"/><path d="M7 11.5V16c0 1.5 2.2 3 5 3s5-1.5 5-3v-4.5M21 9v6"/></svg></span><div><b>Certificados IADE Business School</b><span>Masters profesionales (títulos propios), diplomados y cursos, 2013 a 2020</span></div></div>
+        <div class="sello-inst"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l9-5 9 5-9 5z"/><path d="M7 11.5V16c0 1.5 2.2 3 5 3s5-1.5 5-3v-4.5M21 9v6"/></svg></span><div><b>Certificados IADE Business School</b><span>Masters Profesionales (títulos propios), diplomados y cursos, 2013 a 2020</span></div></div>
       </div>
     </div>
     <div class="verifica-caja">
@@ -1222,14 +1251,19 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
       <p class="bajada">Si tienes otra duda, escríbenos desde el formulario de inscripción.</p>
     </div>
     <div>
-      <details><summary>¿Cuánto tiempo necesito a la semana?</summary><p>La sesión en vivo más el trabajo autónomo de la semana, que organizas a tu ritmo siempre que el entregable llegue en el plazo indicado.</p></details>
-      <details><summary>¿Qué pasa si no puedo asistir a una sesión?</summary><p>Cada sesión deja material de apoyo en la plataforma del curso, y debes completar igualmente el entregable de esa semana.</p></details>
-      <details><summary>¿Cómo pago el programa?</summary><p>En línea, a través de Mercado Pago, con tarjeta de débito, crédito o transferencia, y hasta en 12 cuotas a precio contado. Los diplomados valen USD 300, el paper del master USD 150, y el master no tiene costo adicional. Al inscribirte recibes por correo el brochure con los valores y el enlace de pago; una vez confirmado el pago, te llegan el manual del curso, el programa de trabajo y las indicaciones para comenzar.</p></details>
+      <details><summary>¿Cuánto tiempo necesito a la semana?</summary><p>En los cursos ejecutivos, la sesión en vivo más el trabajo autónomo de la semana. En los diplomados, unas 6 horas semanales, que organizas a tu ritmo siempre que la entrega llegue en el plazo indicado. Si cursas varios diplomados en paralelo, la carga se suma.</p></details>
+      <details><summary>¿Cuándo comienzo?</summary><p>Los diplomados y Masters Profesionales comienzan el primer lunes que esté al menos 7 días después de tu pago. Esa semana te permite leer el manual del estudiante y el primer cuaderno con calma. Los cursos ejecutivos comienzan en la fecha de su cohorte, indicada en el brochure.</p></details>
+      <details><summary>¿Qué pasa si no puedo asistir a una sesión en vivo de un curso?</summary><p>Cada sesión deja material de apoyo en la plataforma del curso, y debes completar igualmente el entregable de esa semana.</p></details>
+      <details><summary>¿Cómo pago el programa?</summary><p>En línea, a través de Mercado Pago, con tarjeta de débito, crédito o transferencia, y hasta en 12 cuotas a precio contado. Los cursos ejecutivos valen $135.000, salvo IA Aplicada a los Negocios, que vale $165.000. Cada diplomado vale $240.000, y el Master Profesional completo $865.000, con sus tres diplomados, el Diplomado en Metodología y el paper. Al inscribirte recibes por correo el brochure con el valor y el enlace de pago; una vez confirmado el pago, te llegan el manual del estudiante, el primer material de estudio y tu fecha de inicio.</p></details>
       <details><summary>¿Qué certificado recibo?</summary><p>Al aprobar el programa recibes un certificado de aprobación emitido por IDEAX, Instituto de Administración y Dirección Ejecutiva. IDEAX es una institución autónoma de formación ejecutiva y continua: sus programas no conducen a grados académicos ni a títulos profesionales.</p></details>
-      <details><summary>¿Un master de IDEAX o de IADE es un magíster?</summary><p>No. Los masters profesionales son títulos propios de formación ejecutiva, orientados a la especialización y al desempeño profesional. No son un grado académico de magíster, que en Chile solo otorgan las universidades, y no habilitan por sí mismos para cursar un doctorado. Un master profesional de IDEAX se obtiene aprobando tres diplomados de una misma ruta y un paper evaluado por pares.</p></details>
-      <details><summary>¿Puedo convalidar un diplomado?</summary><p>Sí. Los diplomados aprobados son convalidables con otros programas de IDEAX: cuentan para las rutas de master que los incluyan. Al inscribir tu tercer diplomado indicas que optarás al master y desarrollas el paper en paralelo.</p></details>
+      <details><summary>¿Un Master Profesional de IDEAX o de IADE es un magíster?</summary><p>No. Los Masters Profesionales son títulos propios de formación ejecutiva, orientados a la especialización y al desempeño profesional. No son un grado académico de magíster, que en Chile solo otorgan las universidades, y no habilitan por sí mismos para cursar un doctorado. Un Master Profesional de IDEAX se obtiene aprobando tres diplomados de una misma ruta, el Diplomado en Metodología y un paper evaluado por pares.</p></details>
+      <details><summary>¿Cuánto dura un Master Profesional?</summary><p>La ruta estándar, con un diplomado a la vez y el Diplomado en Metodología en paralelo a uno de ellos, toma 12 meses. En la ruta intensiva, con dos o más diplomados en paralelo y 12 o más horas semanales, puedes terminar desde 6 a 8 meses. La evaluación por pares del paper en la revista CMIA toma habitualmente entre 2 y 4 meses. El plazo máximo es de 18 meses, con posibilidad de prórroga y de congelamiento por fuerza mayor.</p></details>
+      <details><summary>¿Puedo convalidar un diplomado?</summary><p>Sí. Los diplomados aprobados son convalidables con otros programas de IDEAX: se convalidan si luego te inscribes en el Master Profesional que los incluye. Si ya pagaste el Diplomado en Metodología por separado, ese monto queda como saldo a favor para tu inscripción en el Master Profesional.</p></details>
+      <details><summary>¿Cómo me comunico con mi docente y con IDEAX?</summary><p>Toda consulta, académica o administrativa, se hace por la mensajería de la Facultad Virtual. Los mensajes se acumulan y recibes un resumen diario por correo, uno académico y otro administrativo; respondes por el mismo medio. Te respondemos en un plazo de hasta dos días hábiles, de lunes a viernes, de 9:00 a 18:00, hora de Chile continental. No atendemos consultas por WhatsApp.</p></details>
+      <details><summary>¿Qué son las Clases Magistrales?</summary><p>Una clase en línea al mes, abierta a todos los estudiantes vigentes de IDEAX y sin costo adicional. Su tema se elige según los programas que se están cursando ese mes. Queda grabada y disponible en la Facultad Virtual durante 30 días; la asistencia es voluntaria y no se evalúa.</p></details>
+      <details><summary>¿Puedo apostillar mi certificado?</summary><p>Sí, como servicio opcional con costo adicional. Lo solicitas desde la Facultad Virtual y te informamos el valor al momento de la solicitud.</p></details>
       <details><summary>¿Cómo verifica una institución mi certificado?</summary><p>En la sección Verificación de certificados de este sitio, con el código impreso en el certificado o con tu RUT o pasaporte. También aplica a los certificados emitidos por IADE Business School entre 2013 y 2020.</p></details>
-      <details><summary>¿Necesito conocimientos previos?</summary><p>No se exigen requisitos formales. Cada programa entrega al inicio un material de nivelación con los conceptos que se usarán durante las ocho semanas.</p></details>
+      <details><summary>¿Necesito conocimientos previos?</summary><p>No se exigen requisitos formales. Cada programa entrega al inicio un material de nivelación con los conceptos que se usarán durante el programa.</p></details>
       <details><summary>¿Debo pagar herramientas de inteligencia artificial?</summary><p>No. En IA Aplicada a los Negocios se trabaja con los tramos gratuitos de las herramientas disponibles.</p></details>
     </div>
   </div>
@@ -1274,7 +1308,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
             <option value="emp-m5">Emprendedores: Módulo 5, Formalización y proyectos</option>
             <option value="emp-m6">Emprendedores: Módulo 6, Comercio electrónico</option>
           </optgroup>
-          <optgroup label="Masters profesionales">
+          <optgroup label="Masters Profesionales">
             <option value="m1">Master Profesional en Administración y Dirección de Empresas (MBA)</option>
             <option value="m2">Master Profesional en Gestión Estratégica de Capital Humano</option>
             <option value="m3">Master Profesional en Marketing y Gestión Comercial</option>
@@ -1361,7 +1395,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
         <li><a href="#programas" data-abrir="op">Operaciones y Supply Chain</a></li>
         <li><a href="#programas" data-abrir="al">Artes Liberales Aplicadas</a></li>
         <li><a href="#emprendedores">Programa para Emprendedores</a></li>
-        <li><a href="#masters">Masters y Diplomados</a></li>
+        <li><a href="#masters">Masters Profesionales</a></li>
       </ul>
     </div>
     <div>
@@ -1385,7 +1419,7 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
       </ul>
     </div>
   </div>
-  <p class="nota-legal">IDEAX Chile es una institución autónoma de formación ejecutiva y continua que ofrece programas propios, diplomados y cursos. Sus programas no conducen a grados académicos ni a títulos profesionales; los masters profesionales son títulos propios y no constituyen un grado de magíster.</p>
+  <p class="nota-legal">IDEAX Chile es una institución autónoma de formación ejecutiva y continua que ofrece programas propios, diplomados y cursos. Sus programas no conducen a grados académicos ni a títulos profesionales; los Masters Profesionales son títulos propios y no constituyen un grado de magíster.</p>
   <div class="legal"><span>© <span id="anio"></span> IDEAX, Instituto de Administración y Dirección Ejecutiva.</span><span>Diseñado por <a href="https://davincifactory.cl" target="_blank" rel="noopener" style="color:rgba(255,255,255,.85);font-weight:600">Davinci Factory</a>. Todos los derechos reservados.</span></div>
 </footer>
 
@@ -1399,15 +1433,15 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
   <div class="ficha-cuerpo">
     <div class="bro-datos">
       <div><b>12 meses</b>Duración total</div>
-      <div><b>3 diplomados</b>De 4 meses cada uno</div>
+      <div><b>3 diplomados</b>Más el Diplomado en Metodología</div>
       <div><b>Asincrónico</b>Facultad Virtual IDEAX</div>
       <div><b>Paper</b>Evaluado por pares, CMIA</div>
     </div>
     <div class="bro-valor">
-      <div><b>USD 300</b>por diplomado</div>
-      <div><b>USD 150</b>paper final</div>
-      <div><b>USD 0</b>costo adicional del master</div>
-      <div class="total"><b>USD 1.050</b>ruta completa, hasta 12 cuotas a precio contado con Mercado Pago</div>
+      <div><b>$240.000</b>por diplomado</div>
+      <div><b>$0</b>Diplomado en Metodología, incluido</div>
+      <div><b>$145.000</b>paper final</div>
+      <div class="total"><b>$865.000</b>ruta completa, hasta 12 cuotas a precio contado con Mercado Pago</div>
     </div>
     <h4>Dirigido a</h4>
     <p class="texto" id="bro-dir"></p>
@@ -1420,11 +1454,11 @@ dialog::backdrop{background:rgba(10,28,53,.72);backdrop-filter:blur(3px)}
       <div><b>Consultas</b>Preguntas al docente durante el diplomado</div>
       <div><b>Video</b>Exposición al cerrar cada módulo</div>
     </div>
-    <h4>Ruta al master</h4>
-    <p class="texto">Cada diplomado se puede cursar y certificar por separado, y es convalidable con otros programas de IDEAX. Quien aprueba los tres diplomados de esta ruta y su trabajo final, un paper aplicado sometido a evaluación por pares del Cuaderno Multidisciplinar de Investigación Aplicada (CMIA), obtiene el master profesional. La opción de master se indica al inscribir el tercer diplomado, y el paper se desarrolla en paralelo.</p>
-    <p class="bro-legal">IDEAX Chile, Instituto de Administración y Dirección Ejecutiva, es una institución autónoma de formación ejecutiva y continua. Los masters profesionales son títulos propios y no constituyen un grado académico de magíster. Valores en dólares; el cobro se realiza en moneda local según el tipo de cambio vigente al momento del pago. www.ideax.cl · contacto@ideax.cl</p>
+    <h4>Ruta al Master Profesional</h4>
+    <p class="texto">Cada diplomado se puede cursar y certificar por separado, y es convalidable con otros programas de IDEAX. Quien aprueba los tres diplomados de esta ruta, el Diplomado en Metodología de la Investigación y Escritura Académica, incluido sin costo, y su trabajo final, un paper aplicado sometido a evaluación por pares del Cuaderno Multidisciplinar de Investigación Aplicada (CMIA), obtiene el Master Profesional. La ruta estándar toma 12 meses; el plazo máximo es de 18 meses.</p>
+    <p class="bro-legal">IDEAX Chile, Instituto de Administración y Dirección Ejecutiva, es una institución autónoma de formación ejecutiva y continua. Los Masters Profesionales son títulos propios y no constituyen un grado académico de magíster. Valores en pesos chilenos. www.ideax.cl · contacto@ideax.cl</p>
     <div class="ficha-acciones no-imprimir">
-      <a class="btn btn-naranja" href="#inscripcion" id="bro-inscribir">Quiero información de esta ruta</a>
+      <a class="btn btn-naranja" href="#inscripcion" id="bro-inscribir">Quiero información de este Master Profesional</a>
       <button class="btn btn-noche" id="bro-imprimir">Descargar brochure (PDF)</button>
     </div>
   </div>
@@ -1532,7 +1566,7 @@ ficha.addEventListener("click",e=>{ if(e.target===ficha) cerrar(); });
 $("#ficha-inscribir").addEventListener("click",()=>{ $("#f-programa").value = actual; cerrar(); });
 document.querySelectorAll("[data-preseleccion]").forEach(a=>a.addEventListener("click",()=>{ $("#f-programa").value = a.dataset.preseleccion; }));
 
-/* ===== Masters profesionales: brochures ===== */
+/* ===== Masters Profesionales: brochures ===== */
 const MASTERS = [{"id": "m1", "n": "Master Profesional en Administración y Dirección de Empresas (MBA)", "corto": "MBA", "c": "#0F2747", "desc": "Visión integral de la empresa: estrategia, personas, mercado, finanzas y operaciones, para quienes dirigen o aspiran a dirigir.", "dir": "Profesionales con responsabilidades de jefatura o gerencia, y emprendedores que necesitan una formación directiva completa.", "ico": "<path d=\"M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6\"/>", "d": [{"n": "Diplomado en Dirección Estratégica y Personas", "m": ["Introducción a los negocios", "Gestión estratégica", "Gestión del capital humano", "Liderazgo y coaching", "Desarrollo organizacional"]}, {"n": "Diplomado en Marketing y Finanzas para la Dirección", "m": ["Introducción a la ciencia del mercado", "Investigación de mercado y conducta del consumidor", "Marketing digital", "Economía y gestión financiera", "Finanzas corporativas"]}, {"n": "Diplomado en Operaciones, Proyectos e Innovación", "m": ["Gestión de operaciones", "Logística", "Project management", "Evaluación de proyectos", "Innovar y emprender"]}]}, {"id": "m2", "n": "Master Profesional en Gestión Estratégica de Capital Humano", "corto": "Capital Humano", "c": "#6E3A9C", "desc": "Gestión estratégica de las personas: atracción, desarrollo, compensaciones, relaciones laborales y cambio organizacional.", "dir": "Profesionales de recursos humanos, jefaturas de equipos y consultores en gestión de personas.", "ico": "<circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6\"/><circle cx=\"17\" cy=\"9\" r=\"2.5\"/><path d=\"M16 14.2c3 .2 5.5 2.3 5.5 5.8\"/>", "d": [{"n": "Diplomado en Dirección del Talento y Cultura Organizacional", "m": ["Gestión del capital humano", "Dirección estratégica", "Liderazgo y coaching", "Desarrollo organizacional", "Comunicación organizacional"]}, {"n": "Diplomado en Gestión Operativa de Personas", "m": ["Selección y reclutamiento", "Evaluación del desempeño", "Desarrollo de carrera", "Compensación y beneficios", "Presupuesto de RRHH"]}, {"n": "Diplomado en Relaciones Laborales y Cambio Organizacional", "m": ["Legislación laboral", "Conflicto y negociación", "Clima organizacional", "Cultura organizacional", "Desvinculación y outplacement"]}]}, {"id": "m3", "n": "Master Profesional en Marketing y Gestión Comercial", "corto": "Marketing", "c": "#F07C1B", "desc": "Marketing y gestión comercial basados en datos: marca, investigación de mercados, consumidor, innovación y canales digitales.", "dir": "Profesionales de marketing, ventas y producto, y emprendedores que buscan crecer con método.", "ico": "<path d=\"M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z\"/><path d=\"M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12\"/>", "d": [{"n": "Diplomado en Gerencia de Marketing y Marca", "m": ["Gerencia de marketing", "Segmentación y posicionamiento", "Gerencia de marca", "Plan de marketing", "Marketing de consumo y servicios"]}, {"n": "Diplomado en Investigación de Mercados y Analítica del Consumidor", "m": ["Inteligencia de mercado", "Métodos estadísticos", "Técnicas de investigación de mercados", "Conducta del consumidor", "Data science"]}, {"n": "Diplomado en Gestión Comercial, Innovación y Canales Digitales", "m": ["Gerencia comercial", "Desarrollo de nuevos productos", "Desarrollo de nuevos servicios", "eCommerce y omnicanalidad", "Gestión digital y analítica web"]}]}, {"id": "m4", "n": "Master Profesional en Auditoría, Contabilidad y Control de Gestión", "corto": "Auditoría y Control", "c": "#1D4E89", "desc": "Contabilidad, normas IFRS, auditoría, control interno y control de gestión para resguardar y dirigir la organización.", "dir": "Contadores, auditores, controllers y profesionales de administración y finanzas.", "ico": "<path d=\"M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z\"/><path d=\"M9 12l2 2 4-4\"/>", "d": [{"n": "Diplomado en Contabilidad e IFRS", "m": ["Contabilidad para la gestión", "Contabilidades especiales", "IFRS grandes empresas", "IFRS PYMEs", "Tributación para la empresa"]}, {"n": "Diplomado en Auditoría y Control Interno", "m": ["Auditoría interna y control interno", "Auditoría financiera", "Gestión de riesgos y cumplimiento", "Auditoría con análisis de datos", "Ética y gobierno corporativo"]}, {"n": "Diplomado en Control de Gestión", "m": ["Planificación estratégica", "Costos y presupuestos", "Control de gestión", "Balanced scorecard", "Indicadores y tableros de gestión"]}]}, {"id": "m5", "n": "Master Profesional en Finanzas Aplicadas", "corto": "Finanzas", "c": "#0E7C9E", "desc": "Finanzas aplicadas a la toma de decisiones: análisis, valoración, financiamiento, inversiones y mercados.", "dir": "Profesionales de finanzas, analistas, ejecutivos bancarios y emprendedores que gestionan recursos y deciden inversiones.", "ico": "<path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/>", "d": [{"n": "Diplomado en Fundamentos de Finanzas", "m": ["Gerencia de finanzas", "Matemáticas financieras", "Análisis de estados financieros", "Finanzas a corto plazo", "Modelamiento financiero con Excel e IA"]}, {"n": "Diplomado en Finanzas Corporativas", "m": ["Finanzas corporativas", "Finanzas a largo plazo", "Formulación, evaluación y gestión de proyectos", "Valoración de empresas", "Finanzas para pymes y emprendimientos"]}, {"n": "Diplomado en Inversiones y Mercados Financieros", "m": ["Mercado de capitales e inversiones", "Finanza internacional", "Riesgo financiero y derivados", "Gestión de portafolios", "Fintech y finanzas digitales"]}]}, {"id": "m6", "n": "Master Profesional en Gestión Logística Estratégica", "corto": "Logística", "c": "#14947F", "desc": "Dirección de la cadena logística: inventario, almacenamiento, transporte, distribución y control de la operación.", "dir": "Profesionales de logística, operaciones, compras y abastecimiento, de retail, industria y servicios.", "ico": "<path d=\"M2 6h12v10H2zM14 9h4l4 4v3h-8z\"/><circle cx=\"6\" cy=\"18\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>", "d": [{"n": "Diplomado en Inventario y Almacenamiento", "m": ["Gestión del inventario", "Prevención de pérdidas", "Gestión de centros de distribución", "Infraestructura del almacenaje", "Sistemas ERP y automatización"]}, {"n": "Diplomado en Transporte y Distribución", "m": ["Transporte terrestre y marítimo", "Transporte aéreo y multimodal", "Transporte y distribución", "Sistemas de costeo", "Indicadores de eficiencia"]}, {"n": "Diplomado en Dirección Logística y Control", "m": ["Gestión logística estratégica", "Gerencia de finanzas", "Formulación, evaluación y gestión de proyectos", "Evaluación de proyectos y externalización", "Control de gestión y BSC"]}]}, {"id": "m7", "n": "Master Profesional en Gestión Integrada, Prevención, Higiene, Seguridad y Medio Ambiente", "corto": "Prevención y Medio Ambiente", "c": "#5B8C2A", "desc": "Sistemas integrados de gestión: prevención de riesgos, higiene y seguridad, calidad, responsabilidad social y medio ambiente.", "dir": "Prevencionistas, encargados de calidad y medio ambiente, y jefaturas de operaciones.", "ico": "<path d=\"M12 3c4 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2-6 6-10z\"/><path d=\"M12 21v-7\"/>", "d": [{"n": "Diplomado en Prevención de Riesgos, Higiene y Seguridad", "m": ["Seguridad en el trabajo", "Higiene en el trabajo", "Gestión de la prevención de riesgos", "Gestión de personas", "Sistemas de información y gestión"]}, {"n": "Diplomado en Gestión de la Calidad y Responsabilidad Social", "m": ["Modelos y normativa de calidad", "Auditorías de calidad", "Modelos de excelencia", "Responsabilidad social empresarial", "Gestión de proyectos"]}, {"n": "Diplomado en Gestión Ambiental y Sistemas Integrados", "m": ["Evaluación de impacto ambiental", "Gestión de residuos", "Auditorías ambientales", "Sistemas integrados de gestión", "Metodologías de integración"]}]}, {"id": "m8", "n": "Master Profesional en Formulación, Evaluación y Dirección de Proyectos", "corto": "Proyectos", "c": "#B4530A", "desc": "Formulación, evaluación y dirección de proyectos con estándares profesionales, desde la idea hasta el control.", "dir": "Profesionales que formulan, evalúan o dirigen proyectos en empresas, instituciones públicas y consultoras.", "ico": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M7 9h6M7 13h10M7 17h4\"/>", "d": [{"n": "Diplomado en Formulación de Proyectos", "m": ["Formulación estratégica", "Formulación de proyectos", "Análisis de factibilidad", "Costos y presupuestos", "Gestión de calidad"]}, {"n": "Diplomado en Evaluación de Proyectos", "m": ["Análisis financiero", "Evaluación económica, financiera y social", "Evaluación de impacto ambiental", "Finanzas corporativas", "Mercado de capitales"]}, {"n": "Diplomado en Dirección y Control de Proyectos", "m": ["Estándares PMI", "Control de gestión", "Balanced scorecard", "Dirección de empresas", "Gobiernos corporativos"]}]}];
 const bro = $("#brochure");
 let masterActual = "";
@@ -1543,7 +1577,7 @@ function abrirBrochure(id){
   $("#bro-titulo").textContent = m.n;
   $("#bro-desc").textContent = m.desc;
   $("#bro-dir").textContent = m.dir;
-  $("#bro-dips").innerHTML = m.d.map((d,k)=>`<div class="bro-dip"><div class="bro-dip-cab"><span>${k+1}</span><b>${esc(d.n)}</b><small>4 meses · 5 módulos · USD 300</small></div><ul>${d.m.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`).join("");
+  $("#bro-dips").innerHTML = m.d.map((d,k)=>`<div class="bro-dip"><div class="bro-dip-cab"><span>${k+1}</span><b>${esc(d.n)}</b><small>4 meses · 5 módulos · $240.000</small></div><ul>${d.m.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`).join("");
   if(typeof bro.showModal==="function") bro.showModal(); else bro.setAttribute("open","");
   bro.scrollTop = 0;
 }
