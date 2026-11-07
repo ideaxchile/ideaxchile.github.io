@@ -39,6 +39,10 @@
     const t = document.createElement('div'); t.className = 'toast' + (error ? ' error' : ''); t.textContent = msg;
     document.body.appendChild(t); setTimeout(() => t.remove(), error ? 6000 : 3200);
   }
+  function portadaVista(img, titulo, sub, acciones, pos) {
+    return '<section class="portada-vista" style="background-image:linear-gradient(90deg,rgba(10,28,53,.96) 0%,rgba(15,39,71,.88) 38%,rgba(15,39,71,.25) 72%,rgba(15,39,71,0) 100%),url(img/' + img + '.jpg);background-position:' + (pos || '70% 35%') + '">' +
+      '<div><h1>' + titulo + '</h1>' + (sub ? '<p>' + sub + '</p>' : '') + '</div>' + (acciones ? '<div class="acciones">' + acciones + '</div>' : '') + '</section>';
+  }
   function cargando(msg) { return '<div class="cargando">' + h(msg || 'Cargando') + '</div>'; }
   function vacio(titulo, texto) { return '<div class="vacio"><b>' + h(titulo) + '</b>' + h(texto || '') + '</div>'; }
   function etqEstado(e) {
@@ -210,7 +214,8 @@
 
   /* =================== ingreso =================== */
   async function vIngresar() {
-    app.innerHTML = '<div class="ingreso"><section class="lado"><a class="marca" href="https://www.ideax.cl"><img src="../img/logo-ideax-blanco.png" alt=""><span>IDEA<i>X</i></span><small>eFACULTAD</small></a>' +
+    const fondo = 'ingreso-' + (1 + Math.floor(Math.random() * 3));
+    app.innerHTML = '<div class="ingreso"><section class="lado" style="background-image:linear-gradient(160deg,rgba(15,39,71,.9) 0%,rgba(15,39,71,.62) 45%,rgba(10,28,53,.9) 100%),url(img/' + fondo + '.jpg)"><a class="marca" href="https://www.ideax.cl"><img src="../img/logo-ideax-blanco.png" alt=""><span>IDEA<i>X</i></span><small>eFACULTAD</small></a>' +
       '<div><h1>Tu facultad, donde estés.</h1><p>Estudia cada semana, entrega tus casos, revisa tus notas y conversa con tus docentes. Todo en un solo lugar.</p></div>' +
       '<div class="bandas"><i style="background:#0F2747;border:1px solid #3B5679"></i><i style="background:#1D4E89"></i><i style="background:#14947F"></i><i style="background:#6E3A9C"></i><i style="background:#F07C1B"></i></div></section>' +
       '<section class="form"><div class="caja"><h2>Ingresar</h2><p style="color:var(--gris)">Usa el mismo correo con que te inscribiste.</p>' +
@@ -301,8 +306,7 @@
         '</div><div class="pie">' + (m.final ? notaHtml(m.final) : etqEstado(m.estado)) +
         '<div class="acciones">' + (m.actual ? '<a class="btn naranja chico" href="#/semana/' + m.id + '/' + m.actual.id + '">Ir a mi semana</a>' : '') + '<a class="btn claro chico" href="#/curso/' + m.id + '">Ver programa</a></div></div></article>';
     };
-    vista('<div class="encabezado-vista"><div><h1>Hola, ' + h(u.nombres) + '</h1><p>' + (cursos.some(m => m.actual) ? 'Tienes semanas disponibles. ¡A trabajar!' : 'Aquí están tus programas.') + '</p></div>' +
-      '<div class="acciones"><a class="btn claro" href="#/mensajes">Escribir a IDEAX</a></div></div>' +
+    vista(portadaVista('estudiante', 'Hola, ' + h(u.nombres), cursos.some(m => m.actual) ? 'Tienes semanas disponibles. ¡A trabajar!' : 'Aquí están tus programas.', '<a class="btn naranja" href="#/mensajes">Escribir a IDEAX</a>', '75% 30%') +
       (contenedores.length ? contenedores.map(c => '<div class="aviso info">Estás inscrito en el <b>' + h(c.programa.nombre) + '</b>. Sus diplomados, la Metodología y el paper aparecen abajo como programas separados, cada uno con su calendario.</div>').join('') : '') +
       (cursos.length ? '<div class="rejilla r2">' + cursos.map(tarjeta).join('') + '</div>' : vacio('Aún no tienes programas en la eFacultad', 'Cuando se confirme tu inscripción aparecerán aquí.')));
   }
@@ -670,8 +674,8 @@
     const [d, progs] = await Promise.all([api('bandeja', { estado }), api('programas').catch(() => [])]);
     const pendientes = d.entregas.filter(x => x.estado === 'Enviada');
     const conEntregas = progs.filter(p => p.semanas).sort((a, b) => (pendientes.some(x => x.cod === b.cod) ? 1 : 0) - (pendientes.some(x => x.cod === a.cod) ? 1 : 0));
-    vista('<div class="encabezado-vista"><div><h1>Bandeja de corrección</h1><p>' + (estado === 'Enviada' ? d.entregas.length + ' entrega' + (d.entregas.length === 1 ? '' : 's') + ' por corregir.' : 'Entregas ' + estado.toLowerCase() + 's.') + '</p></div>' +
-      '<div class="acciones"><select id="f-estado"><option value="Enviada">Por corregir</option><option value="Corregida">Calificadas</option><option value="Devuelta">Devueltas</option><option value="Todas">Todas</option></select></div></div>' +
+    vista(portadaVista('docente', 'Bandeja de corrección', estado === 'Enviada' ? d.entregas.length + ' entrega' + (d.entregas.length === 1 ? '' : 's') + ' por corregir.' : 'Entregas ' + estado.toLowerCase() + 's.',
+      '<select id="f-estado"><option value="Enviada">Por corregir</option><option value="Corregida">Calificadas</option><option value="Devuelta">Devueltas</option><option value="Todas">Todas</option></select>', '80% 30%') +
       '<section class="tarjeta"><h3>Corrección en bloque</h3><p style="color:var(--gris);font-size:14px">Descarga todas las entregas de una semana en un ZIP, con cada entrega lista para leer o imprimir y una planilla de calificación con la rúbrica. Después sube la planilla completa y se cargan juntas las notas y las retroalimentaciones.</p>' +
       '<div class="fila-campos" style="align-items:end"><label class="campo" style="margin:0"><span>Programa</span><select id="m-prog">' + conEntregas.map(p => '<option value="' + p.cod + '">' + h(p.nombre) + '</option>').join('') + '</select></label>' +
       '<label class="campo" style="margin:0"><span>Semana</span><select id="m-sem"></select></label>' +
@@ -963,8 +967,8 @@
   async function vResumenGestion() {
     const d = await api('resumenGestion');
     const c = (n, t, url, alerta) => n === null || n === undefined ? '' : '<a class="cifra' + (alerta && n ? ' alerta' : '') + '" href="' + url + '" style="text-decoration:none"><b>' + n + '</b><span>' + t + '</span></a>';
-    vista('<div class="encabezado-vista"><div><h1>Gestión</h1><p>Última sincronización con inscripciones: ' + h(d.ultimaSincronizacion || 'sin registro') + '</p></div>' +
-      (tiene('gestion_administrativa') ? '<button class="btn claro" id="btn-sync">Sincronizar matrículas ahora</button>' : '') + '</div>' +
+    vista(portadaVista('gestion', 'Gestión', 'Última sincronización con inscripciones: ' + h(d.ultimaSincronizacion || 'sin registro'),
+      tiene('gestion_administrativa') ? '<button class="btn naranja" id="btn-sync">Sincronizar matrículas ahora</button>' : '', '75% 30%') +
       '<div class="rejilla r4">' + c(d.matriculasActivas, 'Matrículas activas', '#/matriculas') + c(d.estudiantes, 'Estudiantes', '#/matriculas') + c(d.porCorregir, 'Entregas por corregir', '#/bandeja', true) +
       c(d.solicitudes, 'Solicitudes pendientes', '#/solicitudes-gestion', true) + c(d.mensajes, 'Conversaciones sin leer', '#/mensajes', true) + c(d.semanasSinMaterial, 'Semanas sin material listo', '#/programas') + '</div>');
     if ($('#btn-sync')) $('#btn-sync').onclick = async ev => { ev.target.disabled = true; try { const r = await api('sincronizar'); toast(r.mensaje); vResumenGestion(); } catch (er) { toast(er.message, true); ev.target.disabled = false; } };

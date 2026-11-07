@@ -204,7 +204,7 @@ table.rubrica{width:100%;border-collapse:separate;border-spacing:0;font-size:13p
 
 /* ingreso */
 .ingreso{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;background:#fff}
-.ingreso .lado{background:linear-gradient(160deg,rgba(15,39,71,.92),rgba(10,28,53,.97)),url(../img/portada.jpg) center/cover;color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:space-between}
+.ingreso .lado{background:var(--noche) center/cover no-repeat;color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:space-between}
 .ingreso .lado h1{color:#fff;font-size:38px;margin:0 0 12px}
 .ingreso .lado p{color:#DCE4EE;max-width:440px}
 .ingreso .lado .bandas{display:flex;height:6px;border-radius:4px;overflow:hidden;width:220px}
@@ -283,3 +283,10 @@ table.rubrica{width:100%;border-collapse:separate;border-spacing:0;font-size:13p
 }
 .modal .tabla th{white-space:normal}
 @media(max-width:760px){.toast{bottom:84px}}
+/* portada de cada ambiente */
+.portada-vista{border-radius:var(--radio);background-size:cover;background-repeat:no-repeat;color:#fff;min-height:210px;padding:30px 32px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;box-shadow:var(--sombra);position:relative;overflow:hidden}
+.portada-vista:after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:linear-gradient(90deg,#0F2747,#1D4E89,#14947F,#6E3A9C,#F07C1B)}
+.portada-vista h1{color:#fff;font-size:30px;margin:0 0 6px}
+.portada-vista p{color:#DCE4EE;margin:0;max-width:520px}
+.portada-vista select{width:auto;background:#fff;color:var(--tinta)}
+@media(max-width:620px){.portada-vista{min-height:170px;padding:22px 20px;background-position:80% 30%!important}.portada-vista h1{font-size:24px}}
