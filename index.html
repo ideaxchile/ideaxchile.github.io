@@ -419,6 +419,16 @@ p{margin:0 0 1em}
 .barra-sup a{text-decoration:none;display:inline-flex;align-items:center;gap:7px}
 .barra-sup a:hover{color:#fff}
 .barra-sup svg{width:16px;height:16px}
+.barra-sup a.efac{background:var(--naranja);color:#fff;padding:4px 12px;border-radius:20px;font-weight:600}
+.barra-sup a.efac:hover{background:var(--naranja-2)}
+.menu .btn-efac{background:transparent;color:var(--noche);border:2px solid var(--noche);box-shadow:none}
+.menu .btn-efac:hover{background:var(--noche);color:#fff}
+@media (min-width:1361px){.menu .btn-efac{display:none}}
+.franja-efac{background:var(--noche);color:#fff}
+.franja-efac .contenedor{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-top:16px;padding-bottom:16px;flex-wrap:wrap}
+.franja-efac p{margin:0;color:rgba(255,255,255,.85)}
+.franja-efac p b{color:#fff}
+.franja-efac .btn{white-space:nowrap}
 .barra-sup .destacar{color:#FFB27A;font-weight:600}
 @media (max-width:600px){.barra-sup .contenedor{justify-content:space-between;gap:10px;font-size:.78rem}.barra-sup .ocultar-movil{display:none}}
 
@@ -857,7 +867,8 @@ details.dip-valor summary::after{width:22px;height:22px}
     <a class="ocultar-movil" id="correo-barra" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span></span></a>
     <a class="destacar" href="#gratuitos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg>Cursos gratuitos</a>
     <a class="destacar" href="#becas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v6"/></svg>Becas</a>
-    <a class="destacar" href="#verificar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Verificar certificado</a>
+    <a class="destacar ocultar-movil" href="#verificar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Verificar certificado</a>
+    <a class="efac" href="efacultad/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg>eFacultad</a>
   </div>
 </div>
 
@@ -880,6 +891,7 @@ details.dip-valor summary::after{width:22px;height:22px}
       <a class="enlace" href="#historia">Nuestra Historia</a>
       <a class="enlace" href="#equipo">Equipo Académico</a>
       <a class="enlace" href="#empresas">Empresas</a>
+      <a class="btn btn-efac" href="efacultad/">eFacultad</a>
       <a class="btn btn-naranja" href="#inscripcion">Inscripciones
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
       </a>
@@ -903,6 +915,14 @@ details.dip-valor summary::after{width:22px;height:22px}
       <a class="btn btn-blanco" href="#emprendedores">Programa para emprendedores</a>
     </div>
     <a class="aviso-becas entra" href="#becas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v6"/></svg><span><b>Becas parciales de 20%, 30% y 50%.</b> Postula al inscribirte.</span></a>
+  </div>
+</section>
+
+<!-- ACCESO A LA eFACULTAD -->
+<section class="franja-efac" aria-label="Acceso a la eFacultad">
+  <div class="contenedor">
+    <p><b>¿Ya eres estudiante de IDEAX?</b> Estudia, entrega tus casos, revisa tus notas y descarga tus certificados en tu eFacultad.</p>
+    <a class="btn btn-naranja" href="efacultad/">Ingresar a la eFacultad</a>
   </div>
 </section>
 
@@ -2146,6 +2166,7 @@ details.dip-valor summary::after{width:22px;height:22px}
         <li><a href="#historia">Nuestra Historia</a></li>
         <li><a href="#equipo">Equipo Académico</a></li>
         <li><a href="#empresas">Empresas</a></li>
+        <li><a href="efacultad/">eFacultad, acceso estudiantes y docentes</a></li>
       </ul>
     </div>
     <div>
