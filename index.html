@@ -760,6 +760,13 @@ details.dip-valor summary::after{width:22px;height:22px}
 .texto-legal h4{margin-top:18px}
 .texto-legal p{font-size:.9rem;line-height:1.6;color:var(--tinta);margin:8px 0}
 @media (max-width:560px){.barra-pasos li{font-size:.68rem}.barra-pasos span{width:26px;height:26px}}
+/* Diplomado transversal de Metodología */
+.dip-met{margin-top:26px;border-top-width:5px}
+.met-cab{display:grid;grid-template-columns:1fr auto;gap:28px;align-items:end}
+.met-cab p{max-width:85ch}
+.met-acc{display:flex;flex-direction:column;align-items:stretch;gap:2px;min-width:210px}
+.met-acc .btn{justify-content:center;box-shadow:none}
+@media (max-width:760px){.met-cab{grid-template-columns:1fr;gap:12px}}
 /* Cursos gratuitos */
 .gratuitos{background:var(--papel)}
 .gratis-cabeza{display:grid;grid-template-columns:1.25fr 1fr;gap:50px;align-items:end;margin-bottom:34px}
@@ -954,7 +961,7 @@ details.dip-valor summary::after{width:22px;height:22px}
         <div class="op">+</div>
         <div class="pieza"><b>Diplomado 3</b><span>4 meses</span></div>
         <div class="op">+</div>
-        <div class="pieza met"><b>Metodología</b><span>Diplomado incluido</span></div>
+        <div class="pieza met"><b>Metodología</b><span>Incluido; también por separado</span></div>
         <div class="op">+</div>
         <div class="pieza paper"><b>Paper</b><span>Evaluado por pares, CMIA</span></div>
         <div class="op">=</div>
@@ -1340,6 +1347,21 @@ details.dip-valor summary::after{width:22px;height:22px}
           <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m10">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m10">Quiero más información</a></div>
         </div>
       </div>
+    <article class="dip dip-met revela" style="--c:#F07C1B" data-sim="met">
+      <div class="met-cab">
+        <div>
+          <small>Diplomado transversal · común a todos los Masters Profesionales</small>
+          <h3>Diplomado en Metodología de la Investigación y Escritura Académica</h3>
+          <p>De la pregunta al artículo: en quince semanas investigas, escribes y presentas tu propio paper a evaluación por pares en la revista CMIA. Cada semana avanzas una pieza de tu artículo, con una guía breve, una herramienta concreta y una entrega revisada. Está incluido en todos los Masters Profesionales, y también puedes cursarlo por separado, con certificado propio; si después te inscribes en un master, lo que pagaste queda como saldo a favor.</p>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
+        </div>
+        <div class="met-acc">
+          <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="met">Inscribirme</a>
+          <a class="dip-info" href="#inscripcion" data-info="met">Quiero más información</a>
+        </div>
+      </div>
+      <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Pregunta y problema de investigación</li><li>Revisión de literatura y referencias</li><li>Diseño metodológico</li><li>Análisis de datos</li><li>Escritura científica y publicación</li></ol></details>
+    </article>
     <p class="nota-masters">En cada diplomado encontrarás su valor y la simulación con beca. Se paga en línea con Mercado Pago, hasta en 12 cuotas a precio contado. Los Masters Profesionales son títulos propios de formación ejecutiva de IDEAX y no constituyen un grado académico de magíster.</p>
   </div>
 </section>
@@ -1951,6 +1973,7 @@ details.dip-valor summary::after{width:22px;height:22px}
           <select id="f-programa" name="programa" required>
             <option value="">Selecciona un programa</option>
           <optgroup label="Diplomados">
+            <option value="met">Diplomado en Metodología de la Investigación y Escritura Académica</option>
             <option value="m1-d1">Diplomado en Dirección Estratégica y Personas</option>
             <option value="m1-d2">Diplomado en Marketing y Finanzas para la Dirección</option>
             <option value="m1-d3">Diplomado en Operaciones, Proyectos e Innovación</option>
@@ -2169,7 +2192,7 @@ details.dip-valor summary::after{width:22px;height:22px}
     </div>
     <div class="bro-valor" id="bro-valor">
       <div><b>$240.000</b>por diplomado</div>
-      <div><b>$0</b>Diplomado en Metodología, incluido</div>
+      <div><b>Incluido</b>Diplomado en Metodología</div>
       <div><b>$145.000</b>paper final</div>
       <div class="total"><b>$865.000</b>ruta completa, hasta 12 cuotas a precio contado con Mercado Pago</div>
     </div>
@@ -2307,7 +2330,7 @@ const PRECIOS = { diplomado:240000, master:865000, ia:165000, curso:135000 };
 const TRAMOS = [20,30,50];
 const clp = n => "$" + Math.round(Number(n)||0).toLocaleString("es-CL");
 function precioDe(cod){
-  if(/^m\d+-d\d+$/.test(cod)) return PRECIOS.diplomado;
+  if(/^m\d+-d\d+$/.test(cod) || cod==="met") return PRECIOS.diplomado;
   if(/^m\d+$/.test(cod)) return PRECIOS.master;
   if(cod==="ia") return PRECIOS.ia;
   if(/^(td|op|al)$/.test(cod)) return PRECIOS.curso;
@@ -2329,9 +2352,9 @@ function activarBecaProg(raiz){
 }
 /* En cada diplomado del catálogo: valor y simulación desplegable */
 document.querySelectorAll(".dip").forEach(card=>{
-  const b = card.querySelector("[data-dip]"); if(!b) return;
+  const b = card.querySelector("[data-dip]"); const cod = b ? b.dataset.dip : card.dataset.sim; if(!cod) return;
   const d = document.createElement("details"); d.className = "dip-valor";
-  d.innerHTML = `<summary>Valor y simulación con beca</summary>${simulacion(b.dataset.dip)}`;
+  d.innerHTML = `<summary>Valor y simulación con beca</summary>${simulacion(cod)}`;
   const mat = card.querySelector(".dip-materias");
   if(mat) mat.after(d); else card.querySelector(".dip-acciones").before(d);
 });
