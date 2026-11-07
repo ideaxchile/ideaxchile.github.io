@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>IDEAX | Instituto de Administración y Dirección Ejecutiva</title>
-<meta name="description" content="IDEAX, Instituto de Administración y Dirección Ejecutiva: diplomados, Masters Profesionales y cursos ejecutivos 100% en línea. 30 diplomados en 10 áreas, desde $240.000 en hasta 12 cuotas.">
+<meta name="description" content="IDEAX, Instituto de Administración y Dirección Ejecutiva: diplomados, Masters Profesionales y cursos ejecutivos 100% en línea. 30 diplomados en 10 áreas, con becas parciales.">
 <link rel="canonical" href="https://www.ideax.cl/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="IDEAX">
 <meta property="og:locale" content="es_CL">
 <meta property="og:url" content="https://www.ideax.cl/">
 <meta property="og:title" content="IDEAX | Diplomados y Masters Profesionales en línea">
-<meta property="og:description" content="Formación ejecutiva 100% en línea: 30 diplomados en 10 áreas, Masters Profesionales y cursos ejecutivos. Desde $240.000 en hasta 12 cuotas.">
+<meta property="og:description" content="Formación ejecutiva 100% en línea: 30 diplomados en 10 áreas, Masters Profesionales y cursos ejecutivos, con becas parciales.">
 <meta property="og:image" content="https://www.ideax.cl/img/og-ideax.jpg">
 <meta property="og:image:secure_url" content="https://www.ideax.cl/img/og-ideax.jpg">
 <meta property="og:image:type" content="image/jpeg">
@@ -694,6 +694,28 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
 .becas-ejemplo{margin-top:26px;font-size:.92rem;color:rgba(255,255,255,.85);border-left:3px solid var(--naranja);padding-left:14px;max-width:820px}
 @media (max-width:980px){.becas-cabeza{grid-template-columns:1fr;gap:28px}.becas-pasos{grid-template-columns:1fr}}
 @media (max-width:520px){.tramo strong{font-size:2rem}.tramo{padding:18px 10px}.aviso-becas{font-size:.86rem;border-radius:14px}}
+/* Simulación con beca */
+details.dip-valor{background:none;box-shadow:none;border:0;border-top:1px solid var(--linea);border-radius:0;margin:0}
+details.dip-valor summary{padding:10px 34px 10px 0;font-size:.86rem;font-weight:600;color:var(--c)}
+details.dip-valor summary::after{width:22px;height:22px}
+.sim{font-size:.86rem;color:var(--tinta)}
+.sim-lista{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:0 0 8px}
+.sim-lista b{font-size:1.05rem;color:var(--noche)}
+.sim-lista span{color:var(--gris);font-size:.8rem}
+.sim table{width:100%;border-collapse:collapse}
+.sim th{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gris);font-weight:600;text-align:right;padding:4px 6px;border-bottom:1px solid var(--linea)}
+.sim th:first-child,.sim td:first-child{text-align:left}
+.sim td{padding:6px;text-align:right;border-bottom:1px solid var(--linea);white-space:nowrap}
+.sim td:first-child{font-weight:700;color:var(--c,var(--naranja))}
+.sim td b{color:var(--noche)}
+.sim p{padding:0}
+.sim-nota{font-size:.76rem;color:var(--gris);margin:8px 0 6px;line-height:1.45}
+.sim-beca{display:inline-block;font-size:.84rem;font-weight:600;color:var(--naranja-2);text-decoration:underline;text-underline-offset:3px;margin-bottom:6px}
+.sim-caja{margin:14px 0 4px;border:1.5px solid var(--linea);border-radius:12px;padding:16px 18px}
+.sim-caja h5{margin:0 0 10px;font-size:.95rem;color:var(--noche)}
+.sim-caja .sim{font-size:.92rem}
+@media print{.sim-beca{display:none}}
+
 /* Becas en el formulario */
 .beca-check{display:flex;gap:12px;align-items:flex-start;background:#FFF7F0;border:1.5px solid #F7C9A0;border-radius:10px;padding:14px 16px;cursor:pointer}
 .beca-check input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--naranja);padding:0}
@@ -809,7 +831,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
       </a>
       <a class="btn btn-blanco" href="#emprendedores">Programa para emprendedores</a>
     </div>
-    <a class="aviso-becas entra" href="#becas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v6"/></svg><span><b>Becas parciales de 20%, 30% y 50%.</b> Tu diplomado desde $120.000.</span></a>
+    <a class="aviso-becas entra" href="#becas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v6"/></svg><span><b>Becas parciales de 20%, 30% y 50%.</b> Postula al inscribirte.</span></a>
   </div>
 </section>
 
@@ -832,7 +854,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <li>Proyecto aplicado a tu organización o negocio</li>
           <li>Incluye el programa para emprendedores, completo o por módulo</li>
         </ul>
-        <div class="pie-formato">$135.000 · IA Aplicada a los Negocios $165.000</div>
+        <div class="pie-formato">Cohortes con fecha de inicio</div>
       </article>
       <article class="formato" style="--c:#14947F">
         <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-1.5zM4 19.5A2 2 0 0 1 6 17.5h13"/><path d="M9 8h6M9 11.5h4"/></svg></span>
@@ -844,7 +866,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <li>Al cerrar cada módulo, una exposición en video para su evaluación</li>
           <li>Convalidable con otros programas de IDEAX</li>
         </ul>
-        <div class="pie-formato">$240.000 · 12 cuotas de $20.000 a precio contado</div>
+        <div class="pie-formato">Comienzas cualquier lunes</div>
       </article>
       <article class="formato formato-master" style="--c:#FFB27A">
         <span class="icono" style="background:var(--naranja)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l9-5 9 5-9 5z"/><path d="M7 11.5V16c0 1.5 2.2 3 5 3s5-1.5 5-3v-4.5M21 9v6"/></svg></span>
@@ -857,25 +879,25 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <li>Trabajo final: un paper aplicado</li>
           <li>Título propio de formación ejecutiva; no es un grado de magíster</li>
         </ul>
-        <div class="pie-formato">$865.000 la ruta completa · hasta 12 cuotas</div>
+        <div class="pie-formato">Ruta estándar de 12 meses</div>
       </article>
     </div>
 
     <div class="ruta-master">
       <h3>Cómo se obtiene un Master Profesional</h3>
-      <p>Cada Master Profesional reúne tres diplomados de una misma ruta, el Diplomado en Metodología de la Investigación y Escritura Académica, donde construyes paso a paso tu artículo, y el paper como trabajo final. El Diplomado en Metodología va incluido sin costo. Puedes partir por un diplomado y decidir después si continúas: lo aprobado se convalida. La ruta completa vale $865.000, pagaderos hasta en 12 cuotas a precio contado con Mercado Pago.</p>
+      <p>Cada Master Profesional reúne tres diplomados de una misma ruta, el Diplomado en Metodología de la Investigación y Escritura Académica, donde construyes paso a paso tu artículo, y el paper como trabajo final. El Diplomado en Metodología va incluido sin costo. Puedes partir por un diplomado y decidir después si continúas: lo aprobado se convalida.</p>
       <div class="ecuacion">
-        <div class="pieza"><b>Diplomado 1</b><span>4 meses · $240.000</span></div>
+        <div class="pieza"><b>Diplomado 1</b><span>4 meses</span></div>
         <div class="op">+</div>
-        <div class="pieza"><b>Diplomado 2</b><span>4 meses · $240.000</span></div>
+        <div class="pieza"><b>Diplomado 2</b><span>4 meses</span></div>
         <div class="op">+</div>
-        <div class="pieza"><b>Diplomado 3</b><span>4 meses · $240.000</span></div>
+        <div class="pieza"><b>Diplomado 3</b><span>4 meses</span></div>
         <div class="op">+</div>
-        <div class="pieza met"><b>Metodología</b><span>Diplomado incluido · $0</span></div>
+        <div class="pieza met"><b>Metodología</b><span>Diplomado incluido</span></div>
         <div class="op">+</div>
-        <div class="pieza paper"><b>Paper</b><span>$145.000 · Evaluado por pares, CMIA</span></div>
+        <div class="pieza paper"><b>Paper</b><span>Evaluado por pares, CMIA</span></div>
         <div class="op">=</div>
-        <div class="pieza total"><b>Master Profesional</b><span>12 meses · $865.000 en total</span></div>
+        <div class="pieza total"><b>Master Profesional</b><span>12 meses</span></div>
       </div>
       <div class="notas-ruta">
         <div><b>Tiempos.</b> La ruta estándar toma 12 meses; en la intensiva, con diplomados en paralelo, desde 6 a 8 meses. El plazo máximo es de 18 meses.</div>
@@ -904,7 +926,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Dirección Estratégica y Personas</h3>
           <p>Los fundamentos para conducir una empresa: cómo se define la estrategia y cómo se lidera y desarrolla a las personas que la llevan a cabo.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Introducción a los negocios</li><li>Gestión estratégica</li><li>Gestión del capital humano</li><li>Liderazgo y coaching</li><li>Desarrollo organizacional</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m1-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m1-d1">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m1-d1">Quiero más información</a>
@@ -913,7 +935,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Marketing y Finanzas para la Dirección</h3>
           <p>Las dos lecturas que todo directivo necesita: entender al mercado y al consumidor, y leer las finanzas para decidir dónde invertir.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Introducción a la ciencia del mercado</li><li>Investigación de mercado y conducta del consumidor</li><li>Marketing digital</li><li>Economía y gestión financiera</li><li>Finanzas corporativas</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m1-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m1-d2">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m1-d2">Quiero más información</a>
@@ -922,14 +944,14 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Operaciones, Proyectos e Innovación</h3>
           <p>Cómo producir y entregar con eficiencia, formular y evaluar proyectos, e innovar con método.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gestión de operaciones</li><li>Logística</li><li>Project management</li><li>Evaluación de proyectos</li><li>Innovar y emprender</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m1-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m1-d3">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m1-d3">Quiero más información</a>
         </article>
         </div>
         <div class="area-master">
-          <div><small>Continúa tu especialización</small><b>Master Profesional en Administración y Dirección de Empresas (MBA)</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Administración y Dirección de Empresas (MBA)</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper.</span></div>
           <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m1">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m1">Quiero más información</a></div>
         </div>
       </div>
@@ -940,7 +962,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Dirección del Talento y Cultura Organizacional</h3>
           <p>La gestión de personas como función estratégica: liderazgo, desarrollo organizacional y comunicación interna para construir cultura.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gestión del capital humano</li><li>Dirección estratégica</li><li>Liderazgo y coaching</li><li>Desarrollo organizacional</li><li>Comunicación organizacional</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m2-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m2-d1">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m2-d1">Quiero más información</a>
@@ -949,7 +971,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Gestión Operativa de Personas</h3>
           <p>Los procesos que sostienen el área de personas: reclutamiento y selección, evaluación del desempeño, carrera, compensaciones y presupuesto.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Selección y reclutamiento</li><li>Evaluación del desempeño</li><li>Desarrollo de carrera</li><li>Compensación y beneficios</li><li>Presupuesto de RRHH</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m2-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m2-d2">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m2-d2">Quiero más información</a>
@@ -958,14 +980,14 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Relaciones Laborales y Cambio Organizacional</h3>
           <p>Legislación laboral, negociación y manejo de conflictos, clima y cultura, y procesos de desvinculación bien conducidos.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Legislación laboral</li><li>Conflicto y negociación</li><li>Clima organizacional</li><li>Cultura organizacional</li><li>Desvinculación y outplacement</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m2-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m2-d3">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m2-d3">Quiero más información</a>
         </article>
         </div>
         <div class="area-master">
-          <div><small>Continúa tu especialización</small><b>Master Profesional en Gestión Estratégica de Capital Humano</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Gestión Estratégica de Capital Humano</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper.</span></div>
           <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m2">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m2">Quiero más información</a></div>
         </div>
       </div>
@@ -976,7 +998,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Gerencia de Marketing y Marca</h3>
           <p>Dirigir el marketing de una empresa: segmentar, posicionar, construir marca y llevarlo todo a un plan de marketing.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gerencia de marketing</li><li>Segmentación y posicionamiento</li><li>Gerencia de marca</li><li>Plan de marketing</li><li>Marketing de consumo y servicios</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m3-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m3-d1">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m3-d1">Quiero más información</a>
@@ -985,7 +1007,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Investigación de Mercados y Analítica del Consumidor</h3>
           <p>Diseñar investigaciones de mercado y analizar datos del consumidor con métodos estadísticos y herramientas de data science.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Inteligencia de mercado</li><li>Métodos estadísticos</li><li>Técnicas de investigación de mercados</li><li>Conducta del consumidor</li><li>Data science</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m3-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m3-d2">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m3-d2">Quiero más información</a>
@@ -994,14 +1016,14 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Gestión Comercial, Innovación y Canales Digitales</h3>
           <p>Dirigir la gestión comercial, desarrollar nuevos productos y servicios, y vender en canales digitales y omnicanal.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gerencia comercial</li><li>Desarrollo de nuevos productos</li><li>Desarrollo de nuevos servicios</li><li>eCommerce y omnicanalidad</li><li>Gestión digital y analítica web</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m3-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m3-d3">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m3-d3">Quiero más información</a>
         </article>
         </div>
         <div class="area-master">
-          <div><small>Continúa tu especialización</small><b>Master Profesional en Marketing y Gestión Comercial</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Marketing y Gestión Comercial</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper.</span></div>
           <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m3">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m3">Quiero más información</a></div>
         </div>
       </div>
@@ -1012,7 +1034,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Contabilidad e IFRS</h3>
           <p>Contabilidad para la gestión, normas IFRS para grandes empresas y pymes, y tributación de la empresa.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Contabilidad para la gestión</li><li>Contabilidades especiales</li><li>IFRS grandes empresas</li><li>IFRS PYMEs</li><li>Tributación para la empresa</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m4-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m4-d1">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m4-d1">Quiero más información</a>
@@ -1021,7 +1043,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Auditoría y Control Interno</h3>
           <p>Auditoría interna y financiera, control interno, riesgos y cumplimiento, con análisis de datos y gobierno corporativo.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Auditoría interna y control interno</li><li>Auditoría financiera</li><li>Gestión de riesgos y cumplimiento</li><li>Auditoría con análisis de datos</li><li>Ética y gobierno corporativo</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m4-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m4-d2">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m4-d2">Quiero más información</a>
@@ -1030,14 +1052,14 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Control de Gestión</h3>
           <p>Del plan estratégico a los indicadores: costos, presupuestos, balanced scorecard y tableros para controlar la gestión.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Planificación estratégica</li><li>Costos y presupuestos</li><li>Control de gestión</li><li>Balanced scorecard</li><li>Indicadores y tableros de gestión</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m4-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m4-d3">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m4-d3">Quiero más información</a>
         </article>
         </div>
         <div class="area-master">
-          <div><small>Continúa tu especialización</small><b>Master Profesional en Auditoría, Contabilidad y Control de Gestión</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Auditoría, Contabilidad y Control de Gestión</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper.</span></div>
           <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m4">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m4">Quiero más información</a></div>
         </div>
       </div>
@@ -1048,7 +1070,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Fundamentos de Finanzas</h3>
           <p>La base financiera para decidir: matemáticas financieras, análisis de estados financieros, finanzas de corto plazo y modelos en Excel con apoyo de IA.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gerencia de finanzas</li><li>Matemáticas financieras</li><li>Análisis de estados financieros</li><li>Finanzas a corto plazo</li><li>Modelamiento financiero con Excel e IA</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m5-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m5-d1">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m5-d1">Quiero más información</a>
@@ -1057,7 +1079,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Finanzas Corporativas</h3>
           <p>Decisiones financieras de largo plazo: financiamiento, evaluación de proyectos y valoración de empresas, también en pymes y emprendimientos.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Finanzas corporativas</li><li>Finanzas a largo plazo</li><li>Formulación, evaluación y gestión de proyectos</li><li>Valoración de empresas</li><li>Finanzas para pymes y emprendimientos</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m5-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m5-d2">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m5-d2">Quiero más información</a>
@@ -1066,14 +1088,14 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Inversiones y Mercados Financieros</h3>
           <p>Mercado de capitales, finanzas internacionales, riesgo y derivados, gestión de portafolios y finanzas digitales.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Mercado de capitales e inversiones</li><li>Finanza internacional</li><li>Riesgo financiero y derivados</li><li>Gestión de portafolios</li><li>Fintech y finanzas digitales</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m5-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m5-d3">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m5-d3">Quiero más información</a>
         </article>
         </div>
         <div class="area-master">
-          <div><small>Continúa tu especialización</small><b>Master Profesional en Finanzas Aplicadas</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Finanzas Aplicadas</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper.</span></div>
           <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m5">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m5">Quiero más información</a></div>
         </div>
       </div>
@@ -1084,7 +1106,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Inventario y Almacenamiento</h3>
           <p>Gestionar inventarios y centros de distribución: control de stock, prevención de pérdidas, infraestructura de almacenaje y sistemas ERP.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gestión del inventario</li><li>Prevención de pérdidas</li><li>Gestión de centros de distribución</li><li>Infraestructura del almacenaje</li><li>Sistemas ERP y automatización</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m6-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m6-d1">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m6-d1">Quiero más información</a>
@@ -1093,7 +1115,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Transporte y Distribución</h3>
           <p>Transporte terrestre, marítimo, aéreo y multimodal, redes de distribución, costeo e indicadores de eficiencia.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Transporte terrestre y marítimo</li><li>Transporte aéreo y multimodal</li><li>Transporte y distribución</li><li>Sistemas de costeo</li><li>Indicadores de eficiencia</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m6-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m6-d2">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m6-d2">Quiero más información</a>
@@ -1102,14 +1124,14 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Dirección Logística y Control</h3>
           <p>Dirigir la logística con visión estratégica: finanzas, evaluación de proyectos y externalización, y control de gestión con BSC.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Gestión logística estratégica</li><li>Gerencia de finanzas</li><li>Formulación, evaluación y gestión de proyectos</li><li>Evaluación de proyectos y externalización</li><li>Control de gestión y BSC</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m6-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m6-d3">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m6-d3">Quiero más información</a>
         </article>
         </div>
         <div class="area-master">
-          <div><small>Continúa tu especialización</small><b>Master Profesional en Gestión Logística Estratégica</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Gestión Logística Estratégica</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper.</span></div>
           <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m6">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m6">Quiero más información</a></div>
         </div>
       </div>
@@ -1120,7 +1142,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Prevención de Riesgos, Higiene y Seguridad</h3>
           <p>Seguridad e higiene en el trabajo, gestión de la prevención de riesgos y sistemas de información para el área.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Seguridad en el trabajo</li><li>Higiene en el trabajo</li><li>Gestión de la prevención de riesgos</li><li>Gestión de personas</li><li>Sistemas de información y gestión</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m7-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m7-d1">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m7-d1">Quiero más información</a>
@@ -1129,7 +1151,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Gestión de la Calidad y Responsabilidad Social</h3>
           <p>Normas y modelos de calidad, auditorías, modelos de excelencia y responsabilidad social empresarial.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Modelos y normativa de calidad</li><li>Auditorías de calidad</li><li>Modelos de excelencia</li><li>Responsabilidad social empresarial</li><li>Gestión de proyectos</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m7-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m7-d2">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m7-d2">Quiero más información</a>
@@ -1138,14 +1160,14 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Gestión Ambiental y Sistemas Integrados</h3>
           <p>Evaluación de impacto ambiental, gestión de residuos, auditorías ambientales e integración de sistemas de gestión.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Evaluación de impacto ambiental</li><li>Gestión de residuos</li><li>Auditorías ambientales</li><li>Sistemas integrados de gestión</li><li>Metodologías de integración</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m7-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m7-d3">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m7-d3">Quiero más información</a>
         </article>
         </div>
         <div class="area-master">
-          <div><small>Continúa tu especialización</small><b>Master Profesional en Gestión Integrada, Prevención, Higiene, Seguridad y Medio Ambiente</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Gestión Integrada, Prevención, Higiene, Seguridad y Medio Ambiente</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper.</span></div>
           <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m7">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m7">Quiero más información</a></div>
         </div>
       </div>
@@ -1156,7 +1178,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Formulación de Proyectos</h3>
           <p>Convertir una idea en un proyecto: formulación estratégica, estudios de factibilidad, costos, presupuesto y calidad.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Formulación estratégica</li><li>Formulación de proyectos</li><li>Análisis de factibilidad</li><li>Costos y presupuestos</li><li>Gestión de calidad</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m8-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m8-d1">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m8-d1">Quiero más información</a>
@@ -1165,7 +1187,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Evaluación de Proyectos</h3>
           <p>Evaluar proyectos desde lo económico, financiero, social y ambiental, con herramientas de finanzas corporativas.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Análisis financiero</li><li>Evaluación económica, financiera y social</li><li>Evaluación de impacto ambiental</li><li>Finanzas corporativas</li><li>Mercado de capitales</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m8-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m8-d2">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m8-d2">Quiero más información</a>
@@ -1174,14 +1196,14 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Dirección y Control de Proyectos</h3>
           <p>Dirigir y controlar proyectos con estándares PMI, control de gestión, balanced scorecard y gobierno corporativo.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Estándares PMI</li><li>Control de gestión</li><li>Balanced scorecard</li><li>Dirección de empresas</li><li>Gobiernos corporativos</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m8-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m8-d3">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m8-d3">Quiero más información</a>
         </article>
         </div>
         <div class="area-master">
-          <div><small>Continúa tu especialización</small><b>Master Profesional en Formulación, Evaluación y Dirección de Proyectos</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Formulación, Evaluación y Dirección de Proyectos</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper.</span></div>
           <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m8">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m8">Quiero más información</a></div>
         </div>
       </div>
@@ -1192,7 +1214,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Economía para la Dirección</h3>
           <p>Leer la economía para decidir: cómo se forman los precios, qué mueve el ciclo económico, cómo actúan el Banco Central y el fisco, y qué dicen los indicadores de Chile.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Microeconomía aplicada: demanda, costos y precios</li><li>Macroeconomía y ciclo económico</li><li>Política monetaria y fiscal</li><li>Indicadores económicos de Chile</li><li>Economía internacional y tipo de cambio</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m9-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m9-d1">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m9-d1">Quiero más información</a>
@@ -1201,7 +1223,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Mercados, Competencia y Regulación</h3>
           <p>Cómo funcionan los mercados reales: estructura de las industrias, libre competencia, regulación de servicios básicos, mercado laboral y recursos naturales.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Organización industrial</li><li>Libre competencia</li><li>Regulación de servicios básicos</li><li>Economía laboral</li><li>Recursos naturales y energía</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m9-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m9-d2">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m9-d2">Quiero más información</a>
@@ -1210,14 +1232,14 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Análisis Económico de Datos y Economía del Comportamiento</h3>
           <p>Medir y anticipar con datos económicos: estadística, econometría y pronósticos, junto a la economía del comportamiento y el análisis asistido con IA.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Estadística aplicada</li><li>Econometría aplicada</li><li>Pronósticos y series de tiempo</li><li>Economía del comportamiento</li><li>Análisis de datos económicos con IA</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m9-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m9-d3">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m9-d3">Quiero más información</a>
         </article>
         </div>
         <div class="area-master">
-          <div><small>Continúa tu especialización</small><b>Master Profesional en Economía Aplicada</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Economía Aplicada</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper.</span></div>
           <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m9">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m9">Quiero más información</a></div>
         </div>
       </div>
@@ -1228,7 +1250,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Estado, Políticas Públicas y Gestión de Personas</h3>
           <p>Cómo se organiza el Estado en Chile, cómo se diseñan e implementan las políticas públicas y cómo se gestionan las personas en el sector público, con probidad y transparencia.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>El Estado y la administración pública en Chile</li><li>Diseño de políticas públicas</li><li>Implementación y evaluación de programas</li><li>Gestión de personas en el sector público</li><li>Probidad, transparencia y gobierno digital</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m10-d1">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m10-d1">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m10-d1">Quiero más información</a>
@@ -1237,7 +1259,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Finanzas Públicas, Compras y Control</h3>
           <p>El recorrido del dinero público: presupuesto, contabilidad gubernamental, compras públicas, evaluación social de proyectos y control interno.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Presupuesto público</li><li>Contabilidad gubernamental</li><li>Compras públicas y Mercado Público</li><li>Evaluación social de proyectos</li><li>Control interno y auditoría en el sector público</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m10-d2">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m10-d2">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m10-d2">Quiero más información</a>
@@ -1246,18 +1268,18 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
           <small>Diplomado en</small>
           <h3>Gestión Municipal y Desarrollo Territorial</h3>
           <p>Gestionar una municipalidad y su territorio: marco legal, planificación comunal, servicios a la comunidad, fomento productivo y financiamiento de proyectos.</p>
-          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>$240.000</span></div>
+          <div class="dip-meta"><span>4 meses</span><span>5 materias</span><span>Asincrónico</span></div>
           <details class="dip-materias"><summary>Ver las materias</summary><ol><li>La municipalidad y su marco legal</li><li>Planificación comunal: PLADECO y plan regulador</li><li>Servicios municipales y atención ciudadana</li><li>Fomento productivo y desarrollo económico local</li><li>Financiamiento municipal y proyectos de inversión</li></ol></details>
           <div class="dip-acciones"><button type="button" class="btn btn-noche" data-dip="m10-d3">Ver brochure</button><a class="btn btn-naranja" href="#inscripcion" data-preseleccion="m10-d3">Inscribirme</a></div>
           <a class="dip-info" href="#inscripcion" data-info="m10-d3">Quiero más información</a>
         </article>
         </div>
         <div class="area-master">
-          <div><small>Continúa tu especialización</small><b>Master Profesional en Gestión Pública</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper. $865.000 la ruta completa.</span></div>
+          <div><small>Continúa tu especialización</small><b>Master Profesional en Gestión Pública</b><span>Estos tres diplomados, más el Diplomado en Metodología, incluido, y el paper.</span></div>
           <div class="area-master-acc"><button type="button" class="btn btn-blanco" data-master-bro="m10">Ver brochure del Master Profesional</button><a class="dip-info claro" href="#inscripcion" data-info="m10">Quiero más información</a></div>
         </div>
       </div>
-    <p class="nota-masters">Cada diplomado vale $240.000, pagaderos hasta en 12 cuotas de $20.000 a precio contado con Mercado Pago. El Master Profesional completo vale $865.000 e incluye el Diplomado en Metodología. Los Masters Profesionales son títulos propios de formación ejecutiva de IDEAX y no constituyen un grado académico de magíster.</p>
+    <p class="nota-masters">En cada diplomado encontrarás su valor y la simulación con beca. Se paga en línea con Mercado Pago, hasta en 12 cuotas a precio contado. Los Masters Profesionales son títulos propios de formación ejecutiva de IDEAX y no constituyen un grado académico de magíster.</p>
   </div>
 </section>
 
@@ -1271,9 +1293,9 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
         <p class="bajada">Cualquier persona puede postular a una beca parcial al momento de inscribirse, sin cupos predefinidos. Cada solicitud se revisa caso a caso, considerando tu situación y tus motivos, y se resuelve en un plazo de hasta dos días hábiles.</p>
       </div>
       <div class="tramos">
-        <div class="tramo"><strong>20%</strong><span>Tu diplomado queda en <b>$192.000</b></span></div>
-        <div class="tramo"><strong>30%</strong><span>Tu diplomado queda en <b>$168.000</b></span></div>
-        <div class="tramo"><strong>50%</strong><span>Tu diplomado queda en <b>$120.000</b></span></div>
+        <div class="tramo"><strong>20%</strong><span>de beca sobre el valor del programa</span></div>
+        <div class="tramo"><strong>30%</strong><span>de beca sobre el valor del programa</span></div>
+        <div class="tramo"><strong>50%</strong><span>de beca sobre el valor del programa</span></div>
       </div>
     </div>
     <ol class="becas-pasos revela">
@@ -1281,7 +1303,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
       <li><b>Evaluamos tu solicitud</b><span>Tu inscripción queda en evaluación y no se te cobra nada mientras tanto. Te respondemos por correo en un plazo de hasta dos días hábiles.</span></li>
       <li><b>Pagas el valor con tu beca</b><span>Recibes la resolución junto al enlace de pago con el valor final, en hasta 12 cuotas a precio contado con Mercado Pago.</span></li>
     </ol>
-    <p class="becas-ejemplo">Por ejemplo, un diplomado de $240.000 con beca del 30% queda en $168.000, que puedes pagar en 12 cuotas de $14.000. Con beca del 50% queda en $120.000, es decir, 12 cuotas de $10.000.</p>
+    <p class="becas-ejemplo">Al abrir cada diplomado o programa verás la simulación de su valor con cada tramo de beca.</p>
     <div class="becas-pie">
       <ul class="becas-notas">
         <li>Aplica a diplomados, cursos ejecutivos y Masters Profesionales</li>
@@ -1725,8 +1747,8 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
       <details><summary>¿Cuánto tiempo necesito a la semana?</summary><p>En los diplomados, unas 6 horas semanales, que organizas a tu ritmo siempre que la entrega llegue en el plazo indicado. Si cursas varios diplomados en paralelo, la carga se suma. En los cursos ejecutivos, la sesión en vivo más el trabajo autónomo de la semana.</p></details>
       <details><summary>¿Cuándo comienzo?</summary><p>Los diplomados y Masters Profesionales comienzan el primer lunes que esté al menos 7 días después de tu pago. Esa semana te permite leer el manual del estudiante y el primer cuaderno con calma. Los cursos ejecutivos comienzan en la fecha de su cohorte, indicada en el brochure.</p></details>
       <details><summary>¿Qué pasa si no puedo asistir a una sesión en vivo de un curso?</summary><p>Cada sesión deja material de apoyo en la plataforma del curso, y debes completar igualmente el entregable de esa semana.</p></details>
-      <details><summary>¿Cómo pago el programa?</summary><p>En línea, a través de Mercado Pago, con tarjeta de débito, crédito o transferencia, y hasta en 12 cuotas a precio contado. Cada diplomado vale $240.000, es decir, 12 cuotas de $20.000. Los cursos ejecutivos valen $135.000, salvo IA Aplicada a los Negocios, que vale $165.000, y el Master Profesional completo $865.000, con sus tres diplomados, el Diplomado en Metodología y el paper. Al inscribirte recibes por correo el brochure con el valor y el enlace de pago; una vez confirmado el pago, te llegan el manual del estudiante, el primer material de estudio y tu fecha de inicio.</p></details>
-      <details><summary>¿Cómo solicito una beca?</summary><p>Al inscribirte, marca la opción «Quiero postular a una beca parcial» en el formulario, elige el tramo de 20%, 30% o 50% y cuéntanos tus motivos; puedes adjuntar hasta tres documentos de respaldo en PDF o imagen. Tu inscripción queda en evaluación, sin cobro, y en un plazo de hasta dos días hábiles te enviamos la resolución con el enlace de pago por el valor que corresponda. Por ejemplo, un diplomado de $240.000 con beca del 30% queda en $168.000. Las becas aplican a diplomados, cursos ejecutivos y Masters Profesionales, no son acumulables con códigos de descuento y la información que entregas se trata en forma confidencial.</p></details>
+      <details><summary>¿Cómo pago el programa?</summary><p>En línea, a través de Mercado Pago, con tarjeta de débito, crédito o transferencia, y hasta en 12 cuotas a precio contado. Cada diplomado vale $240.000. Los cursos ejecutivos valen $135.000, salvo IA Aplicada a los Negocios, que vale $165.000, y el Master Profesional completo $865.000, con sus tres diplomados, el Diplomado en Metodología y el paper. Al inscribirte recibes por correo el brochure con el valor y el enlace de pago; una vez confirmado el pago, te llegan el manual del estudiante, el primer material de estudio y tu fecha de inicio.</p></details>
+      <details><summary>¿Cómo solicito una beca?</summary><p>Al inscribirte, marca la opción «Quiero postular a una beca parcial» en el formulario, elige el tramo de 20%, 30% o 50% y cuéntanos tus motivos; puedes adjuntar hasta tres documentos de respaldo en PDF o imagen. Tu inscripción queda en evaluación, sin cobro, y en un plazo de hasta dos días hábiles te enviamos la resolución con el enlace de pago por el valor que corresponda. En cada programa puedes ver la simulación de su valor con beca. Las becas aplican a diplomados, cursos ejecutivos y Masters Profesionales, no son acumulables con códigos de descuento y la información que entregas se trata en forma confidencial.</p></details>
       <details><summary>¿Qué certificado recibo?</summary><p>Al aprobar el programa recibes un certificado de aprobación emitido por IDEAX, Instituto de Administración y Dirección Ejecutiva. IDEAX es una institución autónoma de formación ejecutiva y continua: sus programas no conducen a grados académicos ni a títulos profesionales.</p></details>
       <details><summary>¿Un Master Profesional de IDEAX o de IADE es un magíster?</summary><p>No. Los Masters Profesionales son títulos propios de formación ejecutiva, orientados a la especialización y al desempeño profesional. No son un grado académico de magíster, que en Chile solo otorgan las universidades, y no habilitan por sí mismos para cursar un doctorado. Un Master Profesional de IDEAX se obtiene aprobando tres diplomados de una misma ruta, el Diplomado en Metodología y un paper evaluado por pares.</p></details>
       <details class="faq-extra"><summary>¿Cuánto dura un Master Profesional?</summary><p>La ruta estándar, con un diplomado a la vez y el Diplomado en Metodología en paralelo a uno de ellos, toma 12 meses. En la ruta intensiva, con dos o más diplomados en paralelo y 12 o más horas semanales, puedes terminar desde 6 a 8 meses. La evaluación por pares del paper en la revista CMIA toma habitualmente entre 2 y 4 meses. El plazo máximo es de 18 meses, con posibilidad de prórroga y de congelamiento por fuerza mayor.</p></details>
@@ -1942,6 +1964,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
       <div><b>$145.000</b>paper final</div>
       <div class="total"><b>$865.000</b>ruta completa, hasta 12 cuotas a precio contado con Mercado Pago</div>
     </div>
+    <div class="sim-caja" id="bro-sim"></div>
     <h4>Dirigido a</h4>
     <p class="texto" id="bro-dir"></p>
     <h4 id="bro-est-t">Estructura del programa</h4>
@@ -1973,6 +1996,7 @@ details.dip-materias li{font-size:.86rem;color:var(--tinta);padding:2px 0}
   </div>
   <div class="ficha-cuerpo" id="ficha-cuerpo">
     <div class="ficha-datos" id="ficha-datos"></div>
+    <div class="sim-caja" id="ficha-sim" style="--c:var(--naranja)"></div>
     <h4>Dirigido a</h4>
     <p class="texto" id="ficha-dirigido"></p>
     <h4>Aprenderás a</h4>
@@ -2047,6 +2071,7 @@ function abrir(id){
   $("#ficha-titulo").textContent = p.titulo;
   $("#ficha-bajada").textContent = p.bajada;
   $("#ficha-datos").innerHTML = p.datos.map(d=>`<div><b>${d[0]}</b>${d[1]}</div>`).join("");
+  $("#ficha-sim").innerHTML = `<h5>Valor y simulación con beca</h5>${simulacion(id)}`; activarBecaProg($("#ficha-sim"));
   $("#ficha-dirigido").textContent = p.dirigido;
   $("#ficha-logros").innerHTML = p.logros.map(l=>`<li>${l}</li>`).join("");
   $("#ficha-semanas").innerHTML = p.semanas.map(s=>`<li><div><b>${s[0]}</b><span>${s[1]}</span></div></li>`).join("");
@@ -2066,6 +2091,41 @@ ficha.addEventListener("click",e=>{ if(e.target===ficha) cerrar(); });
 $("#ficha-inscribir").addEventListener("click",()=>{ $("#f-programa").value = actual; cerrar(); });
 document.querySelectorAll("[data-preseleccion]").forEach(a=>a.addEventListener("click",()=>{ $("#f-programa").value = a.dataset.preseleccion; }));
 
+/* ===== Valor y simulación con beca ===== */
+const PRECIOS = { diplomado:240000, master:865000, ia:165000, curso:135000 };
+const TRAMOS = [20,30,50];
+const clp = n => "$" + Math.round(Number(n)||0).toLocaleString("es-CL");
+function precioDe(cod){
+  if(/^m\d+-d\d+$/.test(cod)) return PRECIOS.diplomado;
+  if(/^m\d+$/.test(cod)) return PRECIOS.master;
+  if(cod==="ia") return PRECIOS.ia;
+  if(/^(td|op|al)$/.test(cod)) return PRECIOS.curso;
+  return 0;
+}
+function simulacion(cod){
+  const p = precioDe(cod); if(!p) return "";
+  const filas = TRAMOS.map(t=>{ const v = Math.round(p*(100-t)/100); return `<tr><td>${t}%</td><td><b>${clp(v)}</b></td><td>12 × ${clp(v/12)}</td></tr>`; }).join("");
+  return `<div class="sim"><p class="sim-lista"><span>Valor del programa</span><b>${clp(p)}</b></p>
+    <table><thead><tr><th>Beca</th><th>Valor final</th><th>En cuotas</th></tr></thead><tbody>
+    <tr><td style="color:var(--gris)">Sin beca</td><td><b>${clp(p)}</b></td><td>12 × ${clp(p/12)}</td></tr>${filas}</tbody></table>
+    <p class="sim-nota">Simulación referencial. Las becas se otorgan caso a caso; las cuotas son a precio contado con Mercado Pago.</p>
+    <a class="sim-beca" href="#inscripcion" data-beca-prog="${cod}">Postular a una beca para este programa</a></div>`;
+}
+function activarBecaProg(raiz){
+  (raiz||document).querySelectorAll("[data-beca-prog]").forEach(a=>{ if(a.dataset.listo) return; a.dataset.listo=1;
+    a.addEventListener("click",()=>{ try{ cerrarBrochure(); }catch(e){} try{ cerrar(); }catch(e){}
+      $("#f-programa").value = a.dataset.becaProg; ponerModo("inscribir"); $("#f-beca").checked = true; actualizarBeca(); }); });
+}
+/* En cada diplomado del catálogo: valor y simulación desplegable */
+document.querySelectorAll(".dip").forEach(card=>{
+  const b = card.querySelector("[data-dip]"); if(!b) return;
+  const d = document.createElement("details"); d.className = "dip-valor";
+  d.innerHTML = `<summary>Valor y simulación con beca</summary>${simulacion(b.dataset.dip)}`;
+  const mat = card.querySelector(".dip-materias");
+  if(mat) mat.after(d); else card.querySelector(".dip-acciones").before(d);
+});
+activarBecaProg(document);
+
 /* ===== Masters Profesionales: brochures ===== */
 const MASTERS = [{"id": "m1", "n": "Master Profesional en Administración y Dirección de Empresas (MBA)", "corto": "MBA", "c": "#0F2747", "desc": "Visión integral de la empresa: estrategia, personas, mercado, finanzas y operaciones, para quienes dirigen o aspiran a dirigir.", "dir": "Profesionales con responsabilidades de jefatura o gerencia, y emprendedores que necesitan una formación directiva completa.", "ico": "<path d=\"M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6\"/>", "d": [{"n": "Diplomado en Dirección Estratégica y Personas", "m": ["Introducción a los negocios", "Gestión estratégica", "Gestión del capital humano", "Liderazgo y coaching", "Desarrollo organizacional"], "id": "m1-d1", "desc": "Los fundamentos para conducir una empresa: cómo se define la estrategia y cómo se lidera y desarrolla a las personas que la llevan a cabo."}, {"n": "Diplomado en Marketing y Finanzas para la Dirección", "m": ["Introducción a la ciencia del mercado", "Investigación de mercado y conducta del consumidor", "Marketing digital", "Economía y gestión financiera", "Finanzas corporativas"], "id": "m1-d2", "desc": "Las dos lecturas que todo directivo necesita: entender al mercado y al consumidor, y leer las finanzas para decidir dónde invertir."}, {"n": "Diplomado en Operaciones, Proyectos e Innovación", "m": ["Gestión de operaciones", "Logística", "Project management", "Evaluación de proyectos", "Innovar y emprender"], "id": "m1-d3", "desc": "Cómo producir y entregar con eficiencia, formular y evaluar proyectos, e innovar con método."}], "area": "Administración (MBA)"}, {"id": "m2", "n": "Master Profesional en Gestión Estratégica de Capital Humano", "corto": "Capital Humano", "c": "#6E3A9C", "desc": "Gestión estratégica de las personas: atracción, desarrollo, compensaciones, relaciones laborales y cambio organizacional.", "dir": "Profesionales de recursos humanos, jefaturas de equipos y consultores en gestión de personas.", "ico": "<circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6\"/><circle cx=\"17\" cy=\"9\" r=\"2.5\"/><path d=\"M16 14.2c3 .2 5.5 2.3 5.5 5.8\"/>", "d": [{"n": "Diplomado en Dirección del Talento y Cultura Organizacional", "m": ["Gestión del capital humano", "Dirección estratégica", "Liderazgo y coaching", "Desarrollo organizacional", "Comunicación organizacional"], "id": "m2-d1", "desc": "La gestión de personas como función estratégica: liderazgo, desarrollo organizacional y comunicación interna para construir cultura."}, {"n": "Diplomado en Gestión Operativa de Personas", "m": ["Selección y reclutamiento", "Evaluación del desempeño", "Desarrollo de carrera", "Compensación y beneficios", "Presupuesto de RRHH"], "id": "m2-d2", "desc": "Los procesos que sostienen el área de personas: reclutamiento y selección, evaluación del desempeño, carrera, compensaciones y presupuesto."}, {"n": "Diplomado en Relaciones Laborales y Cambio Organizacional", "m": ["Legislación laboral", "Conflicto y negociación", "Clima organizacional", "Cultura organizacional", "Desvinculación y outplacement"], "id": "m2-d3", "desc": "Legislación laboral, negociación y manejo de conflictos, clima y cultura, y procesos de desvinculación bien conducidos."}], "area": "Capital Humano"}, {"id": "m3", "n": "Master Profesional en Marketing y Gestión Comercial", "corto": "Marketing", "c": "#F07C1B", "desc": "Marketing y gestión comercial basados en datos: marca, investigación de mercados, consumidor, innovación y canales digitales.", "dir": "Profesionales de marketing, ventas y producto, y emprendedores que buscan crecer con método.", "ico": "<path d=\"M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z\"/><path d=\"M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12\"/>", "d": [{"n": "Diplomado en Gerencia de Marketing y Marca", "m": ["Gerencia de marketing", "Segmentación y posicionamiento", "Gerencia de marca", "Plan de marketing", "Marketing de consumo y servicios"], "id": "m3-d1", "desc": "Dirigir el marketing de una empresa: segmentar, posicionar, construir marca y llevarlo todo a un plan de marketing."}, {"n": "Diplomado en Investigación de Mercados y Analítica del Consumidor", "m": ["Inteligencia de mercado", "Métodos estadísticos", "Técnicas de investigación de mercados", "Conducta del consumidor", "Data science"], "id": "m3-d2", "desc": "Diseñar investigaciones de mercado y analizar datos del consumidor con métodos estadísticos y herramientas de data science."}, {"n": "Diplomado en Gestión Comercial, Innovación y Canales Digitales", "m": ["Gerencia comercial", "Desarrollo de nuevos productos", "Desarrollo de nuevos servicios", "eCommerce y omnicanalidad", "Gestión digital y analítica web"], "id": "m3-d3", "desc": "Dirigir la gestión comercial, desarrollar nuevos productos y servicios, y vender en canales digitales y omnicanal."}], "area": "Marketing"}, {"id": "m4", "n": "Master Profesional en Auditoría, Contabilidad y Control de Gestión", "corto": "Auditoría y Control", "c": "#1D4E89", "desc": "Contabilidad, normas IFRS, auditoría, control interno y control de gestión para resguardar y dirigir la organización.", "dir": "Contadores, auditores, controllers y profesionales de administración y finanzas.", "ico": "<path d=\"M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z\"/><path d=\"M9 12l2 2 4-4\"/>", "d": [{"n": "Diplomado en Contabilidad e IFRS", "m": ["Contabilidad para la gestión", "Contabilidades especiales", "IFRS grandes empresas", "IFRS PYMEs", "Tributación para la empresa"], "id": "m4-d1", "desc": "Contabilidad para la gestión, normas IFRS para grandes empresas y pymes, y tributación de la empresa."}, {"n": "Diplomado en Auditoría y Control Interno", "m": ["Auditoría interna y control interno", "Auditoría financiera", "Gestión de riesgos y cumplimiento", "Auditoría con análisis de datos", "Ética y gobierno corporativo"], "id": "m4-d2", "desc": "Auditoría interna y financiera, control interno, riesgos y cumplimiento, con análisis de datos y gobierno corporativo."}, {"n": "Diplomado en Control de Gestión", "m": ["Planificación estratégica", "Costos y presupuestos", "Control de gestión", "Balanced scorecard", "Indicadores y tableros de gestión"], "id": "m4-d3", "desc": "Del plan estratégico a los indicadores: costos, presupuestos, balanced scorecard y tableros para controlar la gestión."}], "area": "Auditoría y Contabilidad"}, {"id": "m5", "n": "Master Profesional en Finanzas Aplicadas", "corto": "Finanzas", "c": "#0E7C9E", "desc": "Finanzas aplicadas a la toma de decisiones: análisis, valoración, financiamiento, inversiones y mercados.", "dir": "Profesionales de finanzas, analistas, ejecutivos bancarios y emprendedores que gestionan recursos y deciden inversiones.", "ico": "<path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/>", "d": [{"n": "Diplomado en Fundamentos de Finanzas", "m": ["Gerencia de finanzas", "Matemáticas financieras", "Análisis de estados financieros", "Finanzas a corto plazo", "Modelamiento financiero con Excel e IA"], "id": "m5-d1", "desc": "La base financiera para decidir: matemáticas financieras, análisis de estados financieros, finanzas de corto plazo y modelos en Excel con apoyo de IA."}, {"n": "Diplomado en Finanzas Corporativas", "m": ["Finanzas corporativas", "Finanzas a largo plazo", "Formulación, evaluación y gestión de proyectos", "Valoración de empresas", "Finanzas para pymes y emprendimientos"], "id": "m5-d2", "desc": "Decisiones financieras de largo plazo: financiamiento, evaluación de proyectos y valoración de empresas, también en pymes y emprendimientos."}, {"n": "Diplomado en Inversiones y Mercados Financieros", "m": ["Mercado de capitales e inversiones", "Finanza internacional", "Riesgo financiero y derivados", "Gestión de portafolios", "Fintech y finanzas digitales"], "id": "m5-d3", "desc": "Mercado de capitales, finanzas internacionales, riesgo y derivados, gestión de portafolios y finanzas digitales."}], "area": "Finanzas"}, {"id": "m6", "n": "Master Profesional en Gestión Logística Estratégica", "corto": "Logística", "c": "#14947F", "desc": "Dirección de la cadena logística: inventario, almacenamiento, transporte, distribución y control de la operación.", "dir": "Profesionales de logística, operaciones, compras y abastecimiento, de retail, industria y servicios.", "ico": "<path d=\"M2 6h12v10H2zM14 9h4l4 4v3h-8z\"/><circle cx=\"6\" cy=\"18\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>", "d": [{"n": "Diplomado en Inventario y Almacenamiento", "m": ["Gestión del inventario", "Prevención de pérdidas", "Gestión de centros de distribución", "Infraestructura del almacenaje", "Sistemas ERP y automatización"], "id": "m6-d1", "desc": "Gestionar inventarios y centros de distribución: control de stock, prevención de pérdidas, infraestructura de almacenaje y sistemas ERP."}, {"n": "Diplomado en Transporte y Distribución", "m": ["Transporte terrestre y marítimo", "Transporte aéreo y multimodal", "Transporte y distribución", "Sistemas de costeo", "Indicadores de eficiencia"], "id": "m6-d2", "desc": "Transporte terrestre, marítimo, aéreo y multimodal, redes de distribución, costeo e indicadores de eficiencia."}, {"n": "Diplomado en Dirección Logística y Control", "m": ["Gestión logística estratégica", "Gerencia de finanzas", "Formulación, evaluación y gestión de proyectos", "Evaluación de proyectos y externalización", "Control de gestión y BSC"], "id": "m6-d3", "desc": "Dirigir la logística con visión estratégica: finanzas, evaluación de proyectos y externalización, y control de gestión con BSC."}], "area": "Logística"}, {"id": "m7", "n": "Master Profesional en Gestión Integrada, Prevención, Higiene, Seguridad y Medio Ambiente", "corto": "Prevención y Medio Ambiente", "c": "#5B8C2A", "desc": "Sistemas integrados de gestión: prevención de riesgos, higiene y seguridad, calidad, responsabilidad social y medio ambiente.", "dir": "Prevencionistas, encargados de calidad y medio ambiente, y jefaturas de operaciones.", "ico": "<path d=\"M12 3c4 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2-6 6-10z\"/><path d=\"M12 21v-7\"/>", "d": [{"n": "Diplomado en Prevención de Riesgos, Higiene y Seguridad", "m": ["Seguridad en el trabajo", "Higiene en el trabajo", "Gestión de la prevención de riesgos", "Gestión de personas", "Sistemas de información y gestión"], "id": "m7-d1", "desc": "Seguridad e higiene en el trabajo, gestión de la prevención de riesgos y sistemas de información para el área."}, {"n": "Diplomado en Gestión de la Calidad y Responsabilidad Social", "m": ["Modelos y normativa de calidad", "Auditorías de calidad", "Modelos de excelencia", "Responsabilidad social empresarial", "Gestión de proyectos"], "id": "m7-d2", "desc": "Normas y modelos de calidad, auditorías, modelos de excelencia y responsabilidad social empresarial."}, {"n": "Diplomado en Gestión Ambiental y Sistemas Integrados", "m": ["Evaluación de impacto ambiental", "Gestión de residuos", "Auditorías ambientales", "Sistemas integrados de gestión", "Metodologías de integración"], "id": "m7-d3", "desc": "Evaluación de impacto ambiental, gestión de residuos, auditorías ambientales e integración de sistemas de gestión."}], "area": "Prevención y Medio Ambiente"}, {"id": "m8", "n": "Master Profesional en Formulación, Evaluación y Dirección de Proyectos", "corto": "Proyectos", "c": "#B4530A", "desc": "Formulación, evaluación y dirección de proyectos con estándares profesionales, desde la idea hasta el control.", "dir": "Profesionales que formulan, evalúan o dirigen proyectos en empresas, instituciones públicas y consultoras.", "ico": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M7 9h6M7 13h10M7 17h4\"/>", "d": [{"n": "Diplomado en Formulación de Proyectos", "m": ["Formulación estratégica", "Formulación de proyectos", "Análisis de factibilidad", "Costos y presupuestos", "Gestión de calidad"], "id": "m8-d1", "desc": "Convertir una idea en un proyecto: formulación estratégica, estudios de factibilidad, costos, presupuesto y calidad."}, {"n": "Diplomado en Evaluación de Proyectos", "m": ["Análisis financiero", "Evaluación económica, financiera y social", "Evaluación de impacto ambiental", "Finanzas corporativas", "Mercado de capitales"], "id": "m8-d2", "desc": "Evaluar proyectos desde lo económico, financiero, social y ambiental, con herramientas de finanzas corporativas."}, {"n": "Diplomado en Dirección y Control de Proyectos", "m": ["Estándares PMI", "Control de gestión", "Balanced scorecard", "Dirección de empresas", "Gobiernos corporativos"], "id": "m8-d3", "desc": "Dirigir y controlar proyectos con estándares PMI, control de gestión, balanced scorecard y gobierno corporativo."}], "area": "Proyectos"}, {"id": "m9", "n": "Master Profesional en Economía Aplicada", "corto": "Economía", "c": "#A23B5F", "area": "Economía", "desc": "Economía aplicada a la toma de decisiones: mercados, ciclo económico, competencia, regulación y análisis de datos económicos.", "dir": "Profesionales de empresas, consultoras, gremios y organismos públicos que necesitan leer la economía y sus datos para decidir.", "ico": "<path d=\"M3 3v18h18\"/><path d=\"M7 15l4-4 3 3 5-6\"/>", "d": [{"n": "Diplomado en Economía para la Dirección", "m": ["Microeconomía aplicada: demanda, costos y precios", "Macroeconomía y ciclo económico", "Política monetaria y fiscal", "Indicadores económicos de Chile", "Economía internacional y tipo de cambio"], "desc": "Leer la economía para decidir: cómo se forman los precios, qué mueve el ciclo económico, cómo actúan el Banco Central y el fisco, y qué dicen los indicadores de Chile.", "id": "m9-d1"}, {"n": "Diplomado en Mercados, Competencia y Regulación", "m": ["Organización industrial", "Libre competencia", "Regulación de servicios básicos", "Economía laboral", "Recursos naturales y energía"], "desc": "Cómo funcionan los mercados reales: estructura de las industrias, libre competencia, regulación de servicios básicos, mercado laboral y recursos naturales.", "id": "m9-d2"}, {"n": "Diplomado en Análisis Económico de Datos y Economía del Comportamiento", "m": ["Estadística aplicada", "Econometría aplicada", "Pronósticos y series de tiempo", "Economía del comportamiento", "Análisis de datos económicos con IA"], "desc": "Medir y anticipar con datos económicos: estadística, econometría y pronósticos, junto a la economía del comportamiento y el análisis asistido con IA.", "id": "m9-d3"}]}, {"id": "m10", "n": "Master Profesional en Gestión Pública", "corto": "Gestión Pública", "c": "#8C6A12", "area": "Gestión Pública", "desc": "Dirección y gestión de organismos públicos: políticas públicas, personas, presupuesto, compras, control y gestión municipal.", "dir": "Funcionarios y profesionales de ministerios, servicios públicos, gobiernos regionales y municipalidades, y consultores que trabajan con el Estado.", "ico": "<path d=\"M3 21h18M4 10h16M12 3l8 5H4z\"/><path d=\"M6 10v8M10 10v8M14 10v8M18 10v8\"/>", "d": [{"n": "Diplomado en Estado, Políticas Públicas y Gestión de Personas", "m": ["El Estado y la administración pública en Chile", "Diseño de políticas públicas", "Implementación y evaluación de programas", "Gestión de personas en el sector público", "Probidad, transparencia y gobierno digital"], "desc": "Cómo se organiza el Estado en Chile, cómo se diseñan e implementan las políticas públicas y cómo se gestionan las personas en el sector público, con probidad y transparencia.", "id": "m10-d1"}, {"n": "Diplomado en Finanzas Públicas, Compras y Control", "m": ["Presupuesto público", "Contabilidad gubernamental", "Compras públicas y Mercado Público", "Evaluación social de proyectos", "Control interno y auditoría en el sector público"], "desc": "El recorrido del dinero público: presupuesto, contabilidad gubernamental, compras públicas, evaluación social de proyectos y control interno.", "id": "m10-d2"}, {"n": "Diplomado en Gestión Municipal y Desarrollo Territorial", "m": ["La municipalidad y su marco legal", "Planificación comunal: PLADECO y plan regulador", "Servicios municipales y atención ciudadana", "Fomento productivo y desarrollo económico local", "Financiamiento municipal y proyectos de inversión"], "desc": "Gestionar una municipalidad y su territorio: marco legal, planificación comunal, servicios a la comunidad, fomento productivo y financiamiento de proyectos.", "id": "m10-d3"}]}];
 const bro = $("#brochure");
@@ -2082,7 +2142,8 @@ function abrirDiplomado(did){
   $("#bro-desc").textContent = d.desc;
   $("#bro-dir").textContent = m.dir;
   $("#bro-datos").innerHTML = `<div><b>4 meses</b>Duración total</div><div><b>5 materias</b>De 3 semanas cada una</div><div><b>Asincrónico</b>Facultad Virtual IDEAX</div><div><b>Certificado</b>De diplomado IDEAX</div>`;
-  $("#bro-valor").innerHTML = `<div><b>$240.000</b>valor del diplomado</div><div><b>12 cuotas</b>a precio contado con Mercado Pago</div><div><b>Lunes</b>inicio, 7 días después del pago</div><div class="total"><b>Convalidable</b>en el ${esc(m.n)}</div>`;
+  $("#bro-valor").innerHTML = `<div><b>Becas</b>parciales de 20%, 30% y 50%</div><div><b>12 cuotas</b>a precio contado con Mercado Pago</div><div><b>Lunes</b>inicio, 7 días después del pago</div><div class="total"><b>Convalidable</b>en el ${esc(m.n)}</div>`;
+  $("#bro-sim").innerHTML = `<h5>Valor y simulación con beca</h5>${simulacion(did)}`; activarBecaProg($("#bro-sim"));
   $("#bro-est-t").textContent = "Materias del diplomado";
   $("#bro-dips").innerHTML = `<div class="bro-dip"><div class="bro-dip-cab"><b>${esc(d.n)}</b><small>4 meses · $240.000</small></div><ul>${d.m.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
   $("#bro-ruta-t").textContent = "Continuidad hacia el Master Profesional";
@@ -2097,6 +2158,7 @@ function abrirBrochure(id){
   $("#bro-titulo").textContent = m.n;
   $("#bro-desc").textContent = m.desc;
   $("#bro-dir").textContent = m.dir;
+  $("#bro-sim").innerHTML = `<h5>Valor y simulación con beca de la ruta completa</h5>${simulacion(id)}`; activarBecaProg($("#bro-sim"));
   $("#bro-dips").innerHTML = m.d.map((d,k)=>`<div class="bro-dip"><div class="bro-dip-cab"><span>${k+1}</span><b>${esc(d.n)}</b><small>4 meses · 5 materias · $240.000</small></div><ul>${d.m.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`).join("");
   if(typeof bro.showModal==="function") bro.showModal(); else bro.setAttribute("open","");
   bro.scrollTop = 0;
