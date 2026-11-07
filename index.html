@@ -1911,7 +1911,7 @@ details.dip-valor summary::after{width:22px;height:22px}
         <input id="v-dato" name="dato" autocomplete="off" spellcheck="false" placeholder="Ej.: IDEAX-2026-00001 o 12.345.678-9">
         <button class="btn btn-naranja" type="submit">Verificar</button>
       </form>
-      <p class="verifica-ayuda">El RUT puede escribirse con o sin puntos y guion.</p>
+      <p class="verifica-ayuda">El RUT puede escribirse con o sin puntos y guion. También puedes ingresar el folio o el código de verificación de los certificados y constancias emitidos desde la eFacultad.</p>
       <div class="verifica-resultado" id="v-resultado" aria-live="polite"></div>
     </div>
   </div>
@@ -2291,7 +2291,7 @@ const CONFIG = {
   /* Correo público que se muestra en el sitio */
   correo: "contacto@ideax.cl",
   /* URL de la aplicación web de Apps Script para verificar certificados (termina en /exec) */
-  verificacionURL: "",
+  verificacionURL: "https://script.google.com/macros/s/AKfycbxKpKOfwdGAso0n0BKhE-VmpYzGJSV_4_gZbdjREqmJG6PPeGVwFMDI0Vrl4MXbHGqz/exec",
   /* URL de la aplicación web de Apps Script que recibe las inscripciones, avisa a
      contacto@ideax.cl y leyton.johns@gmail.com y envía el brochure al interesado */
   inscripcionURL: "https://script.google.com/macros/s/AKfycbyhMvyQAi7qwIBpXZiUrUv5HE4miSm-pAxajWbPNO7UQUJ_lEAumtaZSSEUEURCT9QJ/exec"
@@ -2500,8 +2500,8 @@ function enlaceSolicitud(dato){
 }
 function tarjetaCert(r){
   const cls = r.valido ? "res-ok" : "res-mal";
-  const estado = r.valido ? ICO_OK + "Certificado válido" : ICO_MAL + "Certificado revocado, sin validez";
-  const filas = [["Titular",r.nombre],["Documento",r.documento],["Programa",r.programa],["Tipo",r.tipo],["Emitido por",r.institucion],["Fecha de emisión",r.fecha],["Horas",r.horas],["Código",r.codigo]]
+  const estado = (r.valido ? ICO_OK : ICO_MAL) + esc(r.estado || (r.valido ? "Certificado válido" : "Certificado revocado, sin validez"));
+  const filas = [["Titular",r.nombre],["Documento",r.documento],["Programa",r.programa],["Tipo",r.tipo],["Emitido por",r.institucion],["Fecha de emisión",r.fecha],["Horas",r.horas],["Calificación",r.nota && typeof r.nota==="object" ? `${String(r.nota.pct).replace(".",",")}% (${String(r.nota.n7).replace(".",",")} en escala 1 a 7; ${String(r.nota.n10).replace(".",",")} en escala 1 a 10)` : r.nota],["Código",r.codigo]]
     .filter(f=>f[1]).map(f=>`<dt>${f[0]}</dt><dd>${esc(f[1])}</dd>`).join("");
   return `<div class="res ${cls}"><div class="res-estado">${estado}</div><dl>${filas}</dl></div>`;
 }
