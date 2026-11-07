@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Mi CV | Bolsa de empleo IDEAX</title>
+<link rel="icon" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--noche:#0F2747;--azul:#173B66;--naranja:#F07C1B;--naranja-2:#D9670A;--papel:#F3F5F8;--tinta:#13233B;--gris:#4B5565;--linea:#E1E6ED;--ok:#14947F;--error:#B42318}
+*{box-sizing:border-box}
+body{margin:0;font-family:Poppins,system-ui,sans-serif;color:var(--tinta);background:var(--papel);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:3px solid var(--naranja);outline-offset:2px;border-radius:4px}
+.cab{background:linear-gradient(150deg,var(--noche),var(--azul));color:#fff;padding:26px 20px 70px}
+.cab-in{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.cab img{height:44px}
+.cab .ceja{display:block;color:var(--naranja);font-weight:700;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase}
+.cab h1{margin:2px 0 0;font-size:1.6rem;line-height:1.2}
+.cab p{margin:6px 0 0;opacity:.85;font-size:.95rem;max-width:640px}
+main{max-width:860px;margin:-46px auto 40px;padding:0 14px}
+.tarjeta{background:#fff;border-radius:14px;box-shadow:0 10px 30px rgba(15,39,71,.10);padding:24px 24px 8px;margin-bottom:16px}
+.tarjeta h2{margin:0 0 4px;font-size:1.12rem;color:var(--noche);display:flex;align-items:center;gap:10px}
+.tarjeta h2 .n{background:var(--naranja);color:#fff;border-radius:50%;width:26px;height:26px;display:inline-grid;place-items:center;font-size:.85rem;flex:0 0 auto}
+.ayuda{color:var(--gris);font-size:.86rem;margin:0 0 14px}
+.rejilla{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}
+.rejilla .ancho{grid-column:1/-1}
+@media (max-width:640px){.rejilla{grid-template-columns:1fr}.cab h1{font-size:1.35rem}.tarjeta{padding:18px 16px 4px}}
+label{display:block;font-weight:600;font-size:.86rem;margin-bottom:4px}
+label .op{font-weight:400;color:var(--gris)}
+input,select,textarea{width:100%;font:inherit;font-size:.95rem;padding:10px 12px;border:1.5px solid var(--linea);border-radius:9px;background:#fff;color:var(--tinta)}
+textarea{resize:vertical;min-height:90px}
+input:focus,select:focus,textarea:focus{border-color:var(--naranja);outline:none}
+.campo{margin-bottom:14px}
+.cuenta{font-size:.78rem;color:var(--gris);text-align:right;margin-top:2px}
+.bloque{border:1.5px solid var(--linea);border-radius:12px;padding:14px 14px 2px;margin-bottom:12px;position:relative;background:#FBFCFD}
+.bloque .quitar{position:absolute;top:8px;right:8px;border:0;background:none;color:var(--gris);font-size:.82rem;cursor:pointer;padding:4px 8px;border-radius:6px}
+.bloque .quitar:hover{background:#FDECEC;color:var(--error)}
+.agregar{border:1.5px dashed var(--naranja);background:#FFF7F0;color:var(--naranja-2);font:inherit;font-weight:600;font-size:.9rem;padding:10px 16px;border-radius:10px;cursor:pointer;margin-bottom:16px}
+.agregar[disabled]{opacity:.4;cursor:default}
+.chk{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.9rem;margin:6px 0 14px}
+.chk input{width:18px;height:18px;margin-top:3px;flex:0 0 auto;accent-color:var(--naranja)}
+.programas{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.programas div{background:#EEF3F9;border-radius:8px;padding:8px 12px;font-size:.9rem}
+.programas b{color:var(--noche)}
+.archivo{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.archivo .nom{font-size:.88rem;color:var(--gris)}
+.btn{font:inherit;font-weight:600;border:0;border-radius:10px;padding:13px 26px;cursor:pointer;font-size:1rem}
+.btn-naranja{background:var(--naranja);color:#fff;box-shadow:0 6px 18px rgba(240,124,27,.35)}
+.btn-naranja:hover{background:var(--naranja-2)}
+.btn-borde{background:#fff;border:1.5px solid var(--linea);color:var(--tinta);font-size:.88rem;padding:9px 16px}
+.btn[disabled]{opacity:.6;cursor:wait}
+.pie-form{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:6px 0 18px}
+.estado{font-size:.85rem;color:var(--gris)}
+.aviso{border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:.93rem}
+.aviso.error{background:#FDECEC;color:var(--error)}
+.aviso.ok{background:#E7F6F2;color:#0E6B5C}
+.aviso.info{background:#EEF3F9;color:var(--noche)}
+.centro{text-align:center;padding:40px 24px}
+.centro h2{justify-content:center}
+.oculto{display:none!important}
+footer{text-align:center;font-size:.8rem;color:var(--gris);padding:0 16px 30px}
+footer a{color:var(--gris)}
+</style>
+</head>
+<body>
+<header class="cab">
+  <div class="cab-in">
+    <a href="../"><img src="../img/logo-ideax-blanco.png" alt="IDEAX"></a>
+    <div>
+      <span class="ceja">Bolsa de empleo</span>
+      <h1>Mi CV en formato IDEAX</h1>
+      <p>Completa tu perfil una vez y lo usaremos para enviarte ofertas acordes a tu experiencia. Puedes actualizarlo cuando quieras desde el enlace que te llegó por correo.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="cargando" class="tarjeta centro"><p>Cargando tu información…</p></div>
+
+  <div id="sinEnlace" class="tarjeta centro oculto">
+    <h2>Este formulario es personal</h2>
+    <p id="sinEnlaceTxt" class="ayuda">Ábrelo desde el botón «Completar mi CV» del correo que te enviamos al inscribirte. Si no lo encuentras, escríbenos a contacto@ideax.cl.</p>
+  </div>
+
+  <div id="listo" class="tarjeta centro oculto">
+    <h2 id="listoTit">Tu CV quedó guardado</h2>
+    <p class="ayuda">Te enviamos a tu correo la versión en PDF con el formato de IDEAX. Esa es la que compartiremos con las organizaciones que publiquen ofertas acordes a tu perfil.</p>
+    <p><button class="btn btn-borde" type="button" id="volver">Seguir editando</button></p>
+  </div>
+
+  <form id="form" class="oculto" novalidate>
+    <div id="avisoPrevio" class="aviso info oculto"></div>
+
+    <section class="tarjeta">
+      <h2><span class="n">1</span>Datos de contacto</h2>
+      <p class="ayuda">Así aparecerán en el encabezado de tu CV.</p>
+      <div class="rejilla">
+        <div class="campo"><label for="nombres">Nombres</label><input id="nombres" maxlength="80" required autocomplete="given-name"></div>
+        <div class="campo"><label for="apellidos">Apellidos</label><input id="apellidos" maxlength="80" required autocomplete="family-name"></div>
+        <div class="campo"><label for="correo">Correo</label><input id="correo" type="email" maxlength="120" required autocomplete="email"></div>
+        <div class="campo"><label for="fono">Teléfono <span class="op">(opcional)</span></label><input id="fono" maxlength="40" autocomplete="tel"></div>
+        <div class="campo"><label for="ciudad">Ciudad</label><input id="ciudad" maxlength="80" autocomplete="address-level2"></div>
+        <div class="campo"><label for="pais">País</label><input id="pais" maxlength="60" autocomplete="country-name"></div>
+        <div class="campo ancho"><label for="linkedin">Perfil de LinkedIn <span class="op">(opcional)</span></label><input id="linkedin" maxlength="200" placeholder="linkedin.com/in/tu-perfil"></div>
+      </div>
+    </section>
+
+    <section class="tarjeta">
+      <h2><span class="n">2</span>Perfil profesional</h2>
+      <p class="ayuda">El titular es una línea que te define ante quien selecciona; el resumen cuenta qué sabes hacer y qué buscas. Escribe en primera persona y con hechos concretos.</p>
+      <div class="campo"><label for="titular">Titular profesional</label><input id="titular" maxlength="120" required placeholder="Ej.: Ingeniera comercial con 6 años en control de gestión en retail"></div>
+      <div class="campo"><label for="resumen">Resumen profesional</label><textarea id="resumen" maxlength="900" rows="5" required placeholder="Ej.: He liderado procesos de presupuesto y reportería para tres unidades de negocio…"></textarea><div class="cuenta"><span data-cuenta="resumen">0</span>/900 (mínimo 80)</div></div>
+    </section>
+
+    <section class="tarjeta">
+      <h2><span class="n">3</span>Experiencia laboral</h2>
+      <p class="ayuda">Empieza por la más reciente. En logros, indica resultados medibles cuando puedas (porcentajes, montos, plazos, equipos a cargo). Hasta 8 cargos.</p>
+      <div id="listaExp"></div>
+      <button type="button" class="agregar" id="masExp">+ Agregar experiencia</button>
+    </section>
+
+    <section class="tarjeta">
+      <h2><span class="n">4</span>Formación</h2>
+      <p class="ayuda">Títulos, grados y postítulos. Hasta 6.</p>
+      <div id="listaForm"></div>
+      <button type="button" class="agregar" id="masForm">+ Agregar formación</button>
+      <div id="bloqueProg" class="oculto">
+        <label>Formación en IDEAX <span class="op">(se agrega sola a tu CV)</span></label>
+        <div class="programas" id="programas"></div>
+      </div>
+    </section>
+
+    <section class="tarjeta">
+      <h2><span class="n">5</span>Competencias e idiomas</h2>
+      <div class="campo"><label for="competencias">Competencias <span class="op">(separadas por comas)</span></label><input id="competencias" maxlength="400" placeholder="Ej.: planificación estratégica, negociación, análisis financiero"></div>
+      <div class="campo"><label for="herramientas">Herramientas y software <span class="op">(separadas por comas)</span></label><input id="herramientas" maxlength="400" placeholder="Ej.: Excel avanzado, Power BI, SAP, R"></div>
+      <label>Idiomas <span class="op">(hasta 5)</span></label>
+      <div id="listaIdi"></div>
+      <button type="button" class="agregar" id="masIdi">+ Agregar idioma</button>
+    </section>
+
+    <section class="tarjeta">
+      <h2><span class="n">6</span>Preferencias laborales</h2>
+      <div class="rejilla">
+        <div class="campo ancho"><label for="areas">Áreas o cargos de interés</label><input id="areas" maxlength="300" placeholder="Ej.: control de gestión, finanzas corporativas, jefatura de operaciones"></div>
+        <div class="campo"><label for="modalidad">Modalidad</label><select id="modalidad"><option value="">Selecciona</option><option>Presencial</option><option>Híbrida</option><option>Remota</option><option>Indiferente</option></select></div>
+        <div class="campo"><label for="jornada">Jornada</label><select id="jornada"><option value="">Selecciona</option><option>Completa</option><option>Parcial</option><option>Por proyecto</option><option>Indiferente</option></select></div>
+        <div class="campo"><label for="disponibilidad">Disponibilidad</label><select id="disponibilidad"><option value="">Selecciona</option><option>Inmediata</option><option>15 días</option><option>30 días</option><option>Más de 30 días</option></select></div>
+        <div class="campo"><label for="traslado">¿Dispuesto a trasladarte de ciudad?</label><select id="traslado"><option value="">Selecciona</option><option value="Sí">Sí</option><option value="No">No</option></select></div>
+      </div>
+    </section>
+
+    <section class="tarjeta">
+      <h2><span class="n">7</span>CV propio y autorización</h2>
+      <p class="ayuda">Si tienes un CV con tu propio diseño, puedes adjuntarlo en PDF (hasta 5 MB). Es opcional: el CV en formato IDEAX se genera igual.</p>
+      <div class="archivo">
+        <input type="file" id="archivo" accept="application/pdf" class="oculto">
+        <button type="button" class="btn btn-borde" id="elegir">Adjuntar PDF</button>
+        <span class="nom" id="nomArchivo">Sin archivo</span>
+        <button type="button" class="btn btn-borde oculto" id="quitarArch">Quitar</button>
+      </div>
+      <label class="chk"><input type="checkbox" id="autoriza"> <span>Autorizo a IDEAX Chile a compartir mi CV con organizaciones que publiquen ofertas de empleo a través de su bolsa, y a contactarme por correo con oportunidades acordes a mi perfil. Puedo retirarme cuando quiera respondiendo a cualquier correo de IDEAX.</span></label>
+    </section>
+
+    <div id="avisoError" class="aviso error oculto" role="alert"></div>
+    <div class="pie-form">
+      <button type="submit" class="btn btn-naranja" id="enviar">Guardar mi CV</button>
+      <span class="estado" id="estado">Tu avance se guarda en este navegador mientras escribes.</span>
+    </div>
+  </form>
+</main>
+<footer>IDEAX Chile, Instituto de Administración y Dirección Ejecutiva · <a href="../">www.ideax.cl</a></footer>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbyhMvyQAi7qwIBpXZiUrUv5HE4miSm-pAxajWbPNO7UQUJ_lEAumtaZSSEUEURCT9QJ/exec";
+const q = new URLSearchParams(location.search);
+const DOC = q.get('doc') || '', TOKEN = q.get('t') || '';
+const CLAVE = 'ideax-cv-' + DOC;
+const $ = id => document.getElementById(id);
+const ver = (id, si) => $(id).classList.toggle('oculto', !si);
+let archivo = null, quitarArchivo = false;
+
+async function api(cuerpo) {
+  const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(cuerpo) });
+  return r.json();
+}
+const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ---------- Bloques repetibles ---------- */
+const MOLDES = {
+  Exp: { max: 8, html: x => `
+    <div class="rejilla">
+      <div class="campo"><label>Cargo</label><input data-k="cargo" maxlength="120" value="${esc(x.cargo)}"></div>
+      <div class="campo"><label>Empresa u organización</label><input data-k="empresa" maxlength="120" value="${esc(x.empresa)}"></div>
+      <div class="campo"><label>Desde</label><input data-k="desde" type="month" value="${esc(x.desde)}"></div>
+      <div class="campo"><label>Hasta</label><input data-k="hasta" type="month" value="${esc(x.hasta)}" ${x.actual ? 'disabled' : ''}></div>
+    </div>
+    <label class="chk"><input type="checkbox" data-k="actual" ${x.actual ? 'checked' : ''}> <span>Trabajo aquí actualmente</span></label>
+    <div class="campo"><label>Funciones y logros <span class="op">(uno por línea)</span></label><textarea data-k="logros" maxlength="700" rows="3">${esc(x.logros)}</textarea></div>` },
+  Form: { max: 6, html: x => `
+    <div class="rejilla">
+      <div class="campo ancho"><label>Título o grado</label><input data-k="titulo" maxlength="140" value="${esc(x.titulo)}"></div>
+      <div class="campo"><label>Institución</label><input data-k="institucion" maxlength="140" value="${esc(x.institucion)}"></div>
+      <div class="campo"><label>Año de egreso <span class="op">(o «en curso»)</span></label><input data-k="anio" maxlength="10" value="${esc(x.anio)}"></div>
+    </div>` },
+  Idi: { max: 5, html: x => `
+    <div class="rejilla">
+      <div class="campo"><label>Idioma</label><input data-k="idioma" maxlength="40" value="${esc(x.idioma)}"></div>
+      <div class="campo"><label>Nivel</label><select data-k="nivel">${['', 'Básico', 'Intermedio', 'Avanzado', 'Nativo'].map(n => `<option value="${n}" ${n === x.nivel ? 'selected' : ''}>${n || 'Selecciona'}</option>`).join('')}</select></div>
+    </div>` }
+};
+function agregar(tipo, x) {
+  const lista = $('lista' + tipo);
+  if (lista.children.length >= MOLDES[tipo].max) return;
+  const d = document.createElement('div');
+  d.className = 'bloque';
+  d.innerHTML = '<button type="button" class="quitar">Quitar</button>' + MOLDES[tipo].html(x || {});
+  d.querySelector('.quitar').onclick = () => { d.remove(); estadoBotones(); guardarBorrador(); };
+  const act = d.querySelector('[data-k="actual"]');
+  if (act) act.onchange = () => { const h = d.querySelector('[data-k="hasta"]'); h.disabled = act.checked; if (act.checked) h.value = ''; };
+  lista.appendChild(d);
+  estadoBotones();
+}
+function leerLista(tipo) {
+  return [...$('lista' + tipo).children].map(b => {
+    const o = {};
+    b.querySelectorAll('[data-k]').forEach(el => o[el.dataset.k] = el.type === 'checkbox' ? el.checked : el.value.trim());
+    return o;
+  });
+}
+function estadoBotones() { ['Exp', 'Form', 'Idi'].forEach(t => $('mas' + t).disabled = $('lista' + t).children.length >= MOLDES[t].max); }
+['Exp', 'Form', 'Idi'].forEach(t => $('mas' + t).onclick = () => agregar(t));
+
+/* ---------- Datos del formulario ---------- */
+const SIMPLES = ['nombres', 'apellidos', 'correo', 'fono', 'ciudad', 'pais', 'linkedin', 'titular', 'resumen', 'competencias', 'herramientas', 'areas', 'modalidad', 'jornada', 'disponibilidad', 'traslado'];
+function leer() {
+  const d = {};
+  SIMPLES.forEach(k => d[k] = $(k).value.trim());
+  d.experiencia = leerLista('Exp'); d.formacion = leerLista('Form'); d.idiomas = leerLista('Idi');
+  d.autoriza = $('autoriza').checked;
+  return d;
+}
+function poner(d) {
+  SIMPLES.forEach(k => { if (d[k] != null) $(k).value = d[k]; });
+  ['Exp', 'Form', 'Idi'].forEach(t => $('lista' + t).innerHTML = '');
+  (d.experiencia || []).forEach(x => agregar('Exp', x));
+  (d.formacion || []).forEach(x => agregar('Form', x));
+  (d.idiomas || []).forEach(x => agregar('Idi', x));
+  if (!$('listaExp').children.length) agregar('Exp');
+  if (!$('listaForm').children.length) agregar('Form');
+  if (!$('listaIdi').children.length) agregar('Idi');
+  $('autoriza').checked = !!d.autoriza;
+  contar();
+}
+function contar() { $('form').querySelectorAll('[data-cuenta]').forEach(s => s.textContent = $(s.dataset.cuenta).value.length); }
+
+/* ---------- Borrador local ---------- */
+let tBorrador;
+function guardarBorrador() {
+  clearTimeout(tBorrador);
+  tBorrador = setTimeout(() => { try { localStorage.setItem(CLAVE, JSON.stringify(leer())); } catch (e) { } }, 600);
+}
+function leerBorrador() { try { return JSON.parse(localStorage.getItem(CLAVE) || 'null'); } catch (e) { return null; } }
+function borrarBorrador() { try { localStorage.removeItem(CLAVE); } catch (e) { } }
+$('form').addEventListener('input', () => { contar(); guardarBorrador(); });
+$('form').addEventListener('change', guardarBorrador);
+
+/* ---------- Archivo propio ---------- */
+$('elegir').onclick = () => $('archivo').click();
+$('archivo').onchange = () => {
+  const f = $('archivo').files[0]; if (!f) return;
+  if (f.type !== 'application/pdf') { mostrarError('El archivo debe ser un PDF.'); return; }
+  if (f.size > 5 * 1024 * 1024) { mostrarError('El PDF supera los 5 MB.'); return; }
+  const r = new FileReader();
+  r.onload = () => { archivo = { nombre: f.name, base64: String(r.result).split(',')[1] }; quitarArchivo = false; $('nomArchivo').textContent = f.name; ver('quitarArch', true); };
+  r.readAsDataURL(f);
+};
+$('quitarArch').onclick = () => { archivo = null; quitarArchivo = true; $('archivo').value = ''; $('nomArchivo').textContent = 'Sin archivo'; ver('quitarArch', false); };
+
+/* ---------- Validación y envío ---------- */
+function mostrarError(t) { $('avisoError').textContent = t; ver('avisoError', !!t); if (t) $('avisoError').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+function validar(d) {
+  if (!d.nombres || !d.apellidos) return ['nombres', 'Completa tus nombres y apellidos.'];
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.correo)) return ['correo', 'Revisa tu correo.'];
+  if (!d.titular) return ['titular', 'Escribe tu titular profesional.'];
+  if (d.resumen.length < 80) return ['resumen', 'El resumen profesional debe tener al menos 80 caracteres.'];
+  if (!d.formacion.some(x => x.titulo)) return [null, 'Agrega al menos un título o grado en Formación.'];
+  if (d.linkedin && !/^(https?:\/\/)?([\w-]+\.)?linkedin\.com\//i.test(d.linkedin)) return ['linkedin', 'El enlace de LinkedIn no parece válido.'];
+  if (!d.autoriza) return ['autoriza', 'Para ser parte de la bolsa de empleo debes autorizar que compartamos tu CV.'];
+  return null;
+}
+$('form').onsubmit = async ev => {
+  ev.preventDefault();
+  const d = leer();
+  const v = validar(d);
+  if (v) { mostrarError(v[1]); if (v[0]) setTimeout(() => $(v[0]).focus(), 400); return; }
+  mostrarError('');
+  $('enviar').disabled = true; $('estado').textContent = 'Guardando y generando tu CV en PDF…';
+  try {
+    const r = await api({ accion: 'cvGuardar', doc: DOC, t: TOKEN, datos: d, archivo: archivo, quitarArchivo: quitarArchivo });
+    if (!r.ok) { mostrarError(r.error || 'No fue posible guardar tu CV.'); return; }
+    borrarBorrador(); archivo = null; quitarArchivo = false;
+    $('listoTit').textContent = r.nuevo ? 'Tu CV quedó en la bolsa de empleo' : 'Guardamos los cambios de tu CV';
+    ver('form', false); ver('listo', true); window.scrollTo(0, 0);
+  } catch (e) {
+    mostrarError('No pudimos conectarnos. Revisa tu conexión e inténtalo de nuevo; lo que escribiste sigue guardado en este navegador.');
+  } finally {
+    $('enviar').disabled = false; $('estado').textContent = 'Tu avance se guarda en este navegador mientras escribes.';
+  }
+};
+$('volver').onclick = () => { ver('listo', false); ver('form', true); };
+
+/* ---------- Inicio ---------- */
+(async function () {
+  if (!DOC || !TOKEN) { ver('cargando', false); ver('sinEnlace', true); return; }
+  try {
+    const r = await api({ accion: 'cvVer', doc: DOC, t: TOKEN });
+    ver('cargando', false);
+    if (!r.ok) { $('sinEnlaceTxt').textContent = r.error; ver('sinEnlace', true); return; }
+    const borrador = leerBorrador();
+    poner(borrador || r.datos || {});
+    if (r.programas && r.programas.length) {
+      $('programas').innerHTML = r.programas.map(p => `<div><b>${esc(p.nombre)}</b>, IDEAX Chile (${esc(p.estado.toLowerCase())})</div>`).join('');
+      ver('bloqueProg', true);
+    }
+    const msj = borrador ? 'Recuperamos lo que habías escrito en este navegador y aún no guardabas.'
+      : r.existe ? 'Ya tienes un CV guardado (última actualización: ' + r.actualizado + '). Puedes modificarlo y volver a guardarlo.' : '';
+    if (msj) { $('avisoPrevio').textContent = msj; ver('avisoPrevio', true); }
+    ver('form', true);
+  } catch (e) {
+    ver('cargando', false);
+    $('sinEnlaceTxt').textContent = 'No pudimos cargar el formulario. Revisa tu conexión y vuelve a abrir el enlace.';
+    ver('sinEnlace', true);
+  }
+})();
+</script>
+</body>
+</html>
