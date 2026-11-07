@@ -766,6 +766,8 @@ details.dip-valor summary::after{width:22px;height:22px}
 .met-cab p{max-width:85ch}
 .met-acc{display:flex;flex-direction:column;align-items:stretch;gap:2px;min-width:210px}
 .met-acc .btn{justify-content:center;box-shadow:none}
+.bro-pdf[hidden]{display:none}
+.gratis .bro-pdf{text-align:center;color:var(--c);margin-top:10px}
 @media (max-width:760px){.met-cab{grid-template-columns:1fr;gap:12px}}
 /* Cursos gratuitos */
 .gratuitos{background:var(--papel)}
@@ -975,6 +977,7 @@ details.dip-valor summary::after{width:22px;height:22px}
       <div class="aviso-parrilla">
         <p>Treinta diplomados en diez áreas, cada uno con su brochure, y un Master Profesional por área.</p>
         <a class="btn btn-naranja" href="#diplomados">Ver los 30 diplomados</a>
+        <a class="btn btn-blanco-borde bro-pdf" data-bro="catalogo" target="_blank" rel="noopener" hidden>Descargar el catálogo completo (PDF)</a>
       </div>
     </div>
   </div>
@@ -1358,6 +1361,7 @@ details.dip-valor summary::after{width:22px;height:22px}
         <div class="met-acc">
           <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="met">Inscribirme</a>
           <a class="dip-info" href="#inscripcion" data-info="met">Quiero más información</a>
+          <a class="dip-info bro-pdf" data-bro="met" target="_blank" rel="noopener" hidden>Descargar brochure (PDF)</a>
         </div>
       </div>
       <details class="dip-materias"><summary>Ver las materias</summary><ol><li>Pregunta y problema de investigación</li><li>Revisión de literatura y referencias</li><li>Diseño metodológico</li><li>Análisis de datos</li><li>Escritura científica y publicación</li></ol></details>
@@ -1421,36 +1425,42 @@ details.dip-valor summary::after{width:22px;height:22px}
         <p>Usa la inteligencia artificial para entender a tu cliente, crear contenidos y medir resultados, hasta dejar lista una campaña real.</p>
         <details class="dip-materias"><summary>Ver las 4 semanas</summary><ol><li>Cliente y propuesta de valor con IA</li><li>Contenidos y piezas con IA generativa</li><li>Pauta digital y segmentación</li><li>Medición y mejora de la campaña</li></ol></details>
         <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="g1">Inscribirme gratis</a>
+        <a class="dip-info bro-pdf" data-bro="g1" target="_blank" rel="noopener" hidden>Descargar brochure (PDF)</a>
       </article>
       <article class="gratis" style="--c:#0F2747">
         <small>Finanzas</small><h3>Análisis e interpretación de estados financieros</h3>
         <p>Lee el balance, el estado de resultados y el flujo de efectivo de cualquier empresa, y saca conclusiones para decidir.</p>
         <details class="dip-materias"><summary>Ver las 4 semanas</summary><ol><li>Balance y estado de resultados</li><li>Flujo de efectivo: de dónde viene y a dónde va la caja</li><li>Indicadores de liquidez, endeudamiento y rentabilidad</li><li>Diagnóstico financiero de una empresa real</li></ol></details>
         <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="g2">Inscribirme gratis</a>
+        <a class="dip-info bro-pdf" data-bro="g2" target="_blank" rel="noopener" hidden>Descargar brochure (PDF)</a>
       </article>
       <article class="gratis" style="--c:#7C3AED">
         <small>Personas</small><h3>IA en la gestión de personas: selección, capacitación y clima</h3>
         <p>Aplica herramientas de inteligencia artificial a los procesos de personas, con criterio, ética y resguardo de los datos.</p>
         <details class="dip-materias"><summary>Ver las 4 semanas</summary><ol><li>Selección con IA: perfiles, filtros y sesgos</li><li>Capacitación personalizada</li><li>Clima organizacional: encuestas y análisis de comentarios</li><li>Ética, privacidad y uso responsable</li></ol></details>
         <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="g3">Inscribirme gratis</a>
+        <a class="dip-info bro-pdf" data-bro="g3" target="_blank" rel="noopener" hidden>Descargar brochure (PDF)</a>
       </article>
       <article class="gratis" style="--c:#0E7490">
         <small>Operaciones y logística</small><h3>Inventarios inteligentes: cuánto tener y cuándo comprar</h3>
         <p>Reduce quiebres de stock y capital inmovilizado con métodos simples de clasificación, pronóstico y reposición.</p>
         <details class="dip-materias"><summary>Ver las 4 semanas</summary><ol><li>Clasificación ABC y costo del inventario</li><li>Pronóstico de la demanda</li><li>Cuánto pedir y cuándo: punto de reorden y stock de seguridad</li><li>Indicadores y tablero de inventario</li></ol></details>
         <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="g4">Inscribirme gratis</a>
+        <a class="dip-info bro-pdf" data-bro="g4" target="_blank" rel="noopener" hidden>Descargar brochure (PDF)</a>
       </article>
       <article class="gratis" style="--c:#15803D">
         <small>Economía</small><h3>Economía del comportamiento: por qué decidimos como decidimos</h3>
         <p>Los sesgos que mueven a clientes, equipos y ciudadanos, y cómo diseñar decisiones mejores en tu organización.</p>
         <details class="dip-materias"><summary>Ver las 4 semanas</summary><ol><li>Sesgos y atajos mentales</li><li>Precios, anclas y marcos</li><li>Empujones en empresas y políticas públicas</li><li>Diseñar una intervención y medir su efecto</li></ol></details>
         <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="g5">Inscribirme gratis</a>
+        <a class="dip-info bro-pdf" data-bro="g5" target="_blank" rel="noopener" hidden>Descargar brochure (PDF)</a>
       </article>
       <article class="gratis" style="--c:#B45309">
         <small>Administración pública</small><h3>Gestión pública con datos abiertos e IA</h3>
         <p>Encuentra, analiza y presenta datos públicos para mejorar decisiones y servicios, con un uso responsable de la inteligencia artificial.</p>
         <details class="dip-materias"><summary>Ver las 4 semanas</summary><ol><li>Datos abiertos del Estado: dónde están y cómo leerlos</li><li>Análisis y visualización para decidir</li><li>IA en el servicio público: usos y límites</li><li>Propuesta de mejora basada en datos</li></ol></details>
         <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="g6">Inscribirme gratis</a>
+        <a class="dip-info bro-pdf" data-bro="g6" target="_blank" rel="noopener" hidden>Descargar brochure (PDF)</a>
       </article>
     </div>
     <p class="nota-masters">Puedes cursar un curso gratuito a la vez; al terminarlo, puedes inscribirte en otro. El certificado de participación se solicita desde tu ambiente en la Facultad Virtual una vez calificado el curso. La beca del 50% se entrega como un código personal e intransferible, válido por 30 días para cualquiera de nuestros diplomados.</p>
@@ -2144,7 +2154,7 @@ details.dip-valor summary::after{width:22px;height:22px}
     </div>
   </div>
   <p class="nota-legal">IDEAX Chile es una institución autónoma de formación ejecutiva y continua que ofrece programas propios, diplomados y cursos. Sus programas no conducen a grados académicos ni a títulos profesionales; los Masters Profesionales son títulos propios y no constituyen un grado de magíster.</p>
-  <div class="legal"><span>© <span id="anio"></span> IDEAX, Instituto de Administración y Dirección Ejecutiva.</span><span>Diseñado por <a href="https://davincifactory.cl" target="_blank" rel="noopener" style="color:rgba(255,255,255,.85);font-weight:600">Davinci Factory</a>. Todos los derechos reservados. <a href="#" data-abrir-condiciones style="color:rgba(255,255,255,.85)">Condiciones y privacidad</a></span></div>
+  <div class="legal"><span>© <span id="anio"></span> IDEAX, Instituto de Administración y Dirección Ejecutiva.</span><span>Diseñado por <a href="https://davincifactory.cl" target="_blank" rel="noopener" style="color:rgba(255,255,255,.85);font-weight:600">Davinci Factory</a>. Todos los derechos reservados. <a href="#" data-abrir-condiciones style="color:rgba(255,255,255,.85)">Condiciones y privacidad</a> · <a class="bro-pdf" data-bro="catalogo" target="_blank" rel="noopener" hidden style="color:rgba(255,255,255,.85)">Catálogo de programas (PDF)</a></span></div>
 </footer>
 
 <dialog id="condiciones" aria-labelledby="cond-titulo">
@@ -2158,6 +2168,7 @@ details.dip-valor summary::after{width:22px;height:22px}
     <p><b>Naturaleza de los programas.</b> IDEAX, Instituto de Administración y Dirección Ejecutiva, es una institución autónoma de formación ejecutiva y continua. Sus diplomados, cursos y Masters Profesionales son títulos propios: no conducen a grados académicos ni a títulos profesionales.</p>
     <p><b>Inicio.</b> Los diplomados, Masters Profesionales y cursos gratuitos comienzan el primer lunes que esté al menos 7 días después del pago o de la inscripción. Los cursos ejecutivos comienzan en la fecha de su convocatoria, cuyas inscripciones cierran 3 días antes del inicio.</p>
     <p><b>Pagos.</b> El pago se realiza en línea con Mercado Pago. La matrícula queda confirmada cuando el pago es aprobado, o cuando se resuelve una beca total.</p>
+    <p><b>Retracto y devoluciones.</b> Puedes retractarte de tu inscripción dentro de los 10 días siguientes a su contratación y antes de que comience tu programa; en ese caso te devolvemos el total pagado, sin descuentos, en un plazo máximo de 45 días. Una vez iniciado el programa no hay devolución en dinero: lo que no hayas cursado queda como saldo a favor por 24 meses, para cualquier programa de IDEAX. Si por fuerza mayor debes dejar un programa ya iniciado y solicitas la devolución en dinero de lo no cursado, se descontarán los costos de transacción que Mercado Pago no reintegre a IDEAX.</p>
     <p><b>Becas y códigos.</b> Las becas parciales se resuelven caso a caso y no son acumulables con códigos de descuento. Los códigos personales son intransferibles y solo pueden usarse con el documento de su titular.</p>
     <p><b>Plazos.</b> Cada programa tiene un plazo para completarse, indicado en el manual del estudiante. Por fuerza mayor puedes solicitar un congelamiento o una prórroga; si decides no continuar, puedes solicitar un retiro según las condiciones del manual del estudiante.</p>
     <p><b>Cursos gratuitos.</b> Puedes tener un curso gratuito activo a la vez. El certificado de participación se entrega una vez calificado y aprobado el curso.</p>
@@ -2240,6 +2251,7 @@ details.dip-valor summary::after{width:22px;height:22px}
     <div class="final" id="ficha-final"></div>
     <div class="ficha-acciones">
       <a class="btn btn-naranja" href="#inscripcion" id="ficha-inscribir">Inscribirme en este programa</a>
+      <a class="btn btn-blanco-borde" id="ficha-bro" target="_blank" rel="noopener" hidden>Descargar brochure (PDF)</a>
       <button class="btn btn-noche" data-cerrar>Volver a los programas</button>
     </div>
   </div>
@@ -2305,6 +2317,7 @@ function abrir(id){
   $("#ficha-bajada").textContent = p.bajada;
   $("#ficha-datos").innerHTML = p.datos.map(d=>`<div><b>${d[0]}</b>${d[1]}</div>`).join("");
   $("#ficha-conv").innerHTML = htmlConv(id);
+  const fb = $("#ficha-bro"); if(BROCHURES && BROCHURES[id]){ fb.href = BROCHURES[id]; fb.hidden = false; } else fb.hidden = true;
   $("#ficha-sim").innerHTML = `<h5>Valor y simulación con beca</h5>${simulacion(id)}`; activarBecaProg($("#ficha-sim"));
   $("#ficha-dirigido").textContent = p.dirigido;
   $("#ficha-logros").innerHTML = p.logros.map(l=>`<li>${l}</li>`).join("");
@@ -2412,6 +2425,7 @@ document.querySelectorAll("[data-cerrar-bro]").forEach(b=>b.addEventListener("cl
 bro.addEventListener("click",e=>{ if(e.target===bro) cerrarBrochure(); });
 $("#bro-inscribir").addEventListener("click",()=>{ $("#f-programa").value = masterActual; cerrarBrochure(); });
 $("#bro-imprimir").addEventListener("click",()=>{
+  if(BROCHURES && BROCHURES[masterActual]){ window.open(BROCHURES[masterActual], "_blank", "noopener"); return; }
   document.body.classList.add("imprimiendo");
   const fin=()=>{ document.body.classList.remove("imprimiendo"); window.removeEventListener("afterprint",fin); };
   window.addEventListener("afterprint",fin);
@@ -2788,7 +2802,18 @@ document.addEventListener("click", e=>{ const a = e.target.closest("[data-abrir-
 document.querySelectorAll("[data-cerrar-cond]").forEach(b=>b.addEventListener("click",()=>{ dlgCond.close ? dlgCond.close() : dlgCond.removeAttribute("open"); }));
 dlgCond.addEventListener("click", e=>{ if(e.target===dlgCond) dlgCond.close(); });
 
-mostrarPaso(1); actualizarPrograma(); cargarConvocatorias();
+/* Brochures oficiales en Drive: el script entrega sus enlaces de descarga */
+let BROCHURES = null;
+async function cargarBrochures(){
+  if(!CONFIG.inscripcionURL) return;
+  try{
+    const r = await fetch(CONFIG.inscripcionURL, { method:"POST", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify({ accion:"brochures" }) }).then(x=>x.json());
+    BROCHURES = (r && r.brochures) || null;
+  }catch(x){ BROCHURES = null; }
+  document.querySelectorAll("[data-bro]").forEach(a=>{ const u = BROCHURES && BROCHURES[a.dataset.bro]; if(u){ a.href = u; a.hidden = false; } });
+}
+
+mostrarPaso(1); actualizarPrograma(); cargarConvocatorias(); cargarBrochures();
 
 /* Regreso desde Mercado Pago: www.ideax.cl/?pago=aprobado | pendiente | rechazado */
 (()=>{
