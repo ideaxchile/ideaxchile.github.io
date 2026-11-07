@@ -716,6 +716,66 @@ details.dip-valor summary::after{width:22px;height:22px}
 .sim-caja .sim{font-size:.92rem}
 @media print{.sim-beca{display:none}}
 
+/* Formulario por pasos */
+.paso{display:contents}
+#formulario:not(.modo-info) .paso:not(.activo){display:none}
+#formulario:not(.modo-info) .solo-info{display:none}
+.barra-pasos{grid-column:1/-1;list-style:none;margin:0 0 4px;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;position:relative}
+.barra-pasos::before{content:"";position:absolute;left:12.5%;right:12.5%;top:14px;height:2px;background:var(--linea)}
+.barra-pasos li{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:.76rem;color:var(--gris);text-align:center;line-height:1.25}
+.barra-pasos span{width:30px;height:30px;border-radius:50%;background:var(--papel);border:2px solid var(--linea);display:grid;place-items:center;font-weight:700;color:var(--gris);font-size:.85rem}
+.barra-pasos li.activo{color:var(--noche);font-weight:600}
+.barra-pasos li.activo span{background:var(--naranja);border-color:var(--naranja);color:#fff}
+.barra-pasos li.hecho span{background:var(--noche);border-color:var(--noche);color:#fff}
+.nav-pasos{flex-direction:row;justify-content:space-between;gap:10px}
+.nav-pasos .btn{justify-content:center;box-shadow:none}
+#formulario.primero #b-anterior{visibility:hidden}
+#formulario.ultimo #b-siguiente{display:none}
+#formulario:not(.modo-info):not(.ultimo) .campo-enviar{display:none}
+#formulario.ultimo .nav-pasos{margin-bottom:-8px}
+.con-error{border-color:#B42318!important;box-shadow:0 0 0 3px rgba(180,35,24,.12)!important}
+.acepta{grid-column:1/-1;display:flex;gap:12px;align-items:flex-start;font-weight:400;font-size:.9rem;color:var(--tinta);cursor:pointer;line-height:1.45}
+.acepta input{width:20px;height:20px;flex:none;margin-top:1px;padding:0;accent-color:var(--naranja)}
+.acepta em{font-style:normal;color:var(--gris);font-size:.82rem}
+.acepta a{color:var(--naranja-2);font-weight:600}
+#formulario .opcionales{grid-column:1/-1;font-size:.74rem;color:var(--gris);margin:8px 0 -6px;max-width:none;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.resumen-insc{background:var(--papel);border-radius:10px;padding:14px 16px;font-size:.9rem;line-height:1.55;display:block}
+.conv-box{grid-column:1/-1}
+.conv-box:empty,.conv-ficha:empty{display:none}
+.conv-ok,.conv-no{border-radius:10px;padding:14px 16px;font-size:.9rem;line-height:1.5}
+.conv-ok{background:#E7F6F2;border:1px solid #9FD8CC;color:#0F5E52}
+.conv-ok b,.conv-no b{display:block;margin-bottom:2px}
+.conv-ok small{display:block;margin-top:6px;font-size:.8rem;color:#2F6E62}
+.conv-no{background:#FFF7F0;border:1px solid #F7C9A0;color:#7A3A06}
+.conv-no .btn{margin-top:10px;padding:9px 16px;font-size:.86rem;box-shadow:none}
+.avisame-res{display:block;margin-top:6px;font-weight:600}
+.conv-ficha{margin:14px 0 4px}
+.conv-estado{display:inline-block;align-self:flex-start;font-size:.76rem;font-weight:600;padding:4px 10px;border-radius:20px;margin:0 0 10px}
+.conv-estado:empty{display:none}
+.programa .conv-estado{margin:auto 0 0}
+.programa .conv-estado+.programa-pie{margin-top:0;padding-top:12px}
+.conv-estado.abierta{background:#E7F6F2;color:#0F5E52}
+.conv-estado.cerrada{background:var(--papel);color:var(--gris)}
+#formulario.sin-codigo-prog .campo-codigo{display:none}
+.texto-legal h4{margin-top:18px}
+.texto-legal p{font-size:.9rem;line-height:1.6;color:var(--tinta);margin:8px 0}
+@media (max-width:560px){.barra-pasos li{font-size:.68rem}.barra-pasos span{width:26px;height:26px}}
+/* Cursos gratuitos */
+.gratuitos{background:var(--papel)}
+.gratis-cabeza{display:grid;grid-template-columns:1.25fr 1fr;gap:50px;align-items:end;margin-bottom:34px}
+.gratis-claves{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.gratis-claves li{background:#fff;border-radius:12px;padding:14px 18px;box-shadow:var(--sombra);font-size:.88rem;color:var(--gris);border-left:4px solid var(--naranja)}
+.gratis-claves b{display:block;color:var(--noche);font-size:1rem}
+.grilla-gratis{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.gratis{background:#fff;border-radius:14px;box-shadow:var(--sombra);padding:22px;border-top:5px solid var(--c);display:flex;flex-direction:column}
+.gratis small{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--c)}
+.gratis h3{font-size:1.1rem;color:var(--noche);line-height:1.3;margin:4px 0 8px}
+.gratis p{font-size:.9rem;color:var(--gris);margin:0 0 12px;line-height:1.5}
+.gratis details{margin-top:auto}
+.gratis .btn{margin-top:12px;justify-content:center;box-shadow:none}
+@media (max-width:1000px){.gratis-cabeza{grid-template-columns:1fr;gap:24px}.grilla-gratis{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grilla-gratis{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;padding-bottom:8px}.gratis{flex:0 0 86%;scroll-snap-align:start}}
+
 /* Becas en el formulario */
 .beca-check{display:flex;gap:12px;align-items:flex-start;background:#FFF7F0;border:1.5px solid #F7C9A0;border-radius:10px;padding:14px 16px;cursor:pointer}
 .beca-check input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--naranja);padding:0}
@@ -785,6 +845,7 @@ details.dip-valor summary::after{width:22px;height:22px}
 <div class="barra-sup">
   <div class="contenedor">
     <a class="ocultar-movil" id="correo-barra" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span></span></a>
+    <a class="destacar" href="#gratuitos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg>Cursos gratuitos</a>
     <a class="destacar" href="#becas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v6"/></svg>Becas</a>
     <a class="destacar" href="#verificar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Verificar certificado</a>
   </div>
@@ -1316,6 +1377,64 @@ details.dip-valor summary::after{width:22px;height:22px}
   </div>
 </section>
 
+<!-- CURSOS GRATUITOS -->
+<section class="seccion gratuitos" id="gratuitos">
+  <div class="contenedor">
+    <div class="gratis-cabeza revela">
+      <div>
+        <span class="ceja">Cursos gratuitos</span>
+        <h2 class="titulo">Empieza hoy, sin costo</h2>
+        <p class="bajada">Seis cursos de cuatro semanas, uno por área, con la misma metodología de nuestros diplomados: un texto de estudio y un caso aplicado cada semana. Temas de actualidad, sumamente prácticos, con materiales del mismo nivel que nuestros programas.</p>
+      </div>
+      <ul class="gratis-claves">
+        <li><b>4 semanas</b>Asincrónico, a tu ritmo dentro de cada semana</li>
+        <li><b>Certificado</b>De participación, al aprobar el curso</li>
+        <li><b>Beca del 50%</b>Para un diplomado, al terminar con éxito</li>
+      </ul>
+    </div>
+    <span class="desliza">Desliza para ver los seis cursos</span>
+    <div class="grilla-gratis">
+      <article class="gratis" style="--c:#C2410C">
+        <small>Marketing</small><h3>Marketing con IA: de la idea a la campaña en 4 semanas</h3>
+        <p>Usa la inteligencia artificial para entender a tu cliente, crear contenidos y medir resultados, hasta dejar lista una campaña real.</p>
+        <details class="dip-materias"><summary>Ver las 4 semanas</summary><ol><li>Cliente y propuesta de valor con IA</li><li>Contenidos y piezas con IA generativa</li><li>Pauta digital y segmentación</li><li>Medición y mejora de la campaña</li></ol></details>
+        <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="g1">Inscribirme gratis</a>
+      </article>
+      <article class="gratis" style="--c:#0F2747">
+        <small>Finanzas</small><h3>Análisis e interpretación de estados financieros</h3>
+        <p>Lee el balance, el estado de resultados y el flujo de efectivo de cualquier empresa, y saca conclusiones para decidir.</p>
+        <details class="dip-materias"><summary>Ver las 4 semanas</summary><ol><li>Balance y estado de resultados</li><li>Flujo de efectivo: de dónde viene y a dónde va la caja</li><li>Indicadores de liquidez, endeudamiento y rentabilidad</li><li>Diagnóstico financiero de una empresa real</li></ol></details>
+        <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="g2">Inscribirme gratis</a>
+      </article>
+      <article class="gratis" style="--c:#7C3AED">
+        <small>Personas</small><h3>IA en la gestión de personas: selección, capacitación y clima</h3>
+        <p>Aplica herramientas de inteligencia artificial a los procesos de personas, con criterio, ética y resguardo de los datos.</p>
+        <details class="dip-materias"><summary>Ver las 4 semanas</summary><ol><li>Selección con IA: perfiles, filtros y sesgos</li><li>Capacitación personalizada</li><li>Clima organizacional: encuestas y análisis de comentarios</li><li>Ética, privacidad y uso responsable</li></ol></details>
+        <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="g3">Inscribirme gratis</a>
+      </article>
+      <article class="gratis" style="--c:#0E7490">
+        <small>Operaciones y logística</small><h3>Inventarios inteligentes: cuánto tener y cuándo comprar</h3>
+        <p>Reduce quiebres de stock y capital inmovilizado con métodos simples de clasificación, pronóstico y reposición.</p>
+        <details class="dip-materias"><summary>Ver las 4 semanas</summary><ol><li>Clasificación ABC y costo del inventario</li><li>Pronóstico de la demanda</li><li>Cuánto pedir y cuándo: punto de reorden y stock de seguridad</li><li>Indicadores y tablero de inventario</li></ol></details>
+        <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="g4">Inscribirme gratis</a>
+      </article>
+      <article class="gratis" style="--c:#15803D">
+        <small>Economía</small><h3>Economía del comportamiento: por qué decidimos como decidimos</h3>
+        <p>Los sesgos que mueven a clientes, equipos y ciudadanos, y cómo diseñar decisiones mejores en tu organización.</p>
+        <details class="dip-materias"><summary>Ver las 4 semanas</summary><ol><li>Sesgos y atajos mentales</li><li>Precios, anclas y marcos</li><li>Empujones en empresas y políticas públicas</li><li>Diseñar una intervención y medir su efecto</li></ol></details>
+        <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="g5">Inscribirme gratis</a>
+      </article>
+      <article class="gratis" style="--c:#B45309">
+        <small>Administración pública</small><h3>Gestión pública con datos abiertos e IA</h3>
+        <p>Encuentra, analiza y presenta datos públicos para mejorar decisiones y servicios, con un uso responsable de la inteligencia artificial.</p>
+        <details class="dip-materias"><summary>Ver las 4 semanas</summary><ol><li>Datos abiertos del Estado: dónde están y cómo leerlos</li><li>Análisis y visualización para decidir</li><li>IA en el servicio público: usos y límites</li><li>Propuesta de mejora basada en datos</li></ol></details>
+        <a class="btn btn-naranja" href="#inscripcion" data-preseleccion="g6">Inscribirme gratis</a>
+      </article>
+    </div>
+    <p class="nota-masters">Puedes cursar un curso gratuito a la vez; al terminarlo, puedes inscribirte en otro. El certificado de participación se solicita desde tu ambiente en la Facultad Virtual una vez calificado el curso. La beca del 50% se entrega como un código personal e intransferible, válido por 30 días para cualquiera de nuestros diplomados.</p>
+  </div>
+</section>
+
 <!-- PROGRAMAS -->
 <section class="seccion programas" id="programas">
   <div class="contenedor">
@@ -1333,6 +1452,7 @@ details.dip-valor summary::after{width:22px;height:22px}
             <h3>IA Aplicada a los Negocios</h3>
           </div>
           <p>De los problemas empresariales a las soluciones inteligentes. Diseña, construye y valida una solución con inteligencia artificial.</p>
+          <span class="conv-estado" data-conv="ia"></span>
           <div class="programa-pie">
             <span class="sello-extra" style="background:#FDEBDD;color:#B4530A">+1 h personalizada semanal</span>
             <span class="flecha" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -1348,6 +1468,7 @@ details.dip-valor summary::after{width:22px;height:22px}
             <h3>Toma de Decisiones Gerenciales</h3>
           </div>
           <p>Dirigir, decidir y competir en entornos empresariales. Experiencia práctica con simulador de negocios y análisis de resultados.</p>
+          <span class="conv-estado" data-conv="td"></span>
           <div class="programa-pie">
             <span class="sello-extra" style="background:#E3ECF7;color:var(--td)">Con simulador de negocios</span>
             <span class="flecha" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -1363,6 +1484,7 @@ details.dip-valor summary::after{width:22px;height:22px}
             <h3>Dirección Estratégica de Operaciones y Supply Chain</h3>
           </div>
           <p>De la eficiencia operacional a la ventaja competitiva. Optimiza la cadena de suministro con datos, indicadores y decisiones estratégicas.</p>
+          <span class="conv-estado" data-conv="op"></span>
           <div class="programa-pie">
             <span class="sello-extra" style="background:#DFF3EF;color:#0E6E5F">Caso real de retail</span>
             <span class="flecha" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -1378,6 +1500,7 @@ details.dip-valor summary::after{width:22px;height:22px}
             <h3>Artes Liberales Aplicadas a la Administración y la Economía</h3>
           </div>
           <p>Pensar mejor para dirigir mejor. Integra filosofía, ética, historia y pensamiento científico con las decisiones empresariales y económicas.</p>
+          <span class="conv-estado" data-conv="al"></span>
           <div class="programa-pie">
             <span class="sello-extra" style="background:#EFE6F7;color:var(--al)">Pensamiento crítico</span>
             <span class="flecha" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -1787,12 +1910,44 @@ details.dip-valor summary::after{width:22px;height:22px}
           <button type="button" data-modo="info" role="radio" aria-checked="false">Quiero más información</button>
         </div>
         <p class="modo-ayuda" id="modo-ayuda">Te enviaremos el brochure con el valor y el enlace de pago.</p>
-        <div class="campo"><label for="f-nombre">Nombre y apellido</label><input id="f-nombre" name="nombre" autocomplete="name" required></div>
-        <div class="campo"><label for="f-correo">Correo electrónico</label><input id="f-correo" name="correo" type="email" autocomplete="email" required></div>
-        <div class="campo"><label for="f-fono">Teléfono</label><input id="f-fono" name="fono" type="tel" autocomplete="tel"></div>
-        <div class="campo"><label for="f-pais">País</label><input id="f-pais" name="pais" autocomplete="country-name"></div>
-        <div class="campo ancho">
-          <label for="f-programa">Programa de interés</label>
+        <ol class="barra-pasos solo-inscribir" id="barra-pasos" aria-label="Pasos de la inscripción">
+          <li class="activo"><span>1</span>Tus datos</li><li><span>2</span>Formación y trabajo</li><li><span>3</span>Programa</li><li><span>4</span>Confirmación</li>
+        </ol>
+
+        <div class="paso activo" data-paso="1">
+          <div class="campo ancho solo-info"><label for="f-nombre">Nombre y apellido</label><input id="f-nombre" name="nombre" autocomplete="name"></div>
+          <div class="campo solo-inscribir"><label for="f-nombres">Nombres</label><input id="f-nombres" name="nombres" autocomplete="given-name" data-req></div>
+          <div class="campo solo-inscribir"><label for="f-apellidos">Apellidos</label><input id="f-apellidos" name="apellidos" autocomplete="family-name" data-req></div>
+          <div class="campo solo-inscribir"><label for="f-tipodoc">Documento de identidad</label>
+            <select id="f-tipodoc" name="tipoDoc"><option value="RUT">RUT (Chile)</option><option value="Pasaporte">Pasaporte</option><option value="DNI">DNI u otro documento nacional</option></select></div>
+          <div class="campo solo-inscribir"><label for="f-documento">Número de documento</label><input id="f-documento" name="documento" autocomplete="off" placeholder="12.345.678-9" data-req></div>
+          <div class="campo"><label for="f-correo">Correo electrónico</label><input id="f-correo" name="correo" type="email" autocomplete="email" required data-req></div>
+          <div class="campo"><label for="f-fono">Teléfono</label><input id="f-fono" name="fono" type="tel" autocomplete="tel" placeholder="+56 9 1234 5678"></div>
+          <div class="campo solo-inscribir"><label for="f-fechanac">Fecha de nacimiento</label><input id="f-fechanac" name="fechaNac" type="date" data-req></div>
+          <div class="campo solo-inscribir"><label for="f-nacionalidad">Nacionalidad</label><input id="f-nacionalidad" name="nacionalidad" list="l-paises" data-req></div>
+          <div class="campo"><label for="f-pais">País de residencia</label><input id="f-pais" name="pais" list="l-paises" autocomplete="country-name" data-req></div>
+          <div class="campo solo-inscribir"><label for="f-ciudad">Ciudad o comuna</label><input id="f-ciudad" name="ciudad" autocomplete="address-level2" data-req></div>
+          <datalist id="l-paises"><option value="Chile"><option value="Argentina"><option value="Bolivia"><option value="Brasil"><option value="Colombia"><option value="Costa Rica"><option value="Cuba"><option value="Ecuador"><option value="El Salvador"><option value="España"><option value="Guatemala"><option value="Haití"><option value="Honduras"><option value="México"><option value="Nicaragua"><option value="Panamá"><option value="Paraguay"><option value="Perú"><option value="República Dominicana"><option value="Uruguay"><option value="Venezuela"><option value="Estados Unidos"></datalist>
+        </div>
+
+        <div class="paso" data-paso="2">
+          <div class="campo solo-inscribir"><label for="f-niveleduc">Nivel educacional</label>
+            <select id="f-niveleduc" name="nivelEduc" data-req><option value="">Selecciona</option><option>Enseñanza media completa</option><option>Técnico de nivel superior</option><option>Profesional universitario</option><option>Magíster o máster</option><option>Doctorado</option><option>Estudiante de educación superior</option></select></div>
+          <div class="campo solo-inscribir"><label for="f-titulo">Título o profesión</label><input id="f-titulo" name="titulo" placeholder="Ej.: Ingeniero comercial"></div>
+          <div class="campo ancho solo-inscribir"><label for="f-institucion">Institución donde estudiaste</label><input id="f-institucion" name="institucion"></div>
+          <div class="campo solo-inscribir"><label for="f-empresa">Empresa u organización</label><input id="f-empresa" name="empresa" autocomplete="organization" placeholder="Si trabajas de forma independiente, indícalo"></div>
+          <div class="campo solo-inscribir"><label for="f-cargo">Cargo</label><input id="f-cargo" name="cargo" autocomplete="organization-title"></div>
+          <div class="campo solo-inscribir"><label for="f-sector">Sector</label>
+            <select id="f-sector" name="sector"><option value="">Selecciona</option><option>Comercio y retail</option><option>Industria y manufactura</option><option>Minería y energía</option><option>Construcción e inmobiliario</option><option>Transporte y logística</option><option>Banca, seguros y finanzas</option><option>Tecnología y telecomunicaciones</option><option>Salud</option><option>Educación</option><option>Sector público</option><option>Servicios profesionales</option><option>Agricultura, pesca y alimentos</option><option>Turismo y gastronomía</option><option>Organizaciones sin fines de lucro</option><option>Emprendimiento propio</option><option>Otro</option></select></div>
+          <div class="campo solo-inscribir"><label for="f-experiencia">Años de experiencia laboral</label>
+            <select id="f-experiencia" name="experiencia"><option value="">Selecciona</option><option>Sin experiencia</option><option>Menos de 3</option><option>3 a 5</option><option>6 a 10</option><option>11 a 20</option><option>Más de 20</option></select></div>
+          <div class="campo ancho solo-inscribir"><label for="f-conocio">¿Cómo nos conociste?</label>
+            <select id="f-conocio" name="comoConocio"><option value="">Selecciona</option><option>Recomendación de un conocido</option><option>LinkedIn</option><option>Instagram o Facebook</option><option>Buscador de internet</option><option>Vox Liber</option><option>Mi empresa u organización</option><option>Fui estudiante de IADE Business School</option><option>Otro</option></select></div>
+        </div>
+
+        <div class="paso" data-paso="3">
+          <div class="campo ancho">
+            <label for="f-programa">Programa de interés</label>
           <select id="f-programa" name="programa" required>
             <option value="">Selecciona un programa</option>
           <optgroup label="Diplomados">
@@ -1827,6 +1982,14 @@ details.dip-valor summary::after{width:22px;height:22px}
             <option value="m10-d2">Diplomado en Finanzas Públicas, Compras y Control</option>
             <option value="m10-d3">Diplomado en Gestión Municipal y Desarrollo Territorial</option>
           </optgroup>
+          <optgroup label="Cursos gratuitos de 4 semanas">
+            <option value="g1">Curso gratuito: Marketing con IA, de la idea a la campaña en 4 semanas</option>
+            <option value="g2">Curso gratuito: Análisis e interpretación de estados financieros</option>
+            <option value="g3">Curso gratuito: IA en la gestión de personas, selección, capacitación y clima</option>
+            <option value="g4">Curso gratuito: Inventarios inteligentes, cuánto tener y cuándo comprar</option>
+            <option value="g5">Curso gratuito: Economía del comportamiento, por qué decidimos como decidimos</option>
+            <option value="g6">Curso gratuito: Gestión pública con datos abiertos e IA</option>
+          </optgroup>
           <optgroup label="Cursos ejecutivos y emprendedores">
             <option value="ia">IA Aplicada a los Negocios</option>
             <option value="td">Toma de Decisiones Gerenciales</option>
@@ -1856,26 +2019,43 @@ details.dip-valor summary::after{width:22px;height:22px}
             <option value="empresa">Programa cerrado para mi empresa u organización</option>
           </optgroup>
           </select>
+          </div>
+          <div class="conv-box solo-inscribir" id="conv-box" aria-live="polite"></div>
+          <div class="campo ancho solo-inscribir campo-beca">
+            <label class="beca-check" for="f-beca"><input type="checkbox" id="f-beca" name="beca"><span><b>Quiero postular a una beca parcial</b><small>De 20%, 30% o 50%. No se te cobra nada hasta que resolvamos tu solicitud.</small></span></label>
+          </div>
+          <div class="beca-campos solo-inscribir" id="beca-campos">
+            <div class="campo"><label for="f-tramo">Tramo de beca que solicitas</label>
+              <select id="f-tramo" name="tramo"><option value="20">20%</option><option value="30" selected>30%</option><option value="50">50%</option></select></div>
+            <div class="campo"><label for="f-docs">Documentos de respaldo (opcional)</label>
+              <input id="f-docs" name="docs" type="file" accept="application/pdf,image/jpeg,image/png" multiple>
+              <p class="beca-ayuda" id="docs-ayuda">Hasta 3 archivos PDF, JPG o PNG, de 5 MB cada uno.</p></div>
+            <div class="campo ancho"><label for="f-motivos">Cuéntanos tus motivos</label>
+              <textarea id="f-motivos" name="motivos" placeholder="Tu situación laboral y económica, por qué quieres cursar este programa y cómo lo aplicarás en tu trabajo"></textarea>
+              <p class="beca-ayuda" id="motivos-ayuda">Te recomendamos unas 150 palabras; el mínimo es 80. Esta información es confidencial y solo se usa para evaluar tu solicitud.</p></div>
+          </div>
+          <div class="campo ancho solo-inscribir campo-codigo"><label for="f-codigo">Código de descuento o de beca (opcional)</label>
+            <div class="codigo-fila"><input id="f-codigo" name="codigo" autocomplete="off" maxlength="30"><button type="button" id="b-codigo">Aplicar</button></div>
+            <p class="codigo-res" id="codigo-res" aria-live="polite"></p></div>
+          <div class="campo ancho"><label for="f-mensaje">Comentarios</label><textarea id="f-mensaje" name="mensaje" placeholder="Lo que quieras contarnos"></textarea></div>
         </div>
-        <div class="campo ancho solo-inscribir campo-beca">
-          <label class="beca-check" for="f-beca"><input type="checkbox" id="f-beca" name="beca"><span><b>Quiero postular a una beca parcial</b><small>De 20%, 30% o 50%. No se te cobra nada hasta que resolvamos tu solicitud.</small></span></label>
+
+        <div class="paso" data-paso="4">
+          <div class="campo ancho solo-inscribir resumen-insc" id="resumen-insc"></div>
+          <label class="acepta solo-inscribir"><input type="checkbox" id="f-acepta" name="acepta"><span>Acepto las <a href="#" data-abrir-condiciones>condiciones de matrícula y la política de privacidad</a> de IDEAX. <em>Obligatorio.</em></span></label>
+          <p class="opcionales solo-inscribir">Opcional. Puedes cambiarlo cuando quieras.</p>
+          <label class="acepta solo-inscribir"><input type="checkbox" id="f-susc-vox" name="suscVox"><span>Quiero recibir los números de <b>Vox Liber</b>, revista de pensamiento crítico sobre economía, educación, tecnología y cultura.</span></label>
+          <label class="acepta solo-inscribir"><input type="checkbox" id="f-susc-cmia" name="suscCmia"><span>Quiero recibir los números de <b>Cuadernos CMIA</b>, revista científica de investigación aplicada.</span></label>
+          <label class="acepta solo-inscribir"><input type="checkbox" id="f-bolsa" name="bolsa"><span>Quiero ser parte de la <b>bolsa de empleo IDEAX</b>. Te pediremos completar un CV en nuestro formato para enviarte ofertas acordes a tu perfil, y solo lo compartiremos con empresas con tu autorización.</span></label>
         </div>
-        <div class="beca-campos solo-inscribir" id="beca-campos">
-          <div class="campo"><label for="f-tramo">Tramo de beca que solicitas</label>
-            <select id="f-tramo" name="tramo"><option value="20">20%</option><option value="30" selected>30%</option><option value="50">50%</option></select></div>
-          <div class="campo"><label for="f-docs">Documentos de respaldo (opcional)</label>
-            <input id="f-docs" name="docs" type="file" accept="application/pdf,image/jpeg,image/png" multiple>
-            <p class="beca-ayuda" id="docs-ayuda">Hasta 3 archivos PDF, JPG o PNG, de 5 MB cada uno.</p></div>
-          <div class="campo ancho"><label for="f-motivos">Cuéntanos tus motivos</label>
-            <textarea id="f-motivos" name="motivos" placeholder="Tu situación laboral y económica, por qué quieres cursar este programa y cómo lo aplicarás en tu trabajo"></textarea>
-            <p class="beca-ayuda" id="motivos-ayuda">Te recomendamos unas 150 palabras; el mínimo es 80. Esta información es confidencial y solo se usa para evaluar tu solicitud.</p></div>
-        </div>
-        <div class="campo ancho solo-inscribir campo-codigo"><label for="f-codigo">Código de descuento (opcional)</label>
-          <div class="codigo-fila"><input id="f-codigo" name="codigo" autocomplete="off" maxlength="30"><button type="button" id="b-codigo">Aplicar</button></div>
-          <p class="codigo-res" id="codigo-res" aria-live="polite"></p></div>
-        <div class="campo ancho"><label for="f-mensaje">Comentarios</label><textarea id="f-mensaje" name="mensaje" placeholder="Cargo, organización o lo que quieras contarnos"></textarea></div>
+
         <p class="error-form" id="error-form" role="alert"></p>
-        <div class="campo ancho"><button class="btn btn-naranja" type="submit" style="justify-content:center"><span id="txt-enviar">Inscribirme</span>
+        <div class="campo ancho nav-pasos solo-inscribir">
+          <button type="button" class="btn btn-blanco-borde" id="b-anterior">Anterior</button>
+          <button type="button" class="btn btn-noche" id="b-siguiente">Siguiente
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
+        </div>
+        <div class="campo ancho campo-enviar"><button class="btn btn-naranja" type="submit" style="justify-content:center"><span id="txt-enviar">Inscribirme</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></div>
         <div class="mensaje-ok" id="ok-form" role="status"></div>
       </form>
@@ -1941,8 +2121,37 @@ details.dip-valor summary::after{width:22px;height:22px}
     </div>
   </div>
   <p class="nota-legal">IDEAX Chile es una institución autónoma de formación ejecutiva y continua que ofrece programas propios, diplomados y cursos. Sus programas no conducen a grados académicos ni a títulos profesionales; los Masters Profesionales son títulos propios y no constituyen un grado de magíster.</p>
-  <div class="legal"><span>© <span id="anio"></span> IDEAX, Instituto de Administración y Dirección Ejecutiva.</span><span>Diseñado por <a href="https://davincifactory.cl" target="_blank" rel="noopener" style="color:rgba(255,255,255,.85);font-weight:600">Davinci Factory</a>. Todos los derechos reservados.</span></div>
+  <div class="legal"><span>© <span id="anio"></span> IDEAX, Instituto de Administración y Dirección Ejecutiva.</span><span>Diseñado por <a href="https://davincifactory.cl" target="_blank" rel="noopener" style="color:rgba(255,255,255,.85);font-weight:600">Davinci Factory</a>. Todos los derechos reservados. <a href="#" data-abrir-condiciones style="color:rgba(255,255,255,.85)">Condiciones y privacidad</a></span></div>
 </footer>
+
+<dialog id="condiciones" aria-labelledby="cond-titulo">
+  <div class="ficha-cabeza" style="--c:var(--noche)">
+    <button class="cerrar" aria-label="Cerrar" data-cerrar-cond><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <span class="etiqueta">IDEAX</span>
+    <h3 id="cond-titulo">Condiciones de matrícula y política de privacidad</h3>
+  </div>
+  <div class="ficha-cuerpo texto-legal">
+    <h4>Condiciones de matrícula</h4>
+    <p><b>Naturaleza de los programas.</b> IDEAX, Instituto de Administración y Dirección Ejecutiva, es una institución autónoma de formación ejecutiva y continua. Sus diplomados, cursos y Masters Profesionales son títulos propios: no conducen a grados académicos ni a títulos profesionales.</p>
+    <p><b>Inicio.</b> Los diplomados, Masters Profesionales y cursos gratuitos comienzan el primer lunes que esté al menos 7 días después del pago o de la inscripción. Los cursos ejecutivos comienzan en la fecha de su convocatoria, cuyas inscripciones cierran 3 días antes del inicio.</p>
+    <p><b>Pagos.</b> El pago se realiza en línea con Mercado Pago. La matrícula queda confirmada cuando el pago es aprobado, o cuando se resuelve una beca total.</p>
+    <p><b>Becas y códigos.</b> Las becas parciales se resuelven caso a caso y no son acumulables con códigos de descuento. Los códigos personales son intransferibles y solo pueden usarse con el documento de su titular.</p>
+    <p><b>Plazos.</b> Cada programa tiene un plazo para completarse, indicado en el manual del estudiante. Por fuerza mayor puedes solicitar un congelamiento o una prórroga; si decides no continuar, puedes solicitar un retiro según las condiciones del manual del estudiante.</p>
+    <p><b>Cursos gratuitos.</b> Puedes tener un curso gratuito activo a la vez. El certificado de participación se entrega una vez calificado y aprobado el curso.</p>
+    <p><b>Integridad académica.</b> Los trabajos deben ser de tu autoría. El uso de inteligencia artificial está permitido en los términos que indique cada programa, y debe declararse.</p>
+    <p><b>Materiales.</b> Los materiales de estudio son de uso personal y no pueden reproducirse ni distribuirse.</p>
+
+    <h4>Política de privacidad</h4>
+    <p><b>Responsable.</b> IDEAX Chile es responsable del tratamiento de tus datos personales. Puedes contactarnos en <a href="mailto:contacto@ideax.cl">contacto@ideax.cl</a>.</p>
+    <p><b>Qué datos recogemos.</b> Los que entregas al inscribirte: identificación, contacto, nacionalidad y residencia, fecha de nacimiento, formación y trabajo. Si postulas a una beca, los motivos y documentos que adjuntes. Si te sumas a la bolsa de empleo, tu CV.</p>
+    <p><b>Para qué los usamos.</b> Para gestionar tu inscripción, tus pagos, tu programa, tus certificados y su verificación, y para comunicarnos contigo sobre tus estudios. Con tu consentimiento expreso, además, para enviarte las revistas Vox Liber y Cuadernos CMIA y para incluirte en la bolsa de empleo.</p>
+    <p><b>Con quién los compartimos.</b> No vendemos ni cedemos tus datos. Los tratan por cuenta nuestra los proveedores necesarios para operar: Google, donde se alojan nuestras planillas y correos, y Mercado Pago, que procesa los pagos. Tu CV solo se comparte con empresas que publiquen ofertas si autorizaste la bolsa de empleo.</p>
+    <p><b>Datos de becas.</b> La información económica o personal que entregues para una beca o un congelamiento se usa solo para evaluar tu solicitud, se guarda con acceso restringido y se elimina a los 6 meses de resuelta.</p>
+    <p><b>Cuánto tiempo los guardamos.</b> Los datos de matrícula y certificados se conservan mientras sean necesarios para acreditar tus estudios. Los de suscripciones y bolsa de empleo, hasta que retires tu consentimiento.</p>
+    <p><b>Tus derechos.</b> Puedes solicitar acceso, rectificación, supresión, oposición y portabilidad de tus datos, y retirar en cualquier momento los consentimientos que diste, escribiendo a <a href="mailto:contacto@ideax.cl">contacto@ideax.cl</a>. Cada envío de las revistas incluye además un enlace para darte de baja.</p>
+    <div class="ficha-acciones"><button class="btn btn-noche" data-cerrar-cond>Cerrar</button></div>
+  </div>
+</dialog>
 
 <dialog id="brochure" aria-labelledby="bro-titulo">
   <div class="ficha-cabeza" id="bro-cabeza">
@@ -1996,6 +2205,7 @@ details.dip-valor summary::after{width:22px;height:22px}
   </div>
   <div class="ficha-cuerpo" id="ficha-cuerpo">
     <div class="ficha-datos" id="ficha-datos"></div>
+    <div class="conv-ficha" id="ficha-conv"></div>
     <div class="sim-caja" id="ficha-sim" style="--c:var(--naranja)"></div>
     <h4>Dirigido a</h4>
     <p class="texto" id="ficha-dirigido"></p>
@@ -2071,6 +2281,7 @@ function abrir(id){
   $("#ficha-titulo").textContent = p.titulo;
   $("#ficha-bajada").textContent = p.bajada;
   $("#ficha-datos").innerHTML = p.datos.map(d=>`<div><b>${d[0]}</b>${d[1]}</div>`).join("");
+  $("#ficha-conv").innerHTML = htmlConv(id);
   $("#ficha-sim").innerHTML = `<h5>Valor y simulación con beca</h5>${simulacion(id)}`; activarBecaProg($("#ficha-sim"));
   $("#ficha-dirigido").textContent = p.dirigido;
   $("#ficha-logros").innerHTML = p.logros.map(l=>`<li>${l}</li>`).join("");
@@ -2274,17 +2485,177 @@ async function llamarServicio(datos){
 }
 const fmtCLP = n => "$" + Math.round(Number(n)||0).toLocaleString("es-CL");
 
-/* Código de descuento: consulta previa, el servicio lo vuelve a validar al inscribir */
-const codRes = $("#codigo-res");
+/* ===== Formulario de inscripción por pasos ===== */
+const fForm = $("#formulario"), codRes = $("#codigo-res"), fBeca = $("#f-beca");
+const SIN_BECA = /^(emp-.+|empresa|g\d+)$/;
+const SIN_CODIGO = /^(emp-.+|empresa|g\d+)$/;
+const CON_CONV = /^(ia|td|op|al)$/;
+let modoForm = "inscribir", pasoActual = 1;
+const TOTAL_PASOS = 4;
+
+/* RUT: valida dígito verificador */
+function rutValido(v){
+  const s = String(v||"").toUpperCase().replace(/[^0-9K]/g,"");
+  const m = s.match(/^(\d{7,8})([0-9K])$/); if(!m) return false;
+  let suma = 0, mul = 2;
+  for(let i=m[1].length-1;i>=0;i--){ suma += Number(m[1][i])*mul; mul = mul===7 ? 2 : mul+1; }
+  const r = 11 - (suma % 11), dv = r===11 ? "0" : r===10 ? "K" : String(r);
+  return dv === m[2];
+}
+function formatoRut(v){
+  const s = String(v||"").toUpperCase().replace(/[^0-9K]/g,""); if(s.length < 2) return v;
+  const c = s.slice(0,-1).replace(/\B(?=(\d{3})+(?!\d))/g,"."); return c + "-" + s.slice(-1);
+}
+$("#f-documento").addEventListener("blur", e=>{ if($("#f-tipodoc").value==="RUT" && e.target.value.trim()) e.target.value = formatoRut(e.target.value); });
+$("#f-tipodoc").addEventListener("change", e=>{ $("#f-documento").placeholder = e.target.value==="RUT" ? "12.345.678-9" : "Número del documento"; });
+
+/* Pasos */
+function mostrarPaso(n){
+  pasoActual = Math.max(1, Math.min(TOTAL_PASOS, n));
+  fForm.querySelectorAll(".paso").forEach(p=>p.classList.toggle("activo", Number(p.dataset.paso)===pasoActual));
+  $("#barra-pasos").querySelectorAll("li").forEach((li,i)=>{ li.classList.toggle("activo", i+1===pasoActual); li.classList.toggle("hecho", i+1<pasoActual); });
+  fForm.classList.toggle("primero", pasoActual===1);
+  fForm.classList.toggle("ultimo", pasoActual===TOTAL_PASOS);
+  if(pasoActual===TOTAL_PASOS) pintarResumen();
+  $("#error-form").textContent = "";
+}
+function validarPaso(n){
+  const f = fForm, err = $("#error-form");
+  const falta = (el, msg) => { err.textContent = msg; el.focus(); el.classList.add("con-error"); return false; };
+  fForm.querySelectorAll(".con-error").forEach(x=>x.classList.remove("con-error"));
+  if(n===1){
+    for(const id of ["f-nombres","f-apellidos","f-documento","f-correo","f-fechanac","f-nacionalidad","f-pais","f-ciudad"]){
+      const el = $("#"+id); if(!el.value.trim()) return falta(el, "Completa todos los datos de este paso.");
+    }
+    if($("#f-tipodoc").value==="RUT" && !rutValido(f.documento.value)) return falta(f.documento, "Revisa tu RUT: el dígito verificador no corresponde.");
+    if($("#f-tipodoc").value!=="RUT" && f.documento.value.replace(/[^0-9A-Za-z]/g,"").length < 5) return falta(f.documento, "Revisa tu número de documento.");
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.correo.value.trim())) return falta(f.correo, "Revisa el correo: debe tener la forma nombre@dominio.cl.");
+    const nac = new Date(f.fechaNac.value), edad = (Date.now() - nac) / (365.25*864e5);
+    if(!(edad >= 17 && edad < 100)) return falta(f.fechaNac, "Revisa tu fecha de nacimiento.");
+  }
+  if(n===2){
+    if(!f.nivelEduc.value) return falta(f.nivelEduc, "Indica tu nivel educacional.");
+  }
+  if(n===3){
+    const prog = f.programa.value;
+    if(!prog) return falta(f.programa, "Selecciona el programa que te interesa.");
+    if(CON_CONV.test(prog) && !convDe(prog).length) return falta(f.programa, "Este curso no tiene una convocatoria abierta. Usa el botón para que te avisemos cuando abra.");
+    if(fBeca.checked && !SIN_BECA.test(prog)){
+      if(contarPalabras(f.motivos.value) < 80) return falta(f.motivos, "Para postular a la beca, cuéntanos tus motivos en al menos 80 palabras.");
+      const md = revisarDocs(); if(md) return falta($("#f-docs"), md);
+    }
+  }
+  if(n===4){
+    if(!$("#f-acepta").checked) return falta($("#f-acepta"), "Para inscribirte debes aceptar las condiciones de matrícula y la política de privacidad.");
+  }
+  err.textContent = ""; return true;
+}
+$("#b-siguiente").addEventListener("click", ()=>{ if(validarPaso(pasoActual)){ mostrarPaso(pasoActual+1); document.getElementById("inscripcion").scrollIntoView({behavior:"smooth"}); } });
+$("#b-anterior").addEventListener("click", ()=>mostrarPaso(pasoActual-1));
+function pintarResumen(){
+  const f = fForm, prog = f.programa.value, nombreProg = prog ? f.programa.options[f.programa.selectedIndex].text : "";
+  const cv = CON_CONV.test(prog) ? convDe(prog)[0] : null;
+  $("#resumen-insc").innerHTML = `<b>${esc(f.nombres.value.trim()+" "+f.apellidos.value.trim())}</b> · ${esc(f.correo.value.trim())}<br>
+    Programa: <b>${esc(nombreProg)}</b>${cv ? `<br>Cohorte: ${esc(cv.nombre)}, desde el ${esc(cv.inicio)}` : ""}${fBeca.checked && !SIN_BECA.test(prog) ? `<br>Postulas a una beca del ${esc(f.tramo.value)}%` : ""}`;
+}
+
+/* Modo: inscribirme o solo información */
+function ponerModo(m){
+  modoForm = m;
+  fForm.classList.toggle("modo-info", m==="info");
+  fForm.querySelectorAll(".modo-form button").forEach(b=>{ const on=b.dataset.modo===m; b.classList.toggle("activo",on); b.setAttribute("aria-checked",on); });
+  if(m==="info"){ const n = ($("#f-nombres").value+" "+$("#f-apellidos").value).trim(); if(n && !$("#f-nombre").value) $("#f-nombre").value = n; }
+  mostrarPaso(m==="info" ? pasoActual : 1);
+  try{ actualizarPrograma(); }catch(e){}
+}
+document.querySelectorAll(".modo-form button").forEach(b=>b.addEventListener("click",()=>ponerModo(b.dataset.modo)));
+document.querySelectorAll("[data-preseleccion]").forEach(a=>a.addEventListener("click",()=>{ ponerModo("inscribir"); $("#f-programa").value = a.dataset.preseleccion; actualizarPrograma(); }));
+document.querySelectorAll("[data-info]").forEach(a=>a.addEventListener("click",()=>{ $("#f-programa").value = a.dataset.info; ponerModo("info"); }));
+$("#bro-info").addEventListener("click",()=>{ $("#f-programa").value = masterActual; ponerModo("info"); cerrarBrochure(); });
+$("#bro-inscribir").addEventListener("click",()=>ponerModo("inscribir"));
+
+/* Convocatorias de los cursos sincrónicos */
+let CONVOCATORIAS = null;
+const convDe = cod => (CONVOCATORIAS || []).filter(c=>c.codigo===cod);
+async function cargarConvocatorias(){
+  if(!CONFIG.inscripcionURL) return;
+  try{
+    const r = await fetch(CONFIG.inscripcionURL, { method:"POST", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify({ accion:"convocatorias" }) }).then(x=>x.json());
+    CONVOCATORIAS = (r && r.convocatorias) || [];
+  }catch(x){ CONVOCATORIAS = null; }
+  pintarConvocatorias();
+}
+function pintarConvocatorias(){
+  document.querySelectorAll("#f-programa option").forEach(o=>{
+    if(!CON_CONV.test(o.value)) return;
+    if(!o.dataset.base) o.dataset.base = o.textContent;
+    o.textContent = o.dataset.base + (CONVOCATORIAS && !convDe(o.value).length ? " (sin convocatoria abierta)" : "");
+  });
+  document.querySelectorAll("[data-conv]").forEach(s=>{
+    if(!CONVOCATORIAS){ s.textContent = ""; return; }
+    const c = convDe(s.dataset.conv)[0];
+    s.className = "conv-estado " + (c ? "abierta" : "cerrada");
+    s.textContent = c ? "Inicia el " + c.inicio.replace(/^\S+ /,"") : "Sin convocatoria abierta";
+  });
+  actualizarPrograma();
+}
+function htmlConv(cod){
+  if(!CON_CONV.test(cod)) return "";
+  if(!CONVOCATORIAS) return `<div class="conv-no">Confirmaremos la fecha de la próxima cohorte al recibir tu inscripción.</div>`;
+  const cs = convDe(cod);
+  if(!cs.length) return `<div class="conv-no"><b>Este curso no tiene una convocatoria abierta.</b> Deja tus datos en el paso 1 y te avisaremos por correo cuando abra la próxima cohorte.
+    <button type="button" class="btn btn-noche" data-avisame="${cod}">Avísame cuando abra</button><span class="avisame-res"></span></div>`;
+  const c = cs[0];
+  return `<div class="conv-ok"><b>Próxima cohorte: ${esc(c.nombre)}</b>Comienza el ${esc(c.inicio)} y termina el ${esc(c.termino)}.${c.horario ? ` Sesiones en vivo ${esc(c.horario)}, hora de Chile.` : ""}
+    <small>Inscripciones hasta el ${esc(c.cierre)} · ${c.cupos} cupos disponibles</small></div>`;
+}
+async function avisame(cod, res){
+  const f = fForm, correo = f.correo.value.trim(), nombre = (f.nombres.value+" "+f.apellidos.value).trim() || f.nombre.value.trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)){
+    try{ cerrar(); }catch(e){}
+    ponerModo("inscribir"); f.programa.value = cod; actualizarPrograma(); mostrarPaso(1);
+    document.getElementById("inscripcion").scrollIntoView({behavior:"smooth"});
+    $("#error-form").textContent = "Escribe tu nombre y correo, y luego en el paso 3 presiona «Avísame cuando abra».";
+    return;
+  }
+  res.textContent = "Registrando…";
+  const r = await llamarServicio({ accion:"avisame", nombre, correo, programa:cod });
+  res.textContent = r && r.ok ? "Listo, te avisaremos a " + correo + "." : "No pudimos registrarte; escríbenos a " + CONFIG.correo + ".";
+}
+document.addEventListener("click", e=>{ const b = e.target.closest("[data-avisame]"); if(b){ avisame(b.dataset.avisame, b.parentElement.querySelector(".avisame-res")); } });
+
+/* Programa elegido: convocatoria, beca y código */
+function actualizarPrograma(){
+  const prog = $("#f-programa").value;
+  fForm.classList.toggle("sin-beca-prog", SIN_BECA.test(prog));
+  fForm.classList.toggle("sin-codigo-prog", SIN_CODIGO.test(prog));
+  if(SIN_BECA.test(prog)) fBeca.checked = false;
+  fForm.classList.toggle("con-beca", fBeca.checked && modoForm !== "info");
+  if(fBeca.checked){ $("#f-codigo").value = ""; codRes.textContent = ""; codRes.className = "codigo-res"; }
+  $("#conv-box").innerHTML = modoForm==="info" ? "" : htmlConv(prog);
+  const gratis = /^g\d+$/.test(prog);
+  $("#modo-ayuda").textContent = modoForm==="info" ? "Te enviaremos el manual del estudiante y el brochure completo del programa, sin compromiso."
+    : gratis ? "Los cursos gratuitos no tienen costo. Recibirás de inmediato la confirmación y tu fecha de inicio."
+    : fBeca.checked ? "Recibirás un acuse de tu solicitud de beca y, dentro de dos días hábiles, la resolución con el enlace de pago."
+    : "Completa los cuatro pasos. Al final te enviaremos el brochure con el valor y el enlace de pago.";
+  $("#txt-enviar").textContent = modoForm==="info" ? "Enviarme la información" : gratis ? "Inscribirme gratis" : (fBeca.checked ? "Inscribirme y postular a la beca" : "Inscribirme");
+}
+fBeca.addEventListener("change", actualizarPrograma);
+$("#f-programa").addEventListener("change", ()=>{ actualizarPrograma(); if($("#f-codigo").value.trim()) revisarCodigo(); });
+document.querySelectorAll("[data-beca]").forEach(a=>a.addEventListener("click",()=>{ ponerModo("inscribir"); fBeca.checked = true; actualizarPrograma(); }));
+const actualizarBeca = actualizarPrograma;
+
+/* Código de descuento o de beca: consulta previa; el servicio lo vuelve a validar al inscribir */
 async function revisarCodigo(){
-  const f = $("#formulario"), cod = f.codigo.value.trim().toUpperCase();
+  const f = fForm, cod = f.codigo.value.trim().toUpperCase();
   codRes.className = "codigo-res"; codRes.textContent = "";
   if(!cod) return;
   if(!f.programa.value){ codRes.className = "codigo-res mal"; codRes.textContent = "Primero selecciona el programa."; return; }
   if(!CONFIG.inscripcionURL){ codRes.textContent = "El código se aplicará al revisar tu inscripción."; return; }
   codRes.textContent = "Revisando código…";
   try{
-    const r = await fetch(CONFIG.inscripcionURL, { method:"POST", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify({ accion:"codigo", codigo:cod, programa:f.programa.value }) }).then(x=>x.json());
+    const r = await fetch(CONFIG.inscripcionURL, { method:"POST", headers:{ "Content-Type":"text/plain;charset=utf-8" },
+      body: JSON.stringify({ accion:"codigo", codigo:cod, programa:f.programa.value, tipoDoc:f.tipoDoc.value, documento:f.documento.value }) }).then(x=>x.json());
     if(r && r.ok){
       codRes.className = "codigo-res ok";
       codRes.textContent = r.descuento >= 100 ? "Código válido: beca del 100%. No tendrás que pagar." : `Código válido: ${r.descuento}% de descuento. Valor final ${r.montoTexto || fmtCLP(r.monto)}.`;
@@ -2293,41 +2664,8 @@ async function revisarCodigo(){
 }
 $("#b-codigo").addEventListener("click", revisarCodigo);
 $("#f-codigo").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); revisarCodigo(); } });
-$("#f-programa").addEventListener("change", ()=>{ if($("#f-codigo").value.trim()) revisarCodigo(); });
 
-/* Modo del formulario: inscribirme o solo información */
-let modoForm = "inscribir";
-function ponerModo(m){
-  modoForm = m;
-  const f = $("#formulario"); f.classList.toggle("modo-info", m==="info");
-  f.querySelectorAll(".modo-form button").forEach(b=>{ const on=b.dataset.modo===m; b.classList.toggle("activo",on); b.setAttribute("aria-checked",on); });
-  $("#txt-enviar").textContent = m==="info" ? "Enviarme la información" : "Inscribirme";
-  $("#modo-ayuda").textContent = m==="info" ? "Te enviaremos el manual del estudiante y el brochure completo del programa, sin compromiso." : "Te enviaremos el brochure con el valor y el enlace de pago.";
-  try{ actualizarBeca(); }catch(e){}
-}
-document.querySelectorAll(".modo-form button").forEach(b=>b.addEventListener("click",()=>ponerModo(b.dataset.modo)));
-document.querySelectorAll("[data-preseleccion]").forEach(a=>a.addEventListener("click",()=>ponerModo("inscribir")));
-document.querySelectorAll("[data-info]").forEach(a=>a.addEventListener("click",()=>{ $("#f-programa").value = a.dataset.info; ponerModo("info"); }));
-$("#bro-info").addEventListener("click",()=>{ $("#f-programa").value = masterActual; ponerModo("info"); cerrarBrochure(); });
-$("#bro-inscribir").addEventListener("click",()=>ponerModo("inscribir"));
-
-/* Becas: solo para programas con cobro en línea */
-const SIN_BECA = /^(emp-.+|empresa)$/;
-const fBeca = $("#f-beca"), fForm = $("#formulario");
-function actualizarBeca(){
-  const prog = $("#f-programa").value, permite = !SIN_BECA.test(prog);
-  fForm.classList.toggle("sin-beca-prog", !permite);
-  if(!permite) fBeca.checked = false;
-  fForm.classList.toggle("con-beca", fBeca.checked && modoForm !== "info");
-  if(fBeca.checked){ $("#f-codigo").value = ""; codRes.textContent = ""; codRes.className = "codigo-res"; }
-  $("#modo-ayuda").textContent = modoForm==="info" ? "Te enviaremos el manual del estudiante y el brochure completo del programa, sin compromiso."
-    : (fBeca.checked ? "Recibirás un acuse de tu solicitud de beca y, dentro de dos días hábiles, la resolución con el enlace de pago." : "Te enviaremos el brochure con el valor y el enlace de pago.");
-  $("#txt-enviar").textContent = modoForm==="info" ? "Enviarme la información" : (fBeca.checked ? "Inscribirme y postular a la beca" : "Inscribirme");
-}
-fBeca.addEventListener("change", actualizarBeca);
-$("#f-programa").addEventListener("change", actualizarBeca);
-document.querySelectorAll(".modo-form button").forEach(b=>b.addEventListener("click", actualizarBeca));
-document.querySelectorAll("[data-beca]").forEach(a=>a.addEventListener("click",()=>{ ponerModo("inscribir"); fBeca.checked = true; actualizarBeca(); }));
+/* Beca: motivos y documentos */
 const contarPalabras = s => (s.trim().match(/\S+/g) || []).length;
 $("#f-motivos").addEventListener("input", e=>{
   const n = contarPalabras(e.target.value), a = $("#motivos-ayuda");
@@ -2336,7 +2674,7 @@ $("#f-motivos").addEventListener("input", e=>{
 });
 const TIPOS_DOC = ["application/pdf","image/jpeg","image/png"];
 function revisarDocs(){
-  const fl = Array.from($("#f-docs").files || []), a = $("#docs-ayuda");
+  const fl = Array.from($("#f-docs").files || []);
   if(fl.length > 3) return "Puedes adjuntar como máximo 3 documentos.";
   for(const x of fl){
     if(TIPOS_DOC.indexOf(x.type) < 0) return `«${x.name}» no es PDF, JPG ni PNG.`;
@@ -2351,45 +2689,62 @@ $("#f-docs").addEventListener("change", ()=>{
 });
 const leerBase64 = file => new Promise((ok, mal)=>{ const r = new FileReader(); r.onload = () => ok(String(r.result).split(",")[1] || ""); r.onerror = mal; r.readAsDataURL(file); });
 
-/* Formulario de inscripción */
-$("#formulario").addEventListener("submit", async e=>{
+/* Envío */
+fForm.addEventListener("submit", async e=>{
   e.preventDefault();
-  const f = e.target, err = $("#error-form"), ok = $("#ok-form"), boton = f.querySelector('button[type="submit"]');
+  const f = fForm, err = $("#error-form"), ok = $("#ok-form"), boton = f.querySelector('button[type="submit"]');
   err.textContent = ""; ok.classList.remove("visible");
-  const nombre = f.nombre.value.trim(), correo = f.correo.value.trim(), prog = f.programa.value;
-  if(!nombre){ err.textContent = "Escribe tu nombre para continuar."; f.nombre.focus(); return; }
-  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)){ err.textContent = "Revisa el correo: debe tener la forma nombre@dominio.cl."; f.correo.focus(); return; }
-  if(!prog){ err.textContent = "Selecciona el programa que te interesa."; f.programa.focus(); return; }
-  const nombreProg = f.programa.options[f.programa.selectedIndex].text;
-  const pideBeca = modoForm !== "info" && fBeca.checked && !SIN_BECA.test(prog);
-  if(pideBeca){
-    if(contarPalabras(f.motivos.value) < 80){ err.textContent = "Para postular a la beca, cuéntanos tus motivos en al menos 80 palabras."; f.motivos.focus(); return; }
-    const md = revisarDocs(); if(md){ err.textContent = md; $("#f-docs").focus(); return; }
+  const prog = f.programa.value, nombreProg = prog ? f.programa.options[f.programa.selectedIndex].text.replace(/ \(sin convocatoria abierta\)$/,"") : "";
+  let datos;
+  if(modoForm === "info"){
+    const nombre = f.nombre.value.trim(), correo = f.correo.value.trim();
+    if(!nombre){ err.textContent = "Escribe tu nombre para continuar."; f.nombre.focus(); return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)){ err.textContent = "Revisa el correo: debe tener la forma nombre@dominio.cl."; f.correo.focus(); return; }
+    if(!prog){ err.textContent = "Selecciona el programa que te interesa."; f.programa.focus(); return; }
+    datos = { accion:"informacion", nombre, correo, fono:f.fono.value.trim(), pais:f.pais.value.trim(), programa:prog, programaNombre:nombreProg, mensaje:f.mensaje.value.trim(), origen:location.href };
+  }else{
+    for(let n=1;n<=TOTAL_PASOS;n++){ if(!validarPaso(n)){ mostrarPaso(n); validarPaso(n); return; } }
+    const v = id => $("#"+id).value.trim();
+    datos = { accion:"inscripcion", nombres:v("f-nombres"), apellidos:v("f-apellidos"), nombre:(v("f-nombres")+" "+v("f-apellidos")).trim(),
+      tipoDoc:v("f-tipodoc"), documento:v("f-documento"), correo:v("f-correo"), fono:v("f-fono"), fechaNac:v("f-fechanac"),
+      nacionalidad:v("f-nacionalidad"), pais:v("f-pais"), ciudad:v("f-ciudad"), nivelEduc:v("f-niveleduc"), titulo:v("f-titulo"),
+      institucion:v("f-institucion"), empresa:v("f-empresa"), cargo:v("f-cargo"), sector:v("f-sector"), experiencia:v("f-experiencia"),
+      comoConocio:v("f-conocio"), programa:prog, programaNombre:nombreProg, codigo:SIN_CODIGO.test(prog) ? "" : v("f-codigo").toUpperCase(),
+      mensaje:v("f-mensaje"), acepta:$("#f-acepta").checked, suscVox:$("#f-susc-vox").checked, suscCmia:$("#f-susc-cmia").checked,
+      bolsa:$("#f-bolsa").checked, origen:location.href };
+    const cv = CON_CONV.test(prog) ? convDe(prog)[0] : null; if(cv) datos.convocatoria = cv.id;
+    if(fBeca.checked && !SIN_BECA.test(prog)){
+      datos.codigo = "";
+      try{
+        const docs = [];
+        for(const x of Array.from($("#f-docs").files || [])) docs.push({ nombre: x.name, tipo: x.type, base64: await leerBase64(x) });
+        datos.beca = { pct: Number(f.tramo.value), motivos: f.motivos.value.trim(), docs };
+      }catch(x){ err.textContent = "No pudimos leer los documentos adjuntos. Intenta de nuevo o envía la solicitud sin ellos."; return; }
+    }
   }
-  const datos = { accion: modoForm==="info" ? "informacion" : "inscripcion", nombre, correo, fono: f.fono.value.trim(), pais: f.pais.value.trim(), programa: prog, programaNombre: nombreProg, codigo: modoForm==="info" ? "" : f.codigo.value.trim().toUpperCase(), mensaje: f.mensaje.value.trim(), origen: location.href };
-  if(pideBeca){
-    datos.codigo = "";
-    try{
-      const fl = Array.from($("#f-docs").files || []);
-      const docs = [];
-      for(const x of fl) docs.push({ nombre: x.name, tipo: x.type, base64: await leerBase64(x) });
-      datos.beca = { pct: Number(f.tramo.value), motivos: f.motivos.value.trim(), docs };
-    }catch(x){ err.textContent = "No pudimos leer los documentos adjuntos. Intenta de nuevo o envía la solicitud sin ellos."; return; }
-  }
+  const correo = datos.correo;
 
   if(CONFIG.inscripcionURL){
     boton.disabled = true; boton.style.opacity = ".7";
     try{
       const r = await llamarServicio(datos);
-      if(r && r.ok === false){ err.textContent = r.error || `No pudimos registrar tu inscripción. Escribe a ${CONFIG.correo}.`; return; }
+      if(r && r.ok === false){
+        err.textContent = r.error || `No pudimos registrar tu inscripción. Escribe a ${CONFIG.correo}.`;
+        if(r.codigoError === "DOCUMENTO_INVALIDO" || r.codigoError === "DOCUMENTO_REQUERIDO") mostrarPaso(1);
+        if(r.codigoError === "SIN_CONVOCATORIA"){ cargarConvocatorias(); mostrarPaso(3); }
+        return;
+      }
       let texto;
-      if(r && r.estado === "Beca en evaluación") texto = `<b>¡Solicitud de beca recibida!</b> Tu inscripción en <b>${esc(nombreProg)}</b> quedó en evaluación, sin cobro. Te enviamos un acuse a <b>${esc(correo)}</b> y, en un plazo de hasta dos días hábiles, te llegará la resolución con el enlace de pago por el valor que corresponda.`;
+      if(r && r.estado === "Inscrito gratuito") texto = `<b>¡Inscripción confirmada!</b> Ya estás en el curso gratuito <b>${esc(nombreProg.replace(/^Curso gratuito: /,""))}</b>. Te enviamos a <b>${esc(correo)}</b> tu fecha de inicio, el manual del estudiante y las indicaciones para comenzar.`;
+      else if(r && r.estado === "Beca en evaluación") texto = `<b>¡Solicitud de beca recibida!</b> Tu inscripción en <b>${esc(nombreProg)}</b> quedó en evaluación, sin cobro. Te enviamos un acuse a <b>${esc(correo)}</b> y, en un plazo de hasta dos días hábiles, te llegará la resolución con el enlace de pago por el valor que corresponda.`;
       else if(modoForm === "info") texto = `<b>¡Listo!</b> Te enviamos a <b>${esc(correo)}</b> el manual del estudiante y el brochure completo de <b>${esc(nombreProg)}</b>. Cuando quieras inscribirte, vuelve a este formulario.`;
       else if(r && r.estado === "Becado") texto = `<b>¡Inscripción confirmada!</b> Tienes beca completa en <b>${esc(nombreProg)}</b>. Te enviamos a <b>${esc(correo)}</b> el material y las indicaciones para comenzar.`;
       else if(r && r.estado === "Sin cobro en línea") texto = `<b>¡Solicitud recibida!</b> Te enviamos a <b>${esc(correo)}</b> la información de <b>${esc(nombreProg)}</b> y te contactaremos para los siguientes pasos.`;
       else texto = `<b>¡Inscripción recibida!</b> Te enviamos a <b>${esc(correo)}</b> el brochure de <b>${esc(nombreProg)}</b>${r && r.monto ? `, con el valor de <b>${fmtCLP(r.monto)}</b>${r.descuento ? ` (descuento del ${r.descuento}%)` : ""}` : ""} y el enlace de pago de Mercado Pago, en hasta 12 cuotas.`;
       ok.innerHTML = texto + " Si no lo ves en unos minutos, revisa la carpeta de spam.";
-      ok.classList.add("visible"); const mAct = modoForm; f.reset(); ponerModo(mAct); actualizarBeca(); codRes.textContent = ""; $("#docs-ayuda").textContent = "Hasta 3 archivos PDF, JPG o PNG, de 5 MB cada uno."; $("#docs-ayuda").className = "beca-ayuda";
+      ok.classList.add("visible"); const mAct = modoForm; f.reset(); ponerModo(mAct); mostrarPaso(1);
+      codRes.textContent = ""; $("#docs-ayuda").textContent = "Hasta 3 archivos PDF, JPG o PNG, de 5 MB cada uno."; $("#docs-ayuda").className = "beca-ayuda";
+      if(CON_CONV.test(prog)) cargarConvocatorias();
     }catch(x){
       err.textContent = `No pudimos enviar tu inscripción. Intenta nuevamente o escribe a ${CONFIG.correo}.`;
     }finally{ boton.disabled = false; boton.style.opacity = ""; }
@@ -2397,11 +2752,20 @@ $("#formulario").addEventListener("submit", async e=>{
   }
   /* Respaldo mientras el servicio no esté conectado: correo a contacto@ideax.cl */
   const asunto = (modoForm==="info" ? "Solicitud de información IDEAX: " : "Inscripción IDEAX: ") + nombreProg;
-  const cuerpo = `Nombre: ${nombre}\nCorreo: ${correo}\nTeléfono: ${datos.fono}\nPaís: ${datos.pais}\nPrograma: ${nombreProg}${pideBeca ? `\nSolicito beca del ${f.tramo.value}%\nMotivos: ${f.motivos.value.trim()}` : ""}\n\n${datos.mensaje}`;
+  const cuerpo = Object.keys(datos).filter(k=>typeof datos[k]==="string" && k!=="origen" && k!=="accion").map(k=>k+": "+datos[k]).join("\n");
   ok.innerHTML = `Se abrirá tu correo con la inscripción lista para enviar. Si no se abre, escribe a <b>${CONFIG.correo}</b> indicando el programa <b>${esc(nombreProg)}</b>.`;
   ok.classList.add("visible");
   window.location.href = `mailto:${CONFIG.correo}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
 });
+
+/* Condiciones de matrícula y política de privacidad */
+const dlgCond = $("#condiciones");
+document.addEventListener("click", e=>{ const a = e.target.closest("[data-abrir-condiciones]"); if(!a) return; e.preventDefault();
+  if(typeof dlgCond.showModal==="function") dlgCond.showModal(); else dlgCond.setAttribute("open",""); dlgCond.scrollTop = 0; });
+document.querySelectorAll("[data-cerrar-cond]").forEach(b=>b.addEventListener("click",()=>{ dlgCond.close ? dlgCond.close() : dlgCond.removeAttribute("open"); }));
+dlgCond.addEventListener("click", e=>{ if(e.target===dlgCond) dlgCond.close(); });
+
+mostrarPaso(1); actualizarPrograma(); cargarConvocatorias();
 
 /* Regreso desde Mercado Pago: www.ideax.cl/?pago=aprobado | pendiente | rechazado */
 (()=>{
