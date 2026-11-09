@@ -842,5 +842,14 @@ details.dip-valor summary::after{width:22px;height:22px}
 .programa-elegido{grid-column:1/-1;background:#FFF3E8;border:1px solid #F5D6B8;border-radius:12px;padding:12px 16px;font-size:.95rem;line-height:1.45}
 .programa-elegido small{display:block;color:var(--gris);margin-top:2px}
 .programa-elegido a{color:var(--naranja-2);font-weight:600}
+.area-titulo{display:none;margin:30px 0 4px;font-size:1.25rem;color:var(--c)}
+.areas-todas .area-panel:first-of-type .area-titulo{margin-top:6px}
+.areas-todas .area-titulo{display:block}
+.filtro-formatos{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:26px 0 6px;scroll-margin-top:110px}
+.filtro-formatos span{font-size:.9rem;color:var(--gris);margin-right:4px}
+.filtro-formatos button{font:inherit;font-size:.95rem;font-weight:600;min-height:44px;padding:9px 20px;border-radius:30px;border:2px solid var(--linea);background:#fff;color:var(--noche);cursor:pointer;transition:.2s}
+.filtro-formatos button:hover{border-color:var(--noche)}
+.filtro-formatos button.activo{background:var(--noche);border-color:var(--noche);color:#fff}
+.pagina-interna .seccion[hidden]{display:none}
 /* En el celular, el formulario va primero y el proceso después */
 @media (max-width:900px){.pagina-interna .inscripcion-caja form{order:-1}}

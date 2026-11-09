@@ -179,8 +179,10 @@ function cerrarBrochure(){ if(bro && bro.open){ bro.close ? bro.close() : bro.re
 document.querySelectorAll("[data-dip]").forEach(b=>b.addEventListener("click",()=>abrirDiplomado(b.dataset.dip)));
 document.querySelectorAll("[data-master-bro]").forEach(b=>b.addEventListener("click",()=>abrirBrochure(b.dataset.masterBro)));
 document.querySelectorAll(".area-tab").forEach(b=>b.addEventListener("click",()=>{
+  const todos = b.dataset.area === "todos";
   document.querySelectorAll(".area-tab").forEach(x=>{ const on=x===b; x.classList.toggle("activa",on); x.setAttribute("aria-selected",on); });
-  document.querySelectorAll(".area-panel").forEach(p=>p.classList.toggle("activa",p.dataset.area===b.dataset.area));
+  document.querySelectorAll(".area-panel").forEach(p=>p.classList.toggle("activa", todos || p.dataset.area===b.dataset.area));
+  const cont = b.closest(".contenedor"); if(cont) cont.classList.toggle("areas-todas", todos);
 }));
 document.querySelectorAll(".master").forEach(c=>{
   c.addEventListener("click",()=>abrirBrochure(c.dataset.master));
@@ -637,3 +639,25 @@ document.querySelectorAll(".docente").forEach(d=>{
   d.addEventListener("click",tog); d.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); tog(); } });
 });
 if(document.getElementById("ver-faq")) document.getElementById("ver-faq").addEventListener("click",()=>document.getElementById("preguntas").classList.add("todas"));
+
+/* ===== Página de programas: filtro por formato (www.ideax.cl/programas/?f=gratuitos) ===== */
+(()=>{
+  const barra = $("#filtro-formatos"); if(!barra) return;
+  const botones = [...barra.querySelectorAll("button[data-f]")];
+  function filtrar(f, mover){
+    if(!botones.some(b=>b.dataset.f===f)) f = "todos";
+    botones.forEach(b=>{ const on = b.dataset.f===f; b.classList.toggle("activo", on); b.setAttribute("aria-pressed", on); });
+    document.querySelectorAll("[data-formato]").forEach(s=>{ s.hidden = !(f==="todos" || s.dataset.formato.split(" ").indexOf(f) !== -1); });
+    try{ const u = new URL(location.href); if(f==="todos") u.searchParams.delete("f"); else u.searchParams.set("f", f); history.replaceState(null, "", u); }catch(e){}
+    if(mover) barra.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+  botones.forEach(b=>b.addEventListener("click", ()=>filtrar(b.dataset.f, false)));
+  let f = "todos";
+  try{
+    const q = new URLSearchParams(location.search);
+    f = q.get("f") || "todos";
+    const area = q.get("area");
+    if(area){ f = "diplomados"; const t = document.querySelector('.area-tab[data-area="' + area.replace(/[^a-z0-9-]/gi,"") + '"]'); if(t) t.click(); }
+  }catch(e){}
+  filtrar(f, f !== "todos" && !location.hash);
+})();
