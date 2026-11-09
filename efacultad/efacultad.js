@@ -33,6 +33,7 @@
     if (grande) return '<div class="nota-grande' + (n.aprobado ? '' : ' reprobada') + '"><div><b>' + coma(n.pct) + '%</b></div><div><span>Escala de 1 a 7</span><br><b style="font-size:20px">' + coma(n.n7.toFixed(1)) + '</b></div><div><span>Escala de 1 a 10</span><br><b style="font-size:20px">' + coma(n.n10.toFixed(1)) + '</b></div><div><span class="etq ' + (n.aprobado ? 'verde' : 'rojo') + '">' + (n.aprobado ? 'Aprobado' : 'Reprobado') + '</span></div></div>';
     return '<span class="nota' + (n.aprobado ? '' : ' reprobada') + '"><span class="pct">' + coma(n.pct) + '%</span><small>' + coma(n.n7.toFixed(1)) + ' · ' + coma(n.n10.toFixed(1)) + '</small></span>';
   }
+  const clp = n => '$' + String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   function iniciales(nombre) { return String(nombre || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(x => x[0]).join('').toUpperCase(); }
   function avatar(nombre, foto, clase) { return foto ? '<img class="avatar ' + (clase || '') + '" src="' + h(foto) + '" alt="" referrerpolicy="no-referrer">' : '<span class="avatar ' + (clase || '') + '">' + h(iniciales(nombre)) + '</span>'; }
   function toast(msg, error) {
@@ -282,7 +283,16 @@
           [['Tipo', r.tipo], ['Folio', r.folio], ['Nombre', r.nombre], r.documento ? ['Documento', r.documento] : null, ['Programa', r.programa], r.horas ? ['Horas', r.horas] : null,
             ['Emitido', fecha(r.emitido)], r.vigenteHasta ? ['Matrícula vigente hasta', fecha(r.vigenteHasta)] : null,
             r.clase === 'Constancia' ? ['Situación actual', r.matriculaVigente ? 'Estudiante regular vigente' : 'La matrícula ya no está vigente'] : null,
-            r.nota ? ['Nota final a la fecha', coma(r.nota.pct) + '%'] : null].filter(Boolean).map(x => '<tr><td style="color:var(--gris);width:40%">' + h(x[0]) + '</td><td><b>' + h(x[1]) + '</b></td></tr>').join('') + '</table>';
+            r.nota ? ['Nota final a la fecha', coma(r.nota.pct) + '%'] : null].filter(Boolean).map(x => '<tr><td style="color:var(--gris);width:40%">' + h(x[0]) + '</td><td><b>' + h(x[1]) + '</b></td></tr>').join('') + '</table>' +
+          (r.copia ? '<div id="copia-ver" style="margin-top:16px;border:1px dashed #F5C89E;background:#FFF8F1;border-radius:12px;padding:16px">' +
+            '<b>¿Eres el titular? Solicita una copia</b><p style="margin:4px 0 10px;color:var(--gris);font-size:14px">Copia del certificado y del portafolio de entregas · <b>' + clp(r.copia.monto) + '</b>. Escribe tu número de documento: el enlace de pago y la copia llegan solo al correo que tienes registrado.</p>' +
+            '<form id="f-copia" class="acciones"><input name="doc" placeholder="Tu RUT o pasaporte" style="flex:1" required autocomplete="off"><button class="btn">Enviar enlace de pago</button></form><div id="res-copia"></div></div>' : '');
+        if (r.copia) $('#f-copia').onsubmit = async ev => {
+          ev.preventDefault(); const b = ev.target.querySelector('button'), res = $('#res-copia'); b.disabled = true;
+          try { const x = await api('solicitarCopia', { codigo: r.copia.codigo, documento: ev.target.doc.value });
+            res.innerHTML = '<div class="aviso ok" style="margin-top:10px"><b>Te enviamos el enlace de pago a ' + h(x.correo) + '.</b> Cuando se confirme el pago, recibirás ahí la copia del certificado y del portafolio. El enlace vence en 48 horas.</div>'; ev.target.remove(); }
+          catch (er) { res.innerHTML = '<div class="aviso error" style="margin-top:10px">' + h(er.message) + '</div>'; b.disabled = false; }
+        };
       } catch (e) { out.innerHTML = '<div class="aviso error">' + h(e.message) + '</div>'; }
     };
     $('#f-ver').onsubmit = e => { e.preventDefault(); verificar(e.target.codigo.value.trim()); };
@@ -316,7 +326,7 @@
     const p = d.programa;
     let html = '<div class="miga"><a href="#/inicio">Inicio</a> › ' + h(p.nombre) + '</div><div class="encabezado-vista"><div><h1>' + h(p.nombre) + '</h1><p>' +
       (d.matricula.inicio ? 'Inicio ' + fecha(d.matricula.inicio) : '') + (d.matricula.termino ? ' · Plazo hasta ' + fecha(d.matricula.termino) : '') + ' · ' + p.horas + ' horas</p></div>' +
-      '<div class="acciones">' + (d.notas.final ? notaHtml(d.notas.final) : '') + '<a class="btn claro chico" href="#/imprimir/portafolio/' + mat + '" target="_blank">Portafolio (PDF)</a></div></div>';
+      '<div class="acciones">' + (d.notas.final ? notaHtml(d.notas.final) : '') + '<a class="btn claro chico" href="#/imprimir/portafolio/' + mat + '" target="_blank">Vista previa del portafolio</a></div></div>';
     if (/congel/i.test(d.matricula.estado)) html += '<div class="aviso alerta">Tu matrícula está congelada. Puedes consultar lo que ya hiciste, pero no hacer entregas.</div>';
     let materia = null;
     html += '<div class="semanas">';
@@ -531,7 +541,7 @@
     vista('<div class="encabezado-vista"><div><h1>Mis notas</h1><p>En porcentaje de logro, con sus equivalencias en las escalas de 1 a 7 y de 1 a 10. Se aprueba con 60%.</p></div></div>' + d.map(x => {
       const r = x.resumen;
       return '<section class="tarjeta"><div class="encabezado-vista" style="margin-bottom:10px"><div><h2 style="margin:0">' + h(x.programa.nombre) + '</h2><p>' + r.corregidas + ' de ' + r.semanas + ' semanas calificadas</p></div>' +
-        '<div class="acciones">' + (r.final ? notaHtml(r.final) : '') + '<a class="btn claro chico" href="#/imprimir/portafolio/' + x.matricula + '" target="_blank">Descargar portafolio</a></div></div>' +
+        '<div class="acciones">' + (r.final ? notaHtml(r.final) : '') + '<a class="btn claro chico" href="#/imprimir/portafolio/' + x.matricula + '" target="_blank">Vista previa del portafolio</a></div></div>' +
         (r.materias.length > 1 ? '<div class="tabla-cont" style="margin-bottom:12px;box-shadow:none;border:1px solid var(--linea)"><table class="tabla"><thead><tr><th>Materia</th><th>Calificadas</th><th class="num">Nota</th></tr></thead><tbody>' +
           r.materias.map(m => '<tr><td>' + m.n + '. ' + h(m.nombre) + '</td><td>' + m.corregidas + ' de ' + m.semanas + '</td><td class="num">' + notaHtml(m.nota) + '</td></tr>').join('') + '</tbody></table></div>' : '') +
         '<div class="tabla-cont" style="box-shadow:none;border:1px solid var(--linea)"><table class="tabla"><thead><tr><th>Semana</th><th>Tema</th><th>Estado</th><th class="num">Nota</th></tr></thead><tbody>' +
@@ -541,27 +551,63 @@
     $$('tr.clic').forEach(tr => tr.onclick = () => irA(tr.dataset.ir));
   }
 
+  /* Descarga un PDF que llega en base64 desde el servicio */
+  function guardarPdf(r) {
+    const bin = atob(r.base64), bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const url = URL.createObjectURL(new Blob([bytes], { type: r.tipo || 'application/pdf' }));
+    const a = document.createElement('a'); a.href = url; a.download = r.nombre || 'documento.pdf';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000);
+  }
+
   async function vDocumentos() {
     const [docs, panel] = await Promise.all([api('misDocumentos'), api('panel')]);
     const vigentes = panel.matriculas.filter(m => !m.contenedor && m.vigente);
     const conNotas = panel.matriculas.filter(m => !m.contenedor);
+    const certs = docs.filter(x => x.clase !== 'Constancia');
+    const celdaDescarga = (x, cual) => {
+      const quedan = cual === 'portafolio' ? x.portafolio.quedan : x.quedan;
+      if (quedan > 0) return '<button class="btn claro chico" data-bajar="' + cual + '" data-folio="' + h(x.folio) + '" data-mat="' + h(x.matricula) + '">Descargar PDF</button><br><small style="color:var(--verde,#0F5E52);font-weight:600">' + quedan + ' descarga' + (quedan === 1 ? '' : 's') + ' disponible' + (quedan === 1 ? '' : 's') + '</small>';
+      return '<small style="color:var(--gris)">Ya usaste tu descarga</small><br>' + (x.copia.pendiente
+        ? '<small><b>Copia solicitada.</b> Revisa el enlace de pago en tu correo.</small>'
+        : '<button class="btn chico" data-copia="' + h(x.folio) + '">Solicitar copia · ' + clp(x.copia.monto) + '</button>');
+    };
     vista('<h1>Mis documentos</h1>' +
-      '<div class="rejilla r2"><section class="tarjeta"><h3>Certificado de alumno regular</h3><p style="color:var(--gris)">Acredita que eres estudiante vigente. Se genera al instante, con folio y código de verificación, y te llega también por correo.</p>' +
+      '<div class="rejilla r2"><section class="tarjeta"><h3>Certificado de alumno regular</h3><p style="color:var(--gris)">Acredita que eres estudiante vigente. Se genera al instante, con folio y código de verificación, y te llega también por correo. No tiene límite de descargas.</p>' +
       (vigentes.length ? '<div class="acciones"><select id="sel-ar" style="flex:1">' + vigentes.map(m => '<option value="' + m.id + '">' + h(m.programa.nombre) + '</option>').join('') + '</select><button class="btn naranja" id="btn-ar">Generar</button></div>'
         : '<div class="aviso info" style="margin:0">Necesitas una matrícula activa y vigente para generarlo.</div>') + '</section>' +
-      '<section class="tarjeta"><h3>Portafolio de entregas</h3><p style="color:var(--gris)">Todas tus entregas con su calificación, rúbrica y retroalimentación, en un PDF con código de verificación.</p>' +
+      '<section class="tarjeta"><h3>Vista previa del portafolio</h3><p style="color:var(--gris)">Todas tus entregas con su calificación, rúbrica y retroalimentación. La vista previa no tiene código de verificación; el portafolio oficial en PDF aparece abajo cuando se emite tu certificado.</p>' +
       (conNotas.length ? '<div class="acciones"><select id="sel-por" style="flex:1">' + conNotas.map(m => '<option value="' + m.id + '">' + h(m.programa.nombre) + '</option>').join('') + '</select><button class="btn claro" id="btn-por">Abrir</button></div>' : vacio('Sin programas')) + '</section></div>' +
-      '<h2 style="margin-top:10px">Documentos emitidos</h2>' +
-      (docs.length ? '<div class="tabla-cont"><table class="tabla"><thead><tr><th>Documento</th><th>Programa</th><th>Folio</th><th>Emitido</th><th></th></tr></thead><tbody>' +
-        docs.map(x => '<tr><td><b>' + (x.clase === 'Constancia' ? 'Alumno regular' : 'Certificado') + '</b>' + (x.nota ? '<br>' + notaHtml(x.nota) : '') + (x.beca ? '<br><small>Código de beca: <b>' + h(x.beca) + '</b></small>' : '') + '</td><td>' + h(x.nombrePrograma) + '</td><td>' + h(x.folio) + '<br><small>Código ' + h(x.codigo) + '</small></td><td>' + fecha(x.emitido) + '</td><td>' +
-          (x.url ? '<a class="btn claro chico" href="' + h(x.url) + '" target="_blank" rel="noopener">Ver PDF</a>' : '') + '</td></tr>').join('') + '</tbody></table></div>'
-        : vacio('Aún no tienes documentos emitidos', 'Cuando apruebes un programa, solicita tu certificado en Solicitudes.')));
+      '<h2 style="margin-top:10px">Certificados y portafolios oficiales</h2>' +
+      (certs.length ? '<p style="color:var(--gris);margin-top:-4px">Cada certificado y su portafolio se descargan una vez. Si los pierdes, puedes pedir una copia de ambos, que te llega al correo.</p><div class="tabla-cont"><table class="tabla"><thead><tr><th>Documento</th><th>Programa</th><th>Folio</th><th>Emitido</th><th>Certificado</th><th>Portafolio</th></tr></thead><tbody>' +
+        certs.map(x => '<tr><td><b>Certificado</b>' + (x.nota ? '<br>' + notaHtml(x.nota) : '') + (x.beca ? '<br><small>Código de beca: <b>' + h(x.beca) + '</b></small>' : '') + '</td><td>' + h(x.nombrePrograma) + '</td><td>' + h(x.folio) + '<br><small>Código ' + h(x.codigo) + '</small></td><td>' + fecha(x.emitido) + '</td>' +
+          '<td>' + celdaDescarga(x, 'certificado') + '</td><td>' + celdaDescarga(x, 'portafolio') + '</td></tr>').join('') + '</tbody></table></div>'
+        : vacio('Aún no tienes certificados', 'Cuando apruebes un programa, solicita tu certificado en Solicitudes.')) +
+      (docs.some(x => x.clase === 'Constancia') ? '<h2 style="margin-top:10px">Certificados de alumno regular</h2><div class="tabla-cont"><table class="tabla"><thead><tr><th>Programa</th><th>Folio</th><th>Emitido</th><th></th></tr></thead><tbody>' +
+        docs.filter(x => x.clase === 'Constancia').map(x => '<tr><td>' + h(x.nombrePrograma) + '</td><td>' + h(x.folio) + '<br><small>Código ' + h(x.codigo) + '</small></td><td>' + fecha(x.emitido) + '</td><td>' +
+          '<button class="btn claro chico" data-bajar="constancia" data-folio="' + h(x.folio) + '">Descargar PDF</button></td></tr>').join('') + '</tbody></table></div>' : ''));
     if ($('#btn-ar')) $('#btn-ar').onclick = async () => {
       const b = $('#btn-ar'); b.disabled = true; b.textContent = 'Generando…';
       try { const r = await api('alumnoRegular', { matricula: $('#sel-ar').value }); toast('Certificado ' + r.folio + ' listo.'); if (r.url) window.open(r.url, '_blank'); vDocumentos(); }
       catch (er) { toast(er.message, true); b.disabled = false; b.textContent = 'Generar'; }
     };
     if ($('#btn-por')) $('#btn-por').onclick = () => window.open('#/imprimir/portafolio/' + $('#sel-por').value, '_blank');
+    $$('[data-bajar]').forEach(b => b.onclick = async () => {
+      const unica = b.dataset.bajar !== 'constancia';
+      if (unica && !confirm('Este documento se puede descargar una sola vez. Guárdalo bien en tu computador o en tu nube. ¿Descargar ahora?')) return;
+      const t = b.textContent; b.disabled = true; b.textContent = 'Preparando…';
+      try {
+        const r = b.dataset.bajar === 'portafolio' ? await api('descargarPortafolio', { matricula: b.dataset.mat }) : await api('descargarDocumento', { folio: b.dataset.folio });
+        guardarPdf(r); toast('Documento descargado.'); if (unica) vDocumentos(); else { b.disabled = false; b.textContent = t; }
+      } catch (er) { toast(er.message, true); b.disabled = false; b.textContent = t; }
+    });
+    $$('[data-copia]').forEach(b => b.onclick = async () => {
+      const x = certs.find(c => c.folio === b.dataset.copia);
+      if (!confirm('Solicitar copia del certificado y del portafolio por ' + clp(x.copia.monto) + '. Te enviaremos el enlace de pago de Mercado Pago a tu correo registrado. ¿Continuar?')) return;
+      b.disabled = true; b.textContent = 'Enviando…';
+      try { const r = await api('solicitarCopiaPropia', { folio: b.dataset.copia }); toast('Te enviamos el enlace de pago a ' + r.correo + '.'); vDocumentos(); }
+      catch (er) { toast(er.message, true); b.disabled = false; b.textContent = 'Solicitar copia · ' + clp(x.copia.monto); }
+    });
   }
 
   async function vSolicitudes() {
@@ -665,7 +711,8 @@
       (r.final ? '<h3>Nota a la fecha</h3>' + notaHtml(r.final, true) : '') +
       (r.materias.length > 1 ? '<table class="tabla"><thead><tr><th>Materia</th><th>Calificadas</th><th class="num">Nota</th></tr></thead><tbody>' + r.materias.map(m => '<tr><td>' + h(m.nombre) + '</td><td>' + m.corregidas + ' de ' + m.semanas + '</td><td class="num">' + (m.nota ? coma(m.nota.pct) + '%' : '') + '</td></tr>').join('') + '</tbody></table>' : '') + '</div>';
     vista(hojaImpresion('Portafolio', portada + d.entregas.map(x => bloqueEntrega(Object.assign({ estudiante: d.estudiante, programaNombre: d.programa.nombre }, x))).join(''),
-      d.codigo ? 'Folio ' + h(d.folio) + ' · Código de verificación <b>' + h(d.codigo) + '</b> · Verifica en www.ideax.cl/efacultad/#/verificar<br>' : ''));
+      d.codigo ? 'Folio ' + h(d.folio) + ' · Código de verificación <b>' + h(d.codigo) + '</b> · Verifica en www.ideax.cl/verificar<br>'
+        : '<b>Vista previa.</b> No es un documento oficial ni tiene código de verificación. El portafolio oficial en PDF se descarga en Mis documentos cuando se emite tu certificado.<br>'));
   }
 
   /* =================== DOCENTE =================== */
