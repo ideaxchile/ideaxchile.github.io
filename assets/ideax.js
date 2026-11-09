@@ -257,7 +257,7 @@ function tarjetaCert(r){
    Certificados de la planilla (IADE y antiguos): deja documento y contacto; IDEAX valida la identidad y envía el enlace de pago.
    En ambos casos puede pedirse la copia digital o la apostillada (física y digital, con envío incluido). */
 const COPIA_DIG = {
-  efacultad: "Certificado y portafolio de entregas en PDF, al correo registrado en la eFacultad. Entrega automática al pagar.",
+  efacultad: "Ambos documentos en PDF, al correo registrado en la eFacultad. Entrega automática al pagar.",
   planilla: "Copia del certificado en PDF, con su código de verificación. IDEAX la emite tras validar tu identidad."
 };
 function copiaDatosDe(cp){ return { origen: cp.origen === "planilla" ? "planilla" : "efacultad", codigo: cp.codigo, digital: Number(cp.monto)||0, apostilla: Number(cp.apostilla)||0, portafolio: cp.origen === "planilla" ? 0 : Number(cp.portafolio)||0 }; }
@@ -266,16 +266,21 @@ function copiaEstado(caja){ return caja._st || (caja._st = { op:"digital", porta
 function copiaTotal(c, st){ return st.op === "digital" ? c.digital : c.apostilla + (st.porta && c.portafolio ? c.portafolio : 0); }
 function copiaHtmlOpciones(c, st){
   const dig = st.op === "digital";
-  const opA = c.apostilla > 0 ? `<button type="button" class="copia-op" role="radio" aria-checked="${!dig}" data-copia-op="apostilla"><b>Certificado apostillado, físico y digital</b><span>Envío incluido a Chile o al extranjero.</span></button>` : "";
-  const porta = !dig && c.portafolio > 0 ? `<label class="copia-porta"><input type="checkbox" data-copia-porta${st.porta ? " checked" : ""}>Agregar el portafolio apostillado</label>` : "";
+  const opA = c.apostilla > 0 ? `<button type="button" class="copia-op" role="radio" aria-checked="${!dig}" data-copia-op="apostilla"><b>Copia física apostillada</b><span>Documento físico con apostilla, más su copia digital. Envío incluido a Chile o al extranjero.${c.portafolio > 0 ? " En el siguiente paso eliges si apostillas solo el certificado o también el portafolio." : ""}</span></button>` : "";
   return `<b class="copia-tit">¿Eres el titular? Solicita una copia</b>
     <div class="copia-opciones" role="radiogroup" aria-label="Tipo de copia">
-    <button type="button" class="copia-op" role="radio" aria-checked="${dig}" data-copia-op="digital"><b>Copia digital</b><span>${COPIA_DIG[c.origen]}</span></button>${opA}</div>${porta}
+    <button type="button" class="copia-op" role="radio" aria-checked="${dig}" data-copia-op="digital"><b>${c.origen === "efacultad" ? "Copia digital del certificado y del portafolio" : "Copia digital del certificado"}</b><span>${COPIA_DIG[c.origen]}</span></button>${opA}</div>
     <div class="copia-pie"><button type="button" class="btn btn-noche" data-copia-seguir>Continuar</button></div>`;
 }
+function copiaValor(c, st){
+  const total = copiaTotal(c, st);
+  if(st.op === "digital") return `Valor: <b>${clp(total)}</b>.`;
+  return `Valor: <b>${clp(total)}</b>${st.porta && c.portafolio ? " por el certificado y el portafolio apostillados" : ""}, con envío incluido a Chile o al extranjero.`;
+}
+function copiaBoton(c, st){ return c.origen === "efacultad" ? "Enviar enlace de pago · " + clp(copiaTotal(c, st)) : "Enviar solicitud"; }
 function copiaHtmlForm(c, st){
   const auto = c.origen === "efacultad", dig = st.op === "digital", total = copiaTotal(c, st);
-  const titulo = dig ? "Copia digital" : "Certificado apostillado" + (st.porta && c.portafolio ? " y portafolio apostillado" : "");
+  const titulo = dig ? (auto ? "Copia digital del certificado y del portafolio" : "Copia digital del certificado") : "Copia física apostillada";
   const envio = dig ? "" : " La copia física apostillada se envía a la dirección que indiques.";
   const expl = auto ? "Escribe tu número de documento. Si coincide con el del titular, enviaremos el enlace de pago al correo que tienes registrado en la eFacultad." + envio
     : "Escribe tu número de documento y tus datos de contacto. Validaremos tu identidad antes de enviarte el enlace de pago." + envio;
@@ -283,11 +288,12 @@ function copiaHtmlForm(c, st){
   const contacto = auto ? (dig ? "" : `<div class="copia-grid">${tel}</div>`)
     : `<div class="copia-grid"><label>Correo<input name="correo" type="email" autocomplete="email" placeholder="nombre@correo.cl"></label>${tel}</div>`;
   const dir = dig ? "" : `<div class="copia-grid"><label class="ancho">Dirección de envío<input name="direccion" autocomplete="street-address" placeholder="Calle, número, depto."></label><label>Ciudad o comuna<input name="ciudad" autocomplete="address-level2"></label><label>País<input name="pais" autocomplete="country-name" value="Chile"></label></div>`;
-  const valores = dig ? `Valor: <b>${clp(total)}</b>.`
-    : (st.porta && c.portafolio ? `Valores: certificado apostillado ${clp(c.apostilla)} y portafolio apostillado ${clp(c.portafolio)}. Total: <b>${clp(total)}</b>, con envío incluido.` : `Valor: <b>${clp(total)}</b>, con envío incluido a Chile o al extranjero.`);
-  return `<form class="copia-form" novalidate><b>${titulo}</b><p class="copia-valor">${valores}</p><p>${expl}</p>
+  const docs = !dig && c.portafolio > 0 ? `<fieldset class="copia-docs"><legend>¿Qué documentos quieres apostillar?</legend>
+    <label><input type="radio" name="docs" value="certificado"${st.porta ? "" : " checked"}><span><b>Solo el certificado</b> · ${clp(c.apostilla)}</span></label>
+    <label><input type="radio" name="docs" value="ambos"${st.porta ? " checked" : ""}><span><b>El certificado y el portafolio</b> · ${clp(c.apostilla + c.portafolio)} (${clp(c.apostilla)} + ${clp(c.portafolio)})</span></label></fieldset>` : "";
+  return `<form class="copia-form" novalidate><b>${titulo}</b>${docs}<p class="copia-valor">${copiaValor(c, st)}</p><p>${expl}</p>
     <label>Tu número de documento (RUT o pasaporte)<input name="doc" autocomplete="off" placeholder="12.345.678-9" required></label>${contacto}${dir}
-    <div class="copia-acc"><button type="submit" class="btn btn-naranja">${auto ? "Enviar enlace de pago · " + clp(total) : "Enviar solicitud"}</button><button type="button" class="copia-cancelar" data-copia-volver>Volver</button></div>
+    <div class="copia-acc"><button type="submit" class="btn btn-naranja">${copiaBoton(c, st)}</button><button type="button" class="copia-cancelar" data-copia-volver>Volver</button></div>
     <div class="copia-res" aria-live="polite"></div></form>`;
 }
 async function copiaEnviar(caja, c, st, f){
@@ -325,9 +331,11 @@ document.addEventListener("click", e=>{
   }
 });
 document.addEventListener("change", e=>{
-  const x = e.target.closest("[data-copia-porta]"); if(!x) return;
-  const caja = x.closest(".copia-titular"), st = copiaEstado(caja);
-  st.porta = x.checked; caja.innerHTML = copiaHtmlOpciones(copiaDatos(caja), st); caja.querySelector("[data-copia-porta]").focus();
+  const x = e.target.closest('.copia-docs input[name="docs"]'); if(!x) return;
+  const caja = x.closest(".copia-titular"), c = copiaDatos(caja), st = copiaEstado(caja);
+  st.porta = x.value === "ambos";
+  caja.querySelector(".copia-valor").innerHTML = copiaValor(c, st);
+  caja.querySelector('.copia-form button[type="submit"]').textContent = copiaBoton(c, st);
 });
 function mostrarVerificacion(dato, data){
   if(!data || !data.ok){
