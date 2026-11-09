@@ -30,7 +30,11 @@
 <script>
 /* Enlaces antiguos (www.ideax.cl/#gratuitos, #inscripcion, etc.) llevan a las páginas nuevas */
 (function(){ var m={formatos:"programas/",diplomados:"programas/?f=diplomados",masters:"programas/?f=diplomados",becas:"programas/#becas",
-  gratuitos:"programas/?f=gratuitos",programas:"programas/?f=ejecutivos",emprendedores:"programas/?f=emprendedores",inscripcion:"inscripcion/"};
+  gratuitos:"programas/?f=gratuitos",programas:"programas/?f=ejecutivos",emprendedores:"programas/?f=emprendedores",inscripcion:"inscripcion/",
+  metodologia:"nosotros/#metodologia",historia:"nosotros/#historia",equipo:"nosotros/#equipo","clases-magistrales":"nosotros/#clases-magistrales",
+  naturaleza:"nosotros/#naturaleza",empresas:"empresas/",verificar:"verificar/",preguntas:"preguntas/"};
+  /* El QR de los certificados apunta a www.ideax.cl/?certificado=CODIGO */
+  if(/[?&]certificado=/.test(location.search)){ location.replace("verificar/" + location.search); return; }
   var h=(location.hash||"").slice(1); if(m[h]) location.replace(m[h] + (m[h].indexOf("#")<0 && location.search ? location.search : "")); })();
 </script>
 
@@ -42,7 +46,7 @@
     <a class="ocultar-movil" id="correo-barra" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span></span></a>
     <a class="destacar" href="programas/?f=gratuitos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg>Cursos gratuitos</a>
     <a class="destacar" href="programas/#becas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v6"/></svg>Becas</a>
-    <a class="destacar ocultar-movil" href="#verificar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Verificar certificado</a>
+    <a class="destacar ocultar-movil" href="verificar/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Verificar certificado</a>
     <a class="efac" href="efacultad/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg>eFacultad</a>
   </div>
 </div>
@@ -62,10 +66,9 @@
       <a class="enlace" href="programas/">Programas</a>
       <a class="enlace" href="programas/?f=diplomados">Diplomados</a>
       <a class="enlace" href="programas/?f=emprendedores">Emprendedores</a>
-      <a class="enlace" href="#metodologia">Metodología</a>
-      <a class="enlace" href="#historia">Nuestra Historia</a>
-      <a class="enlace" href="#equipo">Equipo Académico</a>
-      <a class="enlace" href="#empresas">Empresas</a>
+      <a class="enlace" href="nosotros/">Nosotros</a>
+      <a class="enlace" href="empresas/">Empresas</a>
+      <a class="enlace" href="preguntas/">Preguntas</a>
       <a class="btn btn-efac" href="efacultad/">eFacultad</a>
       <a class="btn btn-naranja" href="inscripcion/">Inscripciones
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
@@ -225,257 +228,55 @@
 
 
 
-<!-- METODOLOGÍA -->
-<section class="seccion metodologia" id="metodologia">
+<!-- CONOCE IDEAX -->
+<section class="seccion vitrina" id="conoce">
   <div class="contenedor">
-    <span class="ceja">Metodología de los cursos</span>
-    <h2 class="titulo">Aprender haciendo, semana a semana</h2>
-    <p class="bajada">Programas diseñados para profesionales que trabajan: una sesión en vivo ordena el avance y el resto se desarrolla a tu ritmo, con material concreto y entregables revisados por el docente.</p>
-
-    <span class="desliza">Desliza para ver más</span>
-    <div class="pasos">
-      <div class="paso revela">
-        <span class="num">01</span>
-        <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="5" width="13" height="12" rx="2"/><path d="M15.5 10l6-3.5v11l-6-3.5"/></svg></span>
-        <h3>Sesión sincrónica</h3>
-        <p>Una clase en vivo por semana, con contenidos, casos reales y discusión con el grupo.</p>
-      </div>
-      <div class="paso revela">
-        <span class="num">02</span>
-        <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-1.5zM4 19.5A2 2 0 0 1 6 17.5h13"/></svg></span>
-        <h3>Trabajo autónomo</h3>
-        <p>Lecturas, cuadernos de trabajo y herramientas para aplicar lo visto a tu propia organización.</p>
-      </div>
-      <div class="paso revela">
-        <span class="num">03</span>
-        <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M9 14l2 2 4-4"/></svg></span>
-        <h3>Proyecto aplicado</h3>
-        <p>Cada semana un entregable concreto que construye el trabajo final del programa.</p>
-      </div>
-      <div class="paso revela">
-        <span class="num">04</span>
-        <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="9" r="6"/><path d="M8.5 14l-2 7 5.5-3 5.5 3-2-7"/></svg></span>
-        <h3>Certificación IDEAX</h3>
-        <p>Al aprobar el trabajo final recibes el certificado de aprobación del programa.</p>
-      </div>
-    </div>
-
-    <div class="destacado-ia revela">
-      <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
+    <div class="vitrina-cabeza">
       <div>
-        <h3>En IA Aplicada a los Negocios, una hora más cada semana</h3>
-        <p>Sesión personalizada con el docente para revisar tu proyecto, resolver problemas técnicos y avanzar hacia una versión funcional.</p>
-      </div>
-    </div>
-
-    <div class="clases-magistrales revela" id="clases-magistrales">
-      <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4M10 8.5l4 2-4 2z"/></svg></span>
-      <div>
-        <small>Para todos los estudiantes de IDEAX</small>
-        <h3>Clases Magistrales mensuales</h3>
-        <p>Una vez al mes, una clase magistral en línea abierta a todos los estudiantes vigentes, sin costo adicional. El tema se elige según los diplomados y materias que se están cursando ese mes. Cada clase queda grabada y disponible en la Facultad Virtual durante 30 días.</p>
-      </div>
-      <ul>
-        <li><b>1</b>al mes</li>
-        <li><b>$0</b>para estudiantes</li>
-        <li><b>30 días</b>de grabación disponible</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- HISTORIA -->
-<section class="seccion" id="historia">
-  <div class="contenedor">
-    <div class="historia-grid">
-      <div class="historia-texto revela">
-        <span class="ceja">Nuestra historia</span>
+        <span class="ceja">Conoce IDEAX</span>
         <h2 class="titulo">Más de una década de formación ejecutiva en línea</h2>
-        <p class="bajada" style="margin-bottom:1em">IDEAX es la continuación de IADE Business School, escuela de negocios en línea fundada en Chile en 2013.</p>
-        <p>IADE se dedicó a la formación continua en ciencias económicas y empresariales, con programas en gestión, capital humano, economía y finanzas, marketing, operaciones y logística. Dictó Masters Profesionales como títulos propios, con tesis aplicada y tutoría docente, además de diplomados y cursos para estudiantes de Chile y Latinoamérica.</p>
-        <p>Hoy, como Instituto de Administración y Dirección Ejecutiva, IDEAX retoma esa experiencia con programas abiertos, virtuales y aplicados a los desafíos actuales de la gestión.</p>
       </div>
     </div>
-
-    <div class="hitos">
-      <div class="hito revela"><span class="punto"></span><div class="anio">2013</div><h4>Nace IADE Business School</h4><p>Escuela de negocios basada en metodologías pedagógicas en línea.</p></div>
-      <div class="hito revela"><span class="punto"></span><div class="anio">2018</div><h4>Masters Profesionales</h4><p>Títulos propios en MBA, Business &amp; Law, Capital Humano, Marketing, Finanzas, Logística, Prevención y Proyectos.</p></div>
-      <div class="hito revela"><span class="punto"></span><div class="anio">2020</div><h4>Cierre de un ciclo</h4><p>IADE concluye sus actividades después de siete años de formación.</p></div>
-      <div class="hito revela"><span class="punto"></span><div class="anio">Hoy</div><h4>IDEAX</h4><p>Cursos, diplomados y Masters Profesionales en la Facultad Virtual.</p></div>
-    </div>
-
-    <div class="paises revela">
-      <h4>Estudiantes de toda América y Europa</h4>
-      <div class="chips">
-        <span class="chip">Argentina</span><span class="chip">Bolivia</span><span class="chip">Brasil</span><span class="chip">Chile</span><span class="chip">Colombia</span><span class="chip">Ecuador</span><span class="chip">España</span><span class="chip">Paraguay</span><span class="chip">El Salvador</span><span class="chip">República Dominicana</span><span class="chip">México</span><span class="chip">Estados Unidos</span>
-      </div>
-      <h4>Desde empresas y organizaciones como</h4>
-      <div class="chips">
-        <span class="chip org">Walmart</span><span class="chip org">BBVA</span><span class="chip org">Samsung</span><span class="chip org">Ripley</span><span class="chip org">Cencosud</span><span class="chip org">Unilever</span><span class="chip org">Entel</span><span class="chip org">LATAM</span><span class="chip org">FedEx</span><span class="chip org">Codelco</span><span class="chip org">Tottus</span><span class="chip org">Santa Isabel</span><span class="chip org">Unimarc</span><span class="chip org">FLACSO Chile</span>
-      </div>
-    </div>
-
-    <div class="naturaleza" id="naturaleza">
-      <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M5 21h14M7 7h10M7 7l-3 7a3 3 0 0 0 6 0zM17 7l-3 7a3 3 0 0 0 6 0z"/></svg></span>
-      <div>
-        <h3>Naturaleza institucional</h3>
-        <p><strong>IDEAX Chile, Instituto de Administración y Dirección Ejecutiva</strong>, es una institución autónoma dedicada a la formación ejecutiva y continua. Diseña y dicta sus propios programas para profesionales, directivos y emprendedores.</p>
-        
-        <p>IDEAX no es una universidad ni un instituto profesional, y sus programas no conducen a grados académicos ni a títulos profesionales. Al aprobar un programa se recibe un certificado emitido por IDEAX.</p>
-        <div class="aclaracion"><p><strong style="color:#7A3E0A">Masters Profesionales:</strong> los Masters Profesionales que dictó IADE Business School, y los que IDEAX pueda ofrecer en el futuro, son títulos propios orientados a la especialización profesional. No son un magíster ni equivalen a un grado académico universitario, y no habilitan por sí mismos para continuar estudios de doctorado.</p></div>
-      </div>
+    <div class="vitrina-grilla">
+      <a class="vitrina-card" href="nosotros/" style="--c:#0F2747">
+        <small>Nosotros</small>
+        <h3>Metodología, historia y equipo</h3>
+        <p>Cómo enseñamos semana a semana, de dónde venimos y quiénes forman el equipo académico.</p>
+        <span>Conoce IDEAX <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="vitrina-card" href="empresas/" style="--c:#14947F">
+        <small>Empresas</small>
+        <h3>Formación a la medida de tu organización</h3>
+        <p>Programas cerrados para equipos de trabajo, diseñados según los desafíos de tu empresa.</p>
+        <span>Ver propuesta <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="vitrina-card" href="verificar/" style="--c:#1D4E89">
+        <small>Verificar</small>
+        <h3>Comprueba un certificado</h3>
+        <p>Valida en línea un certificado de IDEAX o de IADE Business School con su código o el documento del titular.</p>
+        <span>Verificar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="vitrina-card oscura" href="preguntas/" style="--c:#F07C1B">
+        <small>Preguntas frecuentes</small>
+        <h3>Todo lo que necesitas saber</h3>
+        <p>Dedicación semanal, inicio, pagos, becas, certificados y convalidaciones.</p>
+        <span>Ver las preguntas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      </a>
     </div>
   </div>
 </section>
 
-<!-- EQUIPO -->
-<section class="seccion papel" id="equipo">
-  <div class="contenedor">
-    <span class="ceja">Equipo académico</span>
-    <h2 class="titulo">Docencia con experiencia real</h2>
-    <p class="bajada">Académicos y profesionales con trayectoria en universidades y empresas de Chile y Latinoamérica.</p>
 
-    <div class="equipo revela">
-      <div class="equipo-foto"><img src="img/logo-ideax-blanco.png" alt=""></div>
-      <div class="equipo-cuerpo">
-        <h3>Luis Leyton-Johns</h3>
-        <div class="rol">Director Ejecutivo IDEAX</div>
-        <p>Candidato a doctor en Ciencias del Comportamiento por la Universitat Rovira i Virgili, Magíster en Administración Logística Estratégica por la Universidad Mayor e Ingeniero Comercial por la Universidad de Santiago de Chile. Ocupó cargos ejecutivos en D&amp;S, Empresas Carozzi y Revista Retailing, y suma más de 25 años de docencia universitaria en Chile, Bolivia y Brasil.</p>
-        <p>Diseña sus cursos con sistemas propios: simuladores de negocios, plataformas de seguimiento y casos construidos con datos reales del mercado chileno.</p>
-        <div class="credenciales">
-          <div class="credencial"><strong>+25 años</strong><span>de docencia universitaria</span></div>
-          <div class="credencial"><strong>Scopus y WoS</strong><span>publicaciones indexadas</span></div>
-          <div class="credencial"><strong>3 países</strong><span>Chile, Bolivia y Brasil</span></div>
-        </div>
-        <div class="redes">
-          <a class="red" href="https://www.linkedin.com/in/luis-leyton-johns" target="_blank" rel="noopener">LinkedIn</a>
-          <a class="red" href="https://orcid.org/0000-0002-4462-403X" target="_blank" rel="noopener">ORCID</a>
-          <a class="red" href="https://scholar.google.com/citations?user=QG5GtekAAAAJ" target="_blank" rel="noopener">Google Académico</a>
-        </div>
-      </div>
-    </div>
 
-    <h3 class="subtitulo-equipo">Cuerpo docente</h3>
-    <span class="desliza">Desliza para ver más</span>
-    <div class="docentes">
-      <article class="docente revela" style="--c:#F07C1B">
-        <div class="docente-cabeza"><span class="avatar" aria-hidden="true">JA</span><div><h4>Jhonny Atila Lijerón</h4><span class="area">Gestión Empresarial</span></div></div>
-        <p class="grado">Candidato a doctor en Administración de Empresas, Universidad de Castilla-La Mancha. Magíster en Ciencias Empresariales (UCLM) y en Finanzas Corporativas (UAGRM).</p>
-        <p class="bio">Ejecutivo, consultor y profesor universitario en instituciones públicas y privadas. Especialista en pymes, creación de empresas, empresa familiar y finanzas corporativas.</p>
-      </article>
-      <article class="docente revela" style="--c:#14947F">
-        <div class="docente-cabeza"><span class="avatar" aria-hidden="true">CM</span><div><h4>Carlos Morales Leiva</h4><span class="area">Administración y Logística</span></div></div>
-        <p class="grado">Magíster en Administración Logística Estratégica (Universidad Mayor) y en Educación Superior (Universidad Diego Portales). Ingeniero Informático.</p>
-        <p class="bio">Trayectoria en Hospital Clínico UC, Hogar de Cristo, Amway, Rhein, Grau S.A. y Sonangol Group, en logística, administración y sistemas de información.</p>
-      </article>
-      <article class="docente revela" style="--c:#6E3A9C">
-        <div class="docente-cabeza"><span class="avatar" aria-hidden="true">AR</span><div><h4>Ariel Rementería Piñones</h4><span class="area">Ciencias de la Información</span></div></div>
-        <p class="grado">Doctor en Ciencias de la Información, Universidad Complutense de Madrid. Magíster en Filosofía, Universidad de Santiago de Chile.</p>
-        <p class="bio">Académico de jornada completa en la Universidad de Santiago de Chile, con docencia e investigación en filosofía y ciencias de la información.</p>
-      </article>
-      <article class="docente revela" style="--c:#1D4E89">
-        <div class="docente-cabeza"><span class="avatar" aria-hidden="true">AC</span><div><h4>Antonio Carlos Ruótolo</h4><span class="area">Marketing e Investigación de Mercados</span></div></div>
-        <p class="grado">PhD en Comunicación Social, University of Missouri. MS, University of Iowa.</p>
-        <p class="bio">Académico en la Universidade Metodista de São Paulo y la Fundação Getulio Vargas. Fue gerente corporativo en Grupo Pão de Açúcar, director en Nielsen y director general de IPDM.</p>
-      </article>
-      <article class="docente revela" style="--c:#F07C1B">
-        <div class="docente-cabeza"><span class="avatar" aria-hidden="true">PS</span><div><h4>Patricia Salas Garrido</h4><span class="area">Capital Humano</span></div></div>
-        <p class="grado">Magíster en Administración de Empresas, Universidad de Santiago de Chile. Especialización en administración de personal, UNAM.</p>
-        <p class="bio">Consultora de empresas. Fue directora de Desarrollo del Factor Humano en SEDECAP, del gobierno del estado de Puebla, México.</p>
-      </article>
-      <article class="docente revela" style="--c:#14947F">
-        <div class="docente-cabeza"><span class="avatar" aria-hidden="true">VV</span><div><h4>Víctor Valencia Pozo</h4><span class="area">Dirección de Empresas</span></div></div>
-        <p class="grado">Candidato a doctor en Ciencias Empresariales, Universidad Autónoma de Madrid. MBA, ESADE. Ingeniero Comercial, Universidad de Santiago de Chile.</p>
-        <p class="bio">Cargos directivos en la Superintendencia de Isapres y la Fiscalía Nacional Económica. Docente en la Universidad Diego Portales y la Universidad de Santiago de Chile.</p>
-      </article>
-    </div>
-  </div>
-</section>
 
-<!-- EMPRESAS -->
-<section class="seccion empresas" id="empresas">
-  <div class="contenedor">
-    <div>
-      <span class="ceja">Empresas</span>
-      <h2 class="titulo">Formación a la medida de tu organización</h2>
-      <p class="bajada">Cualquiera de nuestros programas puede dictarse en forma cerrada para equipos de una misma empresa, trabajando sobre sus propios problemas y datos.</p>
-      <p style="margin-top:30px"><a class="btn btn-naranja" href="inscripcion/" data-preseleccion="empresa">Solicitar propuesta
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
-    </div>
-    <div class="beneficios">
-      <div class="beneficio revela">
-        <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1M14 9h1M9 13h1M14 13h1M10 21v-4h4v4"/></svg></span>
-        <div><h4>Proyectos sobre tu empresa</h4><p>Cada equipo trabaja un problema real de la organización durante las 8 semanas.</p></div>
-      </div>
-      <div class="beneficio revela">
-        <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg></span>
-        <div><h4>Calendario a convenir</h4><p>Día y horario de la sesión en vivo según la disponibilidad de tu equipo.</p></div>
-      </div>
-      <div class="beneficio revela">
-        <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span>
-        <div><h4>Informe de resultados</h4><p>Avance y proyectos del grupo entregados a la jefatura que encargó el programa.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- VERIFICACIÓN -->
-<section class="seccion" id="verificar">
-  <div class="contenedor verifica-grid">
-    <div class="verifica-texto">
-      <span class="ceja">Verificación de certificados</span>
-      <h2 class="titulo">Comprueba la validez de un certificado</h2>
-      <p class="bajada" style="margin-bottom:1em">Instituciones, empleadores y ex estudiantes pueden confirmar en línea la autenticidad de los certificados emitidos por IDEAX y por IADE Business School.</p>
-      <p>Ingresa el código impreso en el certificado o el RUT / pasaporte de la persona titular. Por resguardo de la privacidad, el documento se muestra parcialmente.</p>
-      <div class="sellos-inst">
-        <div class="sello-inst"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="9" r="6"/><path d="M8.5 14l-2 7 5.5-3 5.5 3-2-7"/></svg></span><div><b>Certificados IDEAX</b><span>Programas ejecutivos y para emprendedores</span></div></div>
-        <div class="sello-inst"><span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l9-5 9 5-9 5z"/><path d="M7 11.5V16c0 1.5 2.2 3 5 3s5-1.5 5-3v-4.5M21 9v6"/></svg></span><div><b>Certificados IADE Business School</b><span>Masters Profesionales (títulos propios), diplomados y cursos, 2013 a 2020</span></div></div>
-      </div>
-    </div>
-    <div class="verifica-caja">
-      <div class="verifica-cabeza">
-        <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
-        <div><h3>Verificar certificado</h3><p>Búsqueda por código o por RUT / pasaporte</p></div>
-      </div>
-      <form class="verifica-form" id="form-verificar" novalidate>
-        <label for="v-dato" class="sr" style="position:absolute;left:-9999px">Código del certificado o RUT / pasaporte</label>
-        <input id="v-dato" name="dato" autocomplete="off" spellcheck="false" placeholder="Ej.: IDEAX-2026-00001 o 12.345.678-9">
-        <button class="btn btn-naranja" type="submit">Verificar</button>
-      </form>
-      <p class="verifica-ayuda">El RUT puede escribirse con o sin puntos y guion. También puedes ingresar el folio o el código de verificación de los certificados y constancias emitidos desde la eFacultad.</p>
-      <div class="verifica-resultado" id="v-resultado" aria-live="polite"></div>
-    </div>
-  </div>
-</section>
 
-<!-- PREGUNTAS -->
-<section class="seccion papel" id="preguntas">
-  <div class="contenedor faq-grid">
-    <div>
-      <span class="ceja">Preguntas frecuentes</span>
-      <h2 class="titulo">Todo lo que necesitas saber</h2>
-      <p class="bajada">Si tienes otra duda, escríbenos desde el formulario de inscripción.</p>
-    </div>
-    <div>
-      <details><summary>¿Cuánto tiempo necesito a la semana?</summary><p>En los diplomados, unas 6 horas semanales, que organizas a tu ritmo siempre que la entrega llegue en el plazo indicado. Si cursas varios diplomados en paralelo, la carga se suma. En los cursos ejecutivos, la sesión en vivo más el trabajo autónomo de la semana.</p></details>
-      <details><summary>¿Cuándo comienzo?</summary><p>Los diplomados y Masters Profesionales comienzan el primer lunes que esté al menos 7 días después de tu pago. Esa semana te permite leer el manual del estudiante y el primer cuaderno con calma. Los cursos ejecutivos comienzan en la fecha de su cohorte, indicada en el brochure.</p></details>
-      <details><summary>¿Qué pasa si no puedo asistir a una sesión en vivo de un curso?</summary><p>Cada sesión deja material de apoyo en la plataforma del curso, y debes completar igualmente el entregable de esa semana.</p></details>
-      <details><summary>¿Cómo pago el programa?</summary><p>En línea, a través de Mercado Pago, con tarjeta de débito, crédito o transferencia, y hasta en 12 cuotas a precio contado. Cada diplomado vale $240.000. Los cursos ejecutivos valen $135.000, salvo IA Aplicada a los Negocios, que vale $165.000, y el Master Profesional completo $865.000, con sus tres diplomados, el Diplomado en Metodología y el paper. Al inscribirte recibes por correo el brochure con el valor y el enlace de pago; una vez confirmado el pago, te llegan el manual del estudiante, el primer material de estudio y tu fecha de inicio.</p></details>
-      <details><summary>¿Cómo solicito una beca?</summary><p>Al inscribirte, marca la opción «Quiero postular a una beca parcial» en el formulario, elige el tramo de 20%, 30% o 50% y cuéntanos tus motivos; puedes adjuntar hasta tres documentos de respaldo en PDF o imagen. Tu inscripción queda en evaluación, sin cobro, y en un plazo de hasta dos días hábiles te enviamos la resolución con el enlace de pago por el valor que corresponda. En cada programa puedes ver la simulación de su valor con beca. Las becas aplican a diplomados, cursos ejecutivos y Masters Profesionales, no son acumulables con códigos de descuento y la información que entregas se trata en forma confidencial.</p></details>
-      <details><summary>¿Qué certificado recibo?</summary><p>Al aprobar el programa recibes un certificado de aprobación emitido por IDEAX, Instituto de Administración y Dirección Ejecutiva. IDEAX es una institución autónoma de formación ejecutiva y continua: sus programas no conducen a grados académicos ni a títulos profesionales.</p></details>
-      <details><summary>¿Un Master Profesional de IDEAX o de IADE es un magíster?</summary><p>No. Los Masters Profesionales son títulos propios de formación ejecutiva, orientados a la especialización y al desempeño profesional. No son un grado académico de magíster, que en Chile solo otorgan las universidades, y no habilitan por sí mismos para cursar un doctorado. Un Master Profesional de IDEAX se obtiene aprobando tres diplomados de una misma ruta, el Diplomado en Metodología y un paper evaluado por pares.</p></details>
-      <details class="faq-extra"><summary>¿Cuánto dura un Master Profesional?</summary><p>La ruta estándar, con un diplomado a la vez y el Diplomado en Metodología en paralelo a uno de ellos, toma 12 meses. En la ruta intensiva, con dos o más diplomados en paralelo y 12 o más horas semanales, puedes terminar desde 6 a 8 meses. La evaluación por pares del paper en la revista CMIA toma habitualmente entre 2 y 4 meses. El plazo máximo es de 18 meses, con posibilidad de prórroga y de congelamiento por fuerza mayor.</p></details>
-      <details class="faq-extra"><summary>¿Puedo convalidar un diplomado?</summary><p>Sí. Los diplomados aprobados son convalidables con otros programas de IDEAX: se convalidan si luego te inscribes en el Master Profesional que los incluye. Si ya pagaste el Diplomado en Metodología por separado, ese monto queda como saldo a favor para tu inscripción en el Master Profesional.</p></details>
-      <details class="faq-extra"><summary>¿Cómo me comunico con mi docente y con IDEAX?</summary><p>Toda consulta, académica o administrativa, se hace por la mensajería de la Facultad Virtual. Los mensajes se acumulan y recibes un resumen diario por correo, uno académico y otro administrativo; respondes por el mismo medio. Te respondemos en un plazo de hasta dos días hábiles, de lunes a viernes, de 9:00 a 18:00, hora de Chile continental. No atendemos consultas por WhatsApp.</p></details>
-      <details class="faq-extra"><summary>¿Qué son las Clases Magistrales?</summary><p>Una clase en línea al mes, abierta a todos los estudiantes vigentes de IDEAX y sin costo adicional. Su tema se elige según los programas que se están cursando ese mes. Queda grabada y disponible en la Facultad Virtual durante 30 días; la asistencia es voluntaria y no se evalúa.</p></details>
-      <details class="faq-extra"><summary>¿Puedo apostillar mi certificado?</summary><p>Sí, como servicio opcional con costo adicional. Lo solicitas desde la Facultad Virtual y te informamos el valor al momento de la solicitud.</p></details>
-      <details class="faq-extra"><summary>¿Cómo verifica una institución mi certificado?</summary><p>En la sección Verificación de certificados de este sitio, con el código impreso en el certificado o con tu RUT o pasaporte. También aplica a los certificados emitidos por IADE Business School entre 2013 y 2020.</p></details>
-      <details class="faq-extra"><summary>¿Necesito conocimientos previos?</summary><p>No se exigen requisitos formales. Cada programa entrega al inicio un material de nivelación con los conceptos que se usarán durante el programa.</p></details>
-      <details class="faq-extra"><summary>¿Debo pagar herramientas de inteligencia artificial?</summary><p>No. En IA Aplicada a los Negocios se trabaja con los tramos gratuitos de las herramientas disponibles.</p></details>
-      <button type="button" class="btn btn-noche ver-faq" id="ver-faq">Ver las 15 preguntas</button>
-    </div>
-  </div>
-</section>
+
+
+
+
+
+
 
 
 
@@ -518,10 +319,10 @@
     <div>
       <h4>Instituto</h4>
       <ul>
-        <li><a href="#metodologia">Metodología</a></li>
-        <li><a href="#historia">Nuestra Historia</a></li>
-        <li><a href="#equipo">Equipo Académico</a></li>
-        <li><a href="#empresas">Empresas</a></li>
+        <li><a href="nosotros/#metodologia">Metodología</a></li>
+        <li><a href="nosotros/#historia">Nuestra Historia</a></li>
+        <li><a href="nosotros/#equipo">Equipo Académico</a></li>
+        <li><a href="empresas/">Empresas</a></li>
         <li><a href="efacultad/">eFacultad, acceso estudiantes y docentes</a></li>
       </ul>
     </div>
@@ -529,7 +330,7 @@
       <h4>Contacto</h4>
       <ul>
         <li><a href="inscripcion/">Inscripciones</a></li>
-        <li><a href="#verificar">Verificar certificado</a></li>
+        <li><a href="verificar/">Verificar certificado</a></li>
         <li><a id="correo-pie" href="#"></a></li>
         <li><a href="https://www.linkedin.com/in/luis-leyton-johns" target="_blank" rel="noopener">LinkedIn</a></li>
         <li><a href="https://www.voxliber.cl/" target="_blank" rel="noopener">Vox Liber</a></li>
