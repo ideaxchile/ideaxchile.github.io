@@ -851,6 +851,14 @@ details.dip-valor summary::after{width:22px;height:22px}
 .filtro-formatos button:hover{border-color:var(--noche)}
 .filtro-formatos button.activo{background:var(--noche);border-color:var(--noche);color:#fff}
 .pagina-interna .seccion[hidden]{display:none}
+.copia-titular{margin-top:16px;border:1px dashed #F5C89E;background:#FFF8F1;border-radius:12px;padding:16px 18px}
+.copia-oferta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.copia-oferta b{display:block;color:var(--noche)}.copia-oferta span{font-size:.92rem;color:var(--gris)}.copia-oferta strong{color:var(--tinta)}
+.copia-form{display:flex;flex-direction:column;gap:10px}.copia-form b{color:var(--noche)}.copia-form p{margin:0;font-size:.92rem;color:var(--gris);line-height:1.55}
+.copia-form label{display:flex;flex-direction:column;gap:6px;font-size:.92rem;font-weight:600;color:var(--tinta)}
+.copia-form input{font:inherit;padding:12px 14px;border:1.5px solid var(--linea);border-radius:10px}
+.copia-acc{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.copia-cancelar{font:inherit;font-weight:600;color:var(--azul);background:none;border:0;cursor:pointer;min-height:44px}
+.copia-mal{color:#B42318!important;font-weight:600}.copia-ok>b{display:block;color:#0F5E52;margin-bottom:4px}.copia-ok p{margin:0 0 6px;font-size:.93rem;line-height:1.55}.copia-nota{color:var(--gris)}
 /* En el celular, el formulario va primero y el proceso después */
 @media (max-width:900px){.pagina-interna .inscripcion-caja form{order:-1}}
 

@@ -32,6 +32,8 @@ const CONFIG = {
   verificacionURL: "https://script.google.com/macros/s/AKfycbxKpKOfwdGAso0n0BKhE-VmpYzGJSV_4_gZbdjREqmJG6PPeGVwFMDI0Vrl4MXbHGqz/exec",
   /* URL de la aplicación web de Apps Script que recibe las inscripciones, avisa a
      contacto@ideax.cl y leyton.johns@gmail.com y envía el brochure al interesado */
+  /* URL del servicio de la eFacultad (termina en /exec): recibe las solicitudes de copia del titular */
+  efacultadURL: "https://script.google.com/macros/s/AKfycbz5hhUDvyM21k791WqN1tOYgsJs-9FOH9XRMZ1iGm3kVl2rWrZ-FTJQNR43saUDBVcUCQ/exec",
   inscripcionURL: "https://script.google.com/macros/s/AKfycbyhMvyQAi7qwIBpXZiUrUv5HE4miSm-pAxajWbPNO7UQUJ_lEAumtaZSSEUEURCT9QJ/exec"
 };
 
@@ -245,8 +247,43 @@ function tarjetaCert(r){
   const estado = (r.valido ? ICO_OK : ICO_MAL) + esc(r.estado || (r.valido ? "Certificado válido" : "Certificado revocado, sin validez"));
   const filas = [["Titular",r.nombre],["Documento",r.documento],["Programa",r.programa],["Tipo",r.tipo],["Emitido por",r.institucion],["Fecha de emisión",r.fecha],["Horas",r.horas],["Calificación",r.nota && typeof r.nota==="object" ? `${String(r.nota.pct).replace(".",",")}% (${String(r.nota.n7).replace(".",",")} en escala 1 a 7; ${String(r.nota.n10).replace(".",",")} en escala 1 a 10)` : r.nota],["Código",r.codigo]]
     .filter(f=>f[1]).map(f=>`<dt>${f[0]}</dt><dd>${esc(f[1])}</dd>`).join("");
-  return `<div class="res ${cls}"><div class="res-estado">${estado}</div><dl>${filas}</dl></div>`;
+  const copia = r.valido && r.copia && r.copia.codigo ? `<div class="copia-titular" data-copia-codigo="${esc(r.copia.codigo)}" data-copia-monto="${Number(r.copia.monto)||0}">
+    <div class="copia-oferta"><div><b>¿Eres el titular? Solicita una copia</b><span>Copia del certificado y del portafolio de entregas · <strong>${clp(r.copia.monto)}</strong></span></div>
+    <button type="button" class="btn btn-noche" data-copia-abrir>Solicitar copia</button></div></div>` : "";
+  return `<div class="res ${cls}"><div class="res-estado">${estado}</div><dl>${filas}</dl>${copia}</div>`;
 }
+
+/* Copia para el titular: confirma su documento y el enlace de pago llega a su correo registrado en la eFacultad */
+document.addEventListener("click", e=>{
+  const abrir = e.target.closest("[data-copia-abrir]"); if(!abrir) return;
+  const caja = abrir.closest(".copia-titular"), monto = Number(caja.dataset.copiaMonto);
+  caja.innerHTML = `<form class="copia-form" novalidate><b>Solicitud de copia para el titular</b>
+    <p>Escribe tu número de documento. Si coincide con el del titular, enviaremos el enlace de pago de Mercado Pago al correo que tienes registrado en la eFacultad. Al confirmarse el pago, recibirás en ese correo la copia del certificado y de tu portafolio.</p>
+    <label>Tu número de documento (RUT o pasaporte)<input name="doc" autocomplete="off" placeholder="12.345.678-9" required></label>
+    <div class="copia-acc"><button type="submit" class="btn btn-naranja">Enviar enlace de pago · ${clp(monto)}</button><button type="button" class="copia-cancelar">Cancelar</button></div>
+    <div class="copia-res" aria-live="polite"></div></form>`;
+  const f = caja.querySelector("form");
+  f.querySelector(".copia-cancelar").onclick = () => { caja.outerHTML = ""; };
+  f.doc.focus();
+  f.addEventListener("submit", async ev=>{
+    ev.preventDefault();
+    const res = f.querySelector(".copia-res"), b = f.querySelector('button[type="submit"]');
+    if(f.doc.value.replace(/[^0-9a-z]/gi,"").length < 5){ res.innerHTML = `<p class="copia-mal">Escribe tu RUT o número de pasaporte.</p>`; return; }
+    b.disabled = true; res.innerHTML = `<p>Enviando…</p>`;
+    let j = null;
+    try{
+      j = await fetch(CONFIG.efacultadURL, { method:"POST", headers:{ "Content-Type":"text/plain;charset=utf-8" },
+        body: JSON.stringify({ accion:"solicitarCopia", codigo: caja.dataset.copiaCodigo, documento: f.doc.value }) }).then(x=>x.json());
+    }catch(x){ j = null; }
+    if(j && j.ok){
+      caja.innerHTML = `<div class="copia-ok"><b>Te enviamos el enlace de pago</b><p>Revisa el correo <b>${esc(j.datos.correo)}</b>, el que tienes registrado en la eFacultad. Cuando Mercado Pago confirme el pago, te llegará ahí mismo la copia del certificado y del portafolio. El enlace vence en 48 horas.</p>
+        <p class="copia-nota">¿Ya no usas ese correo? Escríbenos a ${esc(CONFIG.correo)} desde tu nuevo correo, con una foto de tu documento.</p></div>`;
+    }else{
+      res.innerHTML = `<p class="copia-mal">${esc((j && j.error) || "No pudimos enviar la solicitud. Inténtalo de nuevo en unos minutos o escríbenos a " + CONFIG.correo + ".")}</p>`;
+      b.disabled = false;
+    }
+  });
+});
 function mostrarVerificacion(dato, data){
   if(!data || !data.ok){
     vRes.innerHTML = `<div class="res res-info"><div class="res-estado">${ICO_INFO}No se pudo verificar</div><p>${esc((data&&data.error)||"El servicio no respondió. Intenta nuevamente en unos minutos.")}</p></div>`;
@@ -618,6 +655,23 @@ if(fForm){
   if(cambiar) cambiar.addEventListener("click", e=>{ e.preventDefault(); for(let n=1;n<3;n++){ if(!validarPaso(n)){ mostrarPaso(n); return; } } mostrarPaso(3); $("#f-programa").focus(); });
 }
 actualizarPrograma(); mostrarElegido(); cargarConvocatorias(); cargarBrochures();
+
+/* Regreso desde Mercado Pago al pagar una copia: www.ideax.cl/verificar/?copia=aprobado | pendiente | rechazado */
+(()=>{
+  let estado; try{ estado = new URLSearchParams(location.search).get("copia"); }catch(e){ return; }
+  const textos = {
+    aprobado: ["ok","¡Pago recibido!","En unos minutos te llegará al correo la copia de tu certificado y de tu portafolio. También quedará disponible una nueva descarga en Mis documentos de la eFacultad."],
+    pendiente: ["pend","Pago en proceso","Mercado Pago está procesando tu pago. Cuando se confirme, te enviaremos la copia automáticamente."],
+    rechazado: ["mal","El pago no se completó",`No se realizó ningún cobro. Puedes usar de nuevo el enlace que te llegó al correo mientras esté vigente, o escribirnos a ${CONFIG.correo}.`]
+  };
+  const t = textos[estado]; if(!t) return;
+  const d = document.createElement("div");
+  d.className = "aviso-pago " + t[0]; d.setAttribute("role","status");
+  d.innerHTML = `<b>${t[1]}</b><p>${esc(t[2])}</p><button type="button" aria-label="Cerrar">×</button>`;
+  d.querySelector("button").onclick = () => d.remove();
+  document.body.appendChild(d);
+  try{ history.replaceState(null, "", location.pathname + location.hash); }catch(e){}
+})();
 
 /* Regreso desde Mercado Pago: www.ideax.cl/?pago=aprobado | pendiente | rechazado */
 (()=>{
