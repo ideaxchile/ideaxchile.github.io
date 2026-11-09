@@ -118,7 +118,7 @@
 
   /* =================== rutas =================== */
   const RUTAS = [
-    [/^#\/verificar(?:\/(\w+))?$/, vVerificar, 'publica'],
+    [/^#\/verificar(?:\/([\w-]+))?$/, vVerificar, 'publica'],
     [/^#\/ingresar$/, vIngresar, 'publica'],
     [/^#\/clave$/, vCambiarClave, 'sola'],
     [/^#\/imprimir\/entrega\/([\w-]+)$/, vImprimirEntrega, 'sola'],
@@ -270,33 +270,12 @@
   }
 
   /* =================== verificación pública =================== */
-  async function vVerificar(codigo) {
-    app.innerHTML = '<header class="barra"><a class="marca" href="https://www.ideax.cl"><img src="../img/logo-ideax-blanco.png" alt=""><span>IDEA<i>X</i></span><small>VERIFICACIÓN</small></a></header>' +
-      '<main><div class="tarjeta" style="max-width:620px;margin:20px auto"><h2>Verificar un documento de IDEAX</h2><p style="color:var(--gris)">Escribe el código de verificación o el folio que aparece en el documento.</p>' +
-      '<form id="f-ver" class="acciones"><input type="text" name="codigo" value="' + h(codigo || '') + '" placeholder="Ej. 7F3A9C21B0" style="flex:1;text-transform:uppercase" required><button class="btn naranja">Verificar</button></form><div id="res-ver" style="margin-top:18px"></div></div></main>';
-    const verificar = async c => {
-      const out = $('#res-ver'); out.innerHTML = cargando('Verificando');
-      try {
-        const r = await api('verificarCertificado', { codigo: c });
-        if (!r.valido) { out.innerHTML = '<div class="aviso error"><b>No encontramos un documento con ese código.</b> Revisa que esté bien escrito.</div>'; return; }
-        out.innerHTML = '<div class="aviso ok"><b>Documento auténtico emitido por IDEAX.</b></div><table class="tabla">' +
-          [['Tipo', r.tipo], ['Folio', r.folio], ['Nombre', r.nombre], r.documento ? ['Documento', r.documento] : null, ['Programa', r.programa], r.horas ? ['Horas', r.horas] : null,
-            ['Emitido', fecha(r.emitido)], r.vigenteHasta ? ['Matrícula vigente hasta', fecha(r.vigenteHasta)] : null,
-            r.clase === 'Constancia' ? ['Situación actual', r.matriculaVigente ? 'Estudiante regular vigente' : 'La matrícula ya no está vigente'] : null,
-            r.nota ? ['Nota final a la fecha', coma(r.nota.pct) + '%'] : null].filter(Boolean).map(x => '<tr><td style="color:var(--gris);width:40%">' + h(x[0]) + '</td><td><b>' + h(x[1]) + '</b></td></tr>').join('') + '</table>' +
-          (r.copia ? '<div id="copia-ver" style="margin-top:16px;border:1px dashed #F5C89E;background:#FFF8F1;border-radius:12px;padding:16px">' +
-            '<b>¿Eres el titular? Solicita una copia</b><p style="margin:4px 0 10px;color:var(--gris);font-size:14px">Copia del certificado y del portafolio de entregas · <b>' + clp(r.copia.monto) + '</b>. Escribe tu número de documento: el enlace de pago y la copia llegan solo al correo que tienes registrado.</p>' +
-            '<form id="f-copia" class="acciones"><input name="doc" placeholder="Tu RUT o pasaporte" style="flex:1" required autocomplete="off"><button class="btn">Enviar enlace de pago</button></form><div id="res-copia"></div></div>' : '');
-        if (r.copia) $('#f-copia').onsubmit = async ev => {
-          ev.preventDefault(); const b = ev.target.querySelector('button'), res = $('#res-copia'); b.disabled = true;
-          try { const x = await api('solicitarCopia', { codigo: r.copia.codigo, documento: ev.target.doc.value });
-            res.innerHTML = '<div class="aviso ok" style="margin-top:10px"><b>Te enviamos el enlace de pago a ' + h(x.correo) + '.</b> Cuando se confirme el pago, recibirás ahí la copia del certificado y del portafolio. El enlace vence en 48 horas.</div>'; ev.target.remove(); }
-          catch (er) { res.innerHTML = '<div class="aviso error" style="margin-top:10px">' + h(er.message) + '</div>'; b.disabled = false; }
-        };
-      } catch (e) { out.innerHTML = '<div class="aviso error">' + h(e.message) + '</div>'; }
-    };
-    $('#f-ver').onsubmit = e => { e.preventDefault(); verificar(e.target.codigo.value.trim()); };
-    if (codigo) verificar(codigo);
+  /* La verificación es una sola para todo IDEAX: www.ideax.cl/verificar busca por código o por RUT / pasaporte,
+     incluye los certificados de IADE Business School y ofrece las copias. Los QR de los documentos apuntan aquí y se redirigen. */
+  function vVerificar(codigo) {
+    const c = String(codigo || '').replace(/[^0-9A-Za-z-]/g, '');
+    app.innerHTML = '<main><div class="tarjeta" style="max-width:620px;margin:40px auto;text-align:center">' + cargando('Abriendo la verificación de certificados') + '</div></main>';
+    location.replace('https://www.ideax.cl/verificar/' + (c ? '?certificado=' + encodeURIComponent(c) : ''));
   }
 
   /* =================== ESTUDIANTE =================== */
