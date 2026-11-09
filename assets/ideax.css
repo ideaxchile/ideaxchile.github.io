@@ -864,7 +864,8 @@ details.dip-valor summary::after{width:22px;height:22px}
 .copia-op{text-align:left;font:inherit;color:var(--tinta);background:#fff;border:1.5px solid var(--linea);border-radius:10px;padding:12px 14px;cursor:pointer;min-height:44px}
 .copia-op[aria-checked="true"]{border:2px solid #F07C1B}.copia-op b{color:var(--noche)}.copia-op span{display:block;font-size:.86rem;color:var(--gris);margin-top:2px}
 .copia-porta{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;padding-left:4px;font-weight:400}.copia-porta input{width:20px;height:20px;margin:1px 0 0;flex:none}
-.copia-pie{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #F5D6B8;padding-top:12px}
+.copia-valor{color:var(--tinta)!important}.copia-valor b{color:var(--noche)}
+.copia-pie{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:12px;border-top:1px solid #F5D6B8;padding-top:12px}
 .copia-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}.copia-grid .ancho{grid-column:1/-1}
 .copia-mal{color:#B42318!important;font-weight:600}.copia-ok>b{display:block;color:#0F5E52;margin-bottom:4px}.copia-ok p{margin:0 0 6px;font-size:.93rem;line-height:1.55}.copia-nota{color:var(--gris)}
 /* En el celular, el formulario va primero y el proceso después */

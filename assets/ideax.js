@@ -266,12 +266,12 @@ function copiaEstado(caja){ return caja._st || (caja._st = { op:"digital", porta
 function copiaTotal(c, st){ return st.op === "digital" ? c.digital : c.apostilla + (st.porta && c.portafolio ? c.portafolio : 0); }
 function copiaHtmlOpciones(c, st){
   const dig = st.op === "digital";
-  const opA = c.apostilla > 0 ? `<button type="button" class="copia-op" role="radio" aria-checked="${!dig}" data-copia-op="apostilla"><b>Certificado apostillado, físico y digital · ${clp(c.apostilla)}</b><span>Envío incluido a Chile o al extranjero.</span></button>` : "";
-  const porta = !dig && c.portafolio > 0 ? `<label class="copia-porta"><input type="checkbox" data-copia-porta${st.porta ? " checked" : ""}>Agregar el portafolio apostillado · ${clp(c.portafolio)} adicionales</label>` : "";
+  const opA = c.apostilla > 0 ? `<button type="button" class="copia-op" role="radio" aria-checked="${!dig}" data-copia-op="apostilla"><b>Certificado apostillado, físico y digital</b><span>Envío incluido a Chile o al extranjero.</span></button>` : "";
+  const porta = !dig && c.portafolio > 0 ? `<label class="copia-porta"><input type="checkbox" data-copia-porta${st.porta ? " checked" : ""}>Agregar el portafolio apostillado</label>` : "";
   return `<b class="copia-tit">¿Eres el titular? Solicita una copia</b>
     <div class="copia-opciones" role="radiogroup" aria-label="Tipo de copia">
-    <button type="button" class="copia-op" role="radio" aria-checked="${dig}" data-copia-op="digital"><b>Copia digital · ${clp(c.digital)}</b><span>${COPIA_DIG[c.origen]}</span></button>${opA}</div>${porta}
-    <div class="copia-pie"><span>Total: <b>${clp(copiaTotal(c, st))}</b></span><button type="button" class="btn btn-noche" data-copia-seguir>Continuar</button></div>`;
+    <button type="button" class="copia-op" role="radio" aria-checked="${dig}" data-copia-op="digital"><b>Copia digital</b><span>${COPIA_DIG[c.origen]}</span></button>${opA}</div>${porta}
+    <div class="copia-pie"><button type="button" class="btn btn-noche" data-copia-seguir>Continuar</button></div>`;
 }
 function copiaHtmlForm(c, st){
   const auto = c.origen === "efacultad", dig = st.op === "digital", total = copiaTotal(c, st);
@@ -283,7 +283,9 @@ function copiaHtmlForm(c, st){
   const contacto = auto ? (dig ? "" : `<div class="copia-grid">${tel}</div>`)
     : `<div class="copia-grid"><label>Correo<input name="correo" type="email" autocomplete="email" placeholder="nombre@correo.cl"></label>${tel}</div>`;
   const dir = dig ? "" : `<div class="copia-grid"><label class="ancho">Dirección de envío<input name="direccion" autocomplete="street-address" placeholder="Calle, número, depto."></label><label>Ciudad o comuna<input name="ciudad" autocomplete="address-level2"></label><label>País<input name="pais" autocomplete="country-name" value="Chile"></label></div>`;
-  return `<form class="copia-form" novalidate><b>${titulo} · ${clp(total)}</b><p>${expl}</p>
+  const valores = dig ? `Valor: <b>${clp(total)}</b>.`
+    : (st.porta && c.portafolio ? `Valores: certificado apostillado ${clp(c.apostilla)} y portafolio apostillado ${clp(c.portafolio)}. Total: <b>${clp(total)}</b>, con envío incluido.` : `Valor: <b>${clp(total)}</b>, con envío incluido a Chile o al extranjero.`);
+  return `<form class="copia-form" novalidate><b>${titulo}</b><p class="copia-valor">${valores}</p><p>${expl}</p>
     <label>Tu número de documento (RUT o pasaporte)<input name="doc" autocomplete="off" placeholder="12.345.678-9" required></label>${contacto}${dir}
     <div class="copia-acc"><button type="submit" class="btn btn-naranja">${auto ? "Enviar enlace de pago · " + clp(total) : "Enviar solicitud"}</button><button type="button" class="copia-cancelar" data-copia-volver>Volver</button></div>
     <div class="copia-res" aria-live="polite"></div></form>`;
