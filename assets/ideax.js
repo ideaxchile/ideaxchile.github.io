@@ -247,42 +247,85 @@ function tarjetaCert(r){
   const estado = (r.valido ? ICO_OK : ICO_MAL) + esc(r.estado || (r.valido ? "Certificado válido" : "Certificado revocado, sin validez"));
   const filas = [["Titular",r.nombre],["Documento",r.documento],["Programa",r.programa],["Tipo",r.tipo],["Emitido por",r.institucion],["Fecha de emisión",r.fecha],["Horas",r.horas],["Calificación",r.nota && typeof r.nota==="object" ? `${String(r.nota.pct).replace(".",",")}% (${String(r.nota.n7).replace(".",",")} en escala 1 a 7; ${String(r.nota.n10).replace(".",",")} en escala 1 a 10)` : r.nota],["Código",r.codigo]]
     .filter(f=>f[1]).map(f=>`<dt>${f[0]}</dt><dd>${esc(f[1])}</dd>`).join("");
-  const copia = r.valido && r.copia && r.copia.codigo ? `<div class="copia-titular" data-copia-codigo="${esc(r.copia.codigo)}" data-copia-monto="${Number(r.copia.monto)||0}">
-    <div class="copia-oferta"><div><b>¿Eres el titular? Solicita una copia</b><span>Copia del certificado y del portafolio de entregas · <strong>${clp(r.copia.monto)}</strong></span></div>
-    <button type="button" class="btn btn-noche" data-copia-abrir>Solicitar copia</button></div></div>` : "";
+  const cp = r.valido && r.copia && r.copia.codigo ? r.copia : null, planilla = cp && cp.origen === "planilla";
+  const copia = cp ? `<div class="copia-titular" data-origen="${planilla ? "planilla" : "efacultad"}" data-codigo="${esc(cp.codigo)}" data-digital="${Number(cp.monto)||0}" data-apostilla="${Number(cp.apostilla)||0}" data-portafolio="${planilla ? 0 : Number(cp.portafolio)||0}">${copiaHtmlOpciones(copiaDatosDe(cp), { op:"digital", porta:false })}</div>` : "";
   return `<div class="res ${cls}"><div class="res-estado">${estado}</div><dl>${filas}</dl>${copia}</div>`;
 }
 
-/* Copia para el titular: confirma su documento y el enlace de pago llega a su correo registrado en la eFacultad */
-document.addEventListener("click", e=>{
-  const abrir = e.target.closest("[data-copia-abrir]"); if(!abrir) return;
-  const caja = abrir.closest(".copia-titular"), monto = Number(caja.dataset.copiaMonto);
-  caja.innerHTML = `<form class="copia-form" novalidate><b>Solicitud de copia para el titular</b>
-    <p>Escribe tu número de documento. Si coincide con el del titular, enviaremos el enlace de pago de Mercado Pago al correo que tienes registrado en la eFacultad. Al confirmarse el pago, recibirás en ese correo la copia del certificado y de tu portafolio.</p>
-    <label>Tu número de documento (RUT o pasaporte)<input name="doc" autocomplete="off" placeholder="12.345.678-9" required></label>
-    <div class="copia-acc"><button type="submit" class="btn btn-naranja">Enviar enlace de pago · ${clp(monto)}</button><button type="button" class="copia-cancelar">Cancelar</button></div>
+/* Copia para el titular.
+   Certificados de la eFacultad: confirma su documento y el enlace de pago llega al correo registrado; la entrega es automática.
+   Certificados de la planilla (IADE y antiguos): deja documento y contacto; IDEAX valida la identidad y envía el enlace de pago.
+   En ambos casos puede pedirse la copia digital o la apostillada (física y digital, con envío incluido). */
+const COPIA_DIG = {
+  efacultad: "Certificado y portafolio de entregas en PDF, al correo registrado en la eFacultad. Entrega automática al pagar.",
+  planilla: "Copia del certificado en PDF, con su código de verificación. IDEAX la emite tras validar tu identidad."
+};
+function copiaDatosDe(cp){ return { origen: cp.origen === "planilla" ? "planilla" : "efacultad", codigo: cp.codigo, digital: Number(cp.monto)||0, apostilla: Number(cp.apostilla)||0, portafolio: cp.origen === "planilla" ? 0 : Number(cp.portafolio)||0 }; }
+function copiaDatos(caja){ const d = caja.dataset; return { origen: d.origen, codigo: d.codigo, digital: Number(d.digital), apostilla: Number(d.apostilla), portafolio: Number(d.portafolio) }; }
+function copiaEstado(caja){ return caja._st || (caja._st = { op:"digital", porta:false }); }
+function copiaTotal(c, st){ return st.op === "digital" ? c.digital : c.apostilla + (st.porta && c.portafolio ? c.portafolio : 0); }
+function copiaHtmlOpciones(c, st){
+  const dig = st.op === "digital";
+  const opA = c.apostilla > 0 ? `<button type="button" class="copia-op" role="radio" aria-checked="${!dig}" data-copia-op="apostilla"><b>Certificado apostillado, físico y digital · ${clp(c.apostilla)}</b><span>Envío incluido a Chile o al extranjero.</span></button>` : "";
+  const porta = !dig && c.portafolio > 0 ? `<label class="copia-porta"><input type="checkbox" data-copia-porta${st.porta ? " checked" : ""}>Agregar el portafolio apostillado · ${clp(c.portafolio)} adicionales</label>` : "";
+  return `<b class="copia-tit">¿Eres el titular? Solicita una copia</b>
+    <div class="copia-opciones" role="radiogroup" aria-label="Tipo de copia">
+    <button type="button" class="copia-op" role="radio" aria-checked="${dig}" data-copia-op="digital"><b>Copia digital · ${clp(c.digital)}</b><span>${COPIA_DIG[c.origen]}</span></button>${opA}</div>${porta}
+    <div class="copia-pie"><span>Total: <b>${clp(copiaTotal(c, st))}</b></span><button type="button" class="btn btn-noche" data-copia-seguir>Continuar</button></div>`;
+}
+function copiaHtmlForm(c, st){
+  const auto = c.origen === "efacultad", dig = st.op === "digital", total = copiaTotal(c, st);
+  const titulo = dig ? "Copia digital" : "Certificado apostillado" + (st.porta && c.portafolio ? " y portafolio apostillado" : "");
+  const envio = dig ? "" : " La copia física apostillada se envía a la dirección que indiques.";
+  const expl = auto ? "Escribe tu número de documento. Si coincide con el del titular, enviaremos el enlace de pago al correo que tienes registrado en la eFacultad." + envio
+    : "Escribe tu número de documento y tus datos de contacto. Validaremos tu identidad antes de enviarte el enlace de pago." + envio;
+  const tel = `<label>Teléfono<input name="telefono" type="tel" autocomplete="tel" placeholder="+56 9 1234 5678"></label>`;
+  const contacto = auto ? (dig ? "" : `<div class="copia-grid">${tel}</div>`)
+    : `<div class="copia-grid"><label>Correo<input name="correo" type="email" autocomplete="email" placeholder="nombre@correo.cl"></label>${tel}</div>`;
+  const dir = dig ? "" : `<div class="copia-grid"><label class="ancho">Dirección de envío<input name="direccion" autocomplete="street-address" placeholder="Calle, número, depto."></label><label>Ciudad o comuna<input name="ciudad" autocomplete="address-level2"></label><label>País<input name="pais" autocomplete="country-name" value="Chile"></label></div>`;
+  return `<form class="copia-form" novalidate><b>${titulo} · ${clp(total)}</b><p>${expl}</p>
+    <label>Tu número de documento (RUT o pasaporte)<input name="doc" autocomplete="off" placeholder="12.345.678-9" required></label>${contacto}${dir}
+    <div class="copia-acc"><button type="submit" class="btn btn-naranja">${auto ? "Enviar enlace de pago · " + clp(total) : "Enviar solicitud"}</button><button type="button" class="copia-cancelar" data-copia-volver>Volver</button></div>
     <div class="copia-res" aria-live="polite"></div></form>`;
-  const f = caja.querySelector("form");
-  f.querySelector(".copia-cancelar").onclick = () => { caja.outerHTML = ""; };
-  f.doc.focus();
-  f.addEventListener("submit", async ev=>{
-    ev.preventDefault();
-    const res = f.querySelector(".copia-res"), b = f.querySelector('button[type="submit"]');
-    if(f.doc.value.replace(/[^0-9a-z]/gi,"").length < 5){ res.innerHTML = `<p class="copia-mal">Escribe tu RUT o número de pasaporte.</p>`; return; }
-    b.disabled = true; res.innerHTML = `<p>Enviando…</p>`;
-    let j = null;
-    try{
-      j = await fetch(CONFIG.efacultadURL, { method:"POST", headers:{ "Content-Type":"text/plain;charset=utf-8" },
-        body: JSON.stringify({ accion:"solicitarCopia", codigo: caja.dataset.copiaCodigo, documento: f.doc.value }) }).then(x=>x.json());
-    }catch(x){ j = null; }
-    if(j && j.ok){
-      caja.innerHTML = `<div class="copia-ok"><b>Te enviamos el enlace de pago</b><p>Revisa el correo <b>${esc(j.datos.correo)}</b>, el que tienes registrado en la eFacultad. Cuando Mercado Pago confirme el pago, te llegará ahí mismo la copia del certificado y del portafolio. El enlace vence en 48 horas.</p>
-        <p class="copia-nota">¿Ya no usas ese correo? Escríbenos a ${esc(CONFIG.correo)} desde tu nuevo correo, con una foto de tu documento.</p></div>`;
-    }else{
-      res.innerHTML = `<p class="copia-mal">${esc((j && j.error) || "No pudimos enviar la solicitud. Inténtalo de nuevo en unos minutos o escríbenos a " + CONFIG.correo + ".")}</p>`;
-      b.disabled = false;
-    }
-  });
+}
+async function copiaEnviar(caja, c, st, f){
+  const res = f.querySelector(".copia-res"), b = f.querySelector('button[type="submit"]'), auto = c.origen === "efacultad", dig = st.op === "digital";
+  const v = n => f.elements[n] ? f.elements[n].value.trim() : "";
+  const mal = t => { res.innerHTML = `<p class="copia-mal">${esc(t)}</p>`; };
+  if(v("doc").replace(/[^0-9a-z]/gi,"").length < 5) return mal("Escribe tu RUT o número de pasaporte.");
+  if(!auto && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("correo"))) return mal("Revisa tu correo electrónico.");
+  if(!dig && v("direccion").length < 8) return mal("Indica la dirección completa para el envío.");
+  const cuerpo = { accion:"solicitarCopia", codigo: c.codigo, documento: v("doc"), modalidad: dig ? "digital" : (st.porta && c.portafolio ? "apostilla_portafolio" : "apostilla"),
+    telefono: v("telefono"), direccion: v("direccion"), ciudad: v("ciudad"), pais: v("pais") };
+  if(!auto) cuerpo.correo = v("correo");
+  b.disabled = true; res.innerHTML = `<p>Enviando…</p>`;
+  let j = null;
+  try{
+    j = await fetch(auto ? CONFIG.efacultadURL : CONFIG.verificacionURL, { method:"POST", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify(cuerpo) }).then(x=>x.json());
+  }catch(x){ j = null; }
+  if(!(j && j.ok)){ mal((j && j.error) || "No pudimos enviar la solicitud. Inténtalo de nuevo en unos minutos o escríbenos a " + CONFIG.correo + "."); b.disabled = false; return; }
+  const texto = auto
+    ? `Revisa el correo <b>${esc(j.datos && j.datos.correo)}</b>, el que tienes registrado en la eFacultad. ` + (dig ? "Al confirmarse el pago, te llegarán ahí la copia del certificado y del portafolio." : "Al confirmarse el pago, te llegará ahí la copia digital e iniciaremos el trámite de apostilla; el documento físico se despacha a la dirección que indicaste.") + " El enlace vence en 48 horas."
+    : "Validaremos tu identidad y, dentro de dos días hábiles, te enviaremos el enlace de pago al correo que indicaste." + (dig ? " Al pagar, recibirás la copia digital con su código de verificación." : " Al pagar, iniciaremos el trámite de apostilla y te enviaremos la copia digital; la física se despacha a la dirección indicada.");
+  const nota = auto ? `¿Ya no usas ese correo? Escríbenos a ${esc(CONFIG.correo)} desde tu nuevo correo, con una foto de tu documento.` : `Si tienes dudas, escríbenos a ${esc(CONFIG.correo)} indicando el código del certificado.`;
+  caja.innerHTML = `<div class="copia-ok"><b>${auto ? "Te enviamos el enlace de pago" : "Recibimos tu solicitud"}</b><p>${texto}</p><p class="copia-nota">${nota}</p></div>`;
+}
+document.addEventListener("click", e=>{
+  const caja = e.target.closest(".copia-titular"); if(!caja) return;
+  const c = copiaDatos(caja), st = copiaEstado(caja);
+  const op = e.target.closest("[data-copia-op]");
+  if(op){ st.op = op.dataset.copiaOp; if(st.op === "digital") st.porta = false; caja.innerHTML = copiaHtmlOpciones(c, st); caja.querySelector(`[data-copia-op="${st.op}"]`).focus(); return; }
+  if(e.target.closest("[data-copia-volver]")){ caja.innerHTML = copiaHtmlOpciones(c, st); return; }
+  if(e.target.closest("[data-copia-seguir]")){
+    caja.innerHTML = copiaHtmlForm(c, st);
+    const f = caja.querySelector("form"); f.elements.doc.focus();
+    f.addEventListener("submit", ev=>{ ev.preventDefault(); copiaEnviar(caja, c, st, f); });
+  }
+});
+document.addEventListener("change", e=>{
+  const x = e.target.closest("[data-copia-porta]"); if(!x) return;
+  const caja = x.closest(".copia-titular"), st = copiaEstado(caja);
+  st.porta = x.checked; caja.innerHTML = copiaHtmlOpciones(copiaDatos(caja), st); caja.querySelector("[data-copia-porta]").focus();
 });
 function mostrarVerificacion(dato, data){
   if(!data || !data.ok){
@@ -660,7 +703,7 @@ actualizarPrograma(); mostrarElegido(); cargarConvocatorias(); cargarBrochures()
 (()=>{
   let estado; try{ estado = new URLSearchParams(location.search).get("copia"); }catch(e){ return; }
   const textos = {
-    aprobado: ["ok","¡Pago recibido!","En unos minutos te llegará al correo la copia de tu certificado y de tu portafolio. También quedará disponible una nueva descarga en Mis documentos de la eFacultad."],
+    aprobado: ["ok","¡Pago recibido!","En unos minutos te llegará al correo la copia digital. Si pediste la apostilla, te avisaremos por correo cuando despachemos el documento físico."],
     pendiente: ["pend","Pago en proceso","Mercado Pago está procesando tu pago. Cuando se confirme, te enviaremos la copia automáticamente."],
     rechazado: ["mal","El pago no se completó",`No se realizó ningún cobro. Puedes usar de nuevo el enlace que te llegó al correo mientras esté vigente, o escribirnos a ${CONFIG.correo}.`]
   };
