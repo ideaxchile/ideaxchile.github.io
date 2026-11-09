@@ -392,6 +392,17 @@ async function cargarConvocatorias(){
 }
 function pintarConvocatorias(){
   setTimeout(()=>{ try{ mostrarElegido(); }catch(e){} }, 0);
+  /* Home: franja con la convocatoria abierta de cursos gratuitos */
+  const franja = $("#franja-conv");
+  if(franja){
+    const gs = (CONVOCATORIAS || []).filter(c=>/^g\d+$/.test(c.codigo));
+    franja.hidden = !gs.length;
+    if(gs.length){
+      const c = gs[0], n = new Set(gs.map(x=>x.codigo)).size;
+      $("#franja-conv-txt").innerHTML = "<b>Convocatoria abierta.</b> " + (n === 1 ? "Un curso gratuito comienza" : n + " cursos gratuitos comienzan") +
+        " el " + esc(String(c.inicio).replace(/^\S+ /, "")) + ". Inscripciones hasta el " + esc(c.cierre) + ".";
+    }
+  }
   document.querySelectorAll("#f-programa option").forEach(o=>{
     if(!CON_CONV.test(o.value)) return;
     if(!o.dataset.base) o.dataset.base = o.textContent;

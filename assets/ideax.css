@@ -853,3 +853,38 @@ details.dip-valor summary::after{width:22px;height:22px}
 .pagina-interna .seccion[hidden]{display:none}
 /* En el celular, el formulario va primero y el proceso después */
 @media (max-width:900px){.pagina-interna .inscripcion-caja form{order:-1}}
+
+/* ============ Home vitrina ============ */
+.franja-conv{background:#FFF3E8;border-bottom:1px solid #F5D6B8}
+.franja-conv .contenedor{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding-top:16px;padding-bottom:16px}
+.franja-conv p{margin:0;color:var(--tinta);font-size:1rem}
+.vitrina-cabeza{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 32px;margin-bottom:34px}
+.vitrina-ver{display:inline-flex;align-items:center;gap:8px;color:var(--naranja-2);font-weight:700;text-decoration:none}
+.vitrina-ver svg,.vitrina-card span svg,.vitrina-emprende span svg{width:18px;height:18px}
+.vitrina-ver:hover{color:var(--noche)}
+.vitrina-grilla{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.vitrina-card{display:flex;flex-direction:column;gap:10px;padding:28px 24px;border-radius:16px;background:#fff;border:1px solid var(--linea);border-top:5px solid var(--c);text-decoration:none;color:var(--tinta);box-shadow:var(--sombra);transition:transform .25s,box-shadow .25s}
+.vitrina-card:hover{transform:translateY(-4px);box-shadow:0 20px 42px rgba(15,39,71,.16)}
+.vitrina-card small{font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--c)}
+.vitrina-card h3{margin:0;font-size:1.25rem;color:var(--noche)}
+.vitrina-card p{margin:0;font-size:.95rem;color:var(--gris);line-height:1.55}
+.vitrina-card span{margin-top:auto;padding-top:8px;display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--naranja-2)}
+.vitrina-card.oscura{background:var(--noche);border-color:var(--noche);border-top-color:var(--c)}
+.vitrina-card.oscura h3{color:#fff}
+.vitrina-card.oscura p{color:rgba(255,255,255,.8)}
+.vitrina-card.oscura span{color:#FFB27A}
+.vitrina-emprende{margin-top:20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;padding:20px 24px;border-radius:14px;background:var(--papel);text-decoration:none;color:var(--noche)}
+.vitrina-emprende span{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--naranja-2)}
+.vitrina-emprende:hover b{text-decoration:underline}
+.vg-grilla{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.vg-curso{display:flex;flex-direction:column;gap:10px;padding:24px;border-radius:16px;background:#fff;border:1px solid var(--linea);border-left:5px solid var(--c)}
+.vg-curso small{font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--c)}
+.vg-curso h3{margin:0;font-size:1.08rem;line-height:1.35;color:var(--noche)}
+.vg-curso .conv-estado{margin:0}
+.vg-curso .btn{margin-top:auto;align-self:flex-start}
+.franja-becas{background:var(--noche);color:#fff}
+.franja-becas .contenedor{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 32px;padding-top:30px;padding-bottom:30px}
+.franja-becas b{display:block;font-size:1.25rem}
+.franja-becas span{color:rgba(255,255,255,.8)}
+@media (max-width:1050px){.vitrina-grilla{grid-template-columns:repeat(2,minmax(0,1fr))}.vg-grilla{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.vitrina-grilla,.vg-grilla{grid-template-columns:1fr}}
