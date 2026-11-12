@@ -1233,21 +1233,34 @@
     };
   }
 
-  /** Guía de uso de los mensajes, para estudiantes y para el equipo. */
+  /** Guía de uso de los mensajes, para estudiantes y para el equipo, ordenada en pasos. */
   function ayudaMensajes(equipo, abierta) {
     const pincha = '<span class="pincha"><span class="cerrado">Pincha aquí para ver las opciones</span><span class="abierto">Ocultar</span></span>';
-    if (equipo) return '<details class="ayuda-msj"' + (abierta ? ' open' : '') + '><summary><span class="tit">Cómo sacarle partido a los mensajes: audio, video, capturas y archivos</span>' + pincha + '</summary><div class="ayuda-cuerpo">' +
-      '<div><h4>' + ICO.mic + ' Responde con audio</h4><p>Para explicar un razonamiento o un cálculo, un audio de uno o dos minutos suele ser más claro y cercano que un texto largo. Graba directo desde el navegador, hasta 3 minutos.</p></div>' +
-      '<div><h4>' + ICO.video + ' Comparte un video</h4><p>Para mostrar paso a paso cómo usar una planilla, graba tu pantalla con Loom o súbela a YouTube como «no listado» y pega el enlace. No se suben videos a la eFacultad.</p></div>' +
-      '<div><h4>' + ICO.img + ' Marca la captura</h4><p>Si el problema está en una celda o un gráfico, saca una captura, márcala y pégala con Ctrl+V. Ahorra varias idas y vueltas.</p></div>' +
-      '<div><h4>' + ICO.clip + ' Adjunta material</h4><p>Puedes enviar una guía en PDF, una planilla corregida o un ejemplo. Hasta 5 adjuntos de 10 MB por mensaje.</p></div>' +
-      '<p class="pie-ayuda">Plazo comprometido: responder en hasta <b>dos días hábiles</b>. Cada mañana recibes un resumen por correo con los mensajes sin leer. Los adjuntos se borran solos 30 días después del cierre del curso; si algo debe quedar, súbelo como material del curso.</p></div></details>';
-    return '<details class="ayuda-msj"' + (abierta ? ' open' : '') + '><summary><span class="tit">¿Cómo comunicarte con tu docente y con IDEAX? Puedes escribir, enviar capturas, archivos y audios</span>' + pincha + '</summary><div class="ayuda-cuerpo">' +
-      '<div><h4>Elige bien el tipo de consulta</h4><p><b>Académica:</b> dudas de contenidos, casos, planillas y entregas. La responde tu docente. <b>Administrativa:</b> pagos, plazos, accesos y certificados. La responde el equipo de IDEAX. Respondemos en hasta dos días hábiles.</p></div>' +
-      '<div><h4>' + ICO.img + ' Muestra lo que ves</h4><p>Saca una captura de pantalla y pégala con <b>Ctrl+V</b> en el cuadro de texto. En Windows: <b>Windows+Shift+S</b>. En Mac: <b>Cmd+Ctrl+Shift+4</b> y luego <b>Cmd+V</b>. En el celular, toma la captura y súbela con el botón <b>Captura</b>.</p></div>' +
-      '<div><h4>' + ICO.mic + ' Explícalo con un audio</h4><p>Presiona <b>Audio</b>, permite el micrófono cuando el navegador lo pida y habla hasta 3 minutos. Si no te convence, quítalo con la × y graba otro antes de enviar.</p></div>' +
-      '<div><h4>' + ICO.clip + ' Adjunta tu archivo</h4><p>Envía tu planilla, tu documento o un PDF para que tu docente vea exactamente dónde estás. Hasta 5 adjuntos de 10 MB por mensaje.</p></div>' +
-      '<p class="pie-ayuda"><b>Consejos:</b> una consulta por conversación, indica la semana y la casilla, y cuenta qué intentaste. Para trámites formales, como certificados, prórrogas o congelamientos, usa <a href="#/solicitudes">Solicitudes</a>. Tus adjuntos solo los ven tú y el equipo de IDEAX, y se borran solos 30 días después del cierre del curso.</p></div></details>';
+    const tile = (ico, tit, lineas) => '<div class="am-tile"><div class="am-ico">' + ico + '</div><b>' + tit + '</b><ul>' + lineas.map(l => '<li>' + l + '</li>').join('') + '</ul></div>';
+    const paso = (n, tit, cuerpo) => '<div class="am-paso"><div class="am-num">' + n + '</div><div class="am-cont"><h4>' + tit + '</h4>' + cuerpo + '</div></div>';
+    const txt = '<svg class="ico" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>';
+    if (equipo) return '<details class="ayuda-msj"' + (abierta ? ' open' : '') + '><summary><span class="tit">Cómo sacarle partido a los mensajes: audio, video, capturas y archivos</span>' + pincha + '</summary><div class="am-cuerpo">' +
+      paso(1, 'Elige el recurso que mejor explica', '<div class="am-tiles">' +
+        tile(ICO.mic, 'Audio', ['Para explicar un razonamiento o un cálculo.', 'Uno o dos minutos; máximo 3.', 'Presiona <b>Audio</b>, habla y luego <b>Listo</b>.']) +
+        tile(ICO.video, 'Video', ['Para mostrar paso a paso una planilla.', 'Graba con Loom o sube a YouTube como «no listado».', 'Presiona <b>Video</b> y pega el enlace.']) +
+        tile(ICO.img, 'Captura', ['Para señalar una celda o un gráfico.', 'Márcala y pégala con <b>Ctrl+V</b>.']) +
+        tile(ICO.clip, 'Archivo', ['Guías en PDF, planillas corregidas o ejemplos.', 'Hasta 5 adjuntos de 10 MB.']) + '</div>') +
+      paso(2, 'Responde a tiempo', '<ul class="am-lista"><li>Plazo comprometido: <b>dos días hábiles</b>.</li><li>Cada mañana te llega un resumen por correo con los mensajes sin leer.</li></ul>') +
+      paso(3, 'Ten presente', '<ul class="am-lista"><li>Los adjuntos se borran solos <b>30 días después del cierre del curso</b>.</li><li>Si algo debe quedar para siempre, súbelo como material del curso.</li></ul>') +
+      '</div></details>';
+    return '<details class="ayuda-msj"' + (abierta ? ' open' : '') + '><summary><span class="tit">¿Cómo comunicarte con tu docente y con IDEAX? Puedes escribir, enviar capturas, archivos y audios</span>' + pincha + '</summary><div class="am-cuerpo">' +
+      paso(1, 'Elige el tipo de consulta', '<div class="am-dos">' +
+        '<div class="am-tipo"><b>Académica</b><span>Responde: <b>tu docente</b></span><ul><li>Contenidos y lecturas</li><li>Casos y planillas</li><li>Dudas de tu entrega</li></ul></div>' +
+        '<div class="am-tipo"><b>Administrativa</b><span>Responde: <b>el equipo de IDEAX</b></span><ul><li>Pagos y plazos</li><li>Accesos a la eFacultad</li><li>Certificados</li></ul></div></div>' +
+        '<p class="am-nota">Respondemos en hasta <b>dos días hábiles</b>.</p>') +
+      paso(2, 'Elige cómo explicarte', '<div class="am-tiles">' +
+        tile(txt, 'Texto', ['Escribe tu duda en el cuadro.', 'Indica la semana y la casilla.']) +
+        tile(ICO.img, 'Captura', ['Windows: <b>Windows+Shift+S</b>', 'Mac: <b>Cmd+Ctrl+Shift+4</b>', 'Luego pégala con <b>Ctrl+V</b> (Mac: <b>Cmd+V</b>).', 'Celular: botón <b>Captura</b>.']) +
+        tile(ICO.mic, 'Audio', ['Presiona <b>Audio</b>.', 'Permite el micrófono.', 'Habla hasta 3 minutos y presiona <b>Listo</b>.']) +
+        tile(ICO.clip, 'Archivo', ['Presiona <b>Archivo</b>.', 'PDF, Word, Excel o imágenes.', 'Hasta 5 adjuntos de 10 MB.']) + '</div>') +
+      paso(3, 'Antes de enviar, revisa', '<ul class="am-lista am-check"><li>Una sola consulta por conversación.</li><li>Dijiste en qué semana y casilla estás.</li><li>Contaste qué intentaste y dónde te trabaste.</li><li>Si algo no quedó bien, quítalo con la <b>×</b> antes de enviar.</li></ul>') +
+      '<div class="am-pie"><span>📋 Para trámites formales (certificados, prórrogas, congelamientos) usa <a href="#/solicitudes">Solicitudes</a>.</span><span>🔒 Tus adjuntos solo los ven tú y el equipo de IDEAX, y se borran 30 días después del cierre del curso.</span></div>' +
+      '</div></details>';
   }
 
   /* =================== MENSAJES =================== */

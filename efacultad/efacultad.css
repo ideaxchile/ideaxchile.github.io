@@ -499,3 +499,27 @@ table.rubrica{width:100%;border-collapse:separate;border-spacing:0;font-size:13p
 .ayuda-msj[open] .pincha .abierto{display:inline}
 .ayuda-msj:not([open]){border:1px solid #F6D2AE;background:var(--naranja-suave)}
 .ayuda-msj summary:hover .pincha{filter:brightness(1.05)}
+/* guía de mensajes ordenada en pasos */
+.am-cuerpo{padding:6px 18px 18px}
+.am-paso{display:grid;grid-template-columns:34px 1fr;gap:14px;padding:16px 0;border-bottom:1px solid var(--linea)}
+.am-paso:last-of-type{border-bottom:0}
+.am-num{width:30px;height:30px;border-radius:50%;background:var(--noche);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px}
+.am-cont h4{margin:4px 0 10px;color:var(--noche);font-size:15px}
+.am-dos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.am-tipo{border:1px solid var(--linea);border-radius:10px;padding:12px 14px;background:var(--papel)}
+.am-tipo>b{display:block;color:var(--noche);font-size:15px}.am-tipo>span{display:block;font-size:13px;color:var(--gris);margin-bottom:6px}
+.am-tipo ul,.am-tile ul,.am-lista{margin:0;padding-left:18px;font-size:14px;color:var(--gris)}
+.am-tipo li,.am-tile li,.am-lista li{margin:2px 0}
+.am-nota{margin:10px 0 0;font-size:14px;color:var(--gris)}
+.am-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.am-tile{border:1px solid var(--linea);border-radius:12px;padding:16px 14px;background:#fff;text-align:center}
+.am-tile ul{text-align:left}
+.am-tile>b{display:block;color:var(--noche);margin:10px 0 8px;font-size:16px}
+.am-tile ul{padding-left:16px;font-size:13px}
+.am-ico{width:76px;height:76px;border-radius:50%;background:var(--naranja-suave);color:var(--naranja);display:grid;place-items:center;margin:0 auto}
+.am-ico .ico{width:40px;height:40px;stroke-width:1.8}
+.am-check{list-style:none;padding-left:0}.am-check li{padding-left:24px;position:relative}
+.am-check li::before{content:'✓';position:absolute;left:2px;color:#14947F;font-weight:700}
+.am-pie{display:flex;flex-direction:column;gap:6px;margin-top:6px;padding:12px 14px;background:var(--papel);border-radius:10px;font-size:13px;color:var(--gris)}
+@media (max-width:900px){.am-tiles{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.am-tiles,.am-dos{grid-template-columns:1fr}.am-paso{grid-template-columns:28px 1fr;gap:10px}.am-cuerpo{padding:4px 12px 14px}}
