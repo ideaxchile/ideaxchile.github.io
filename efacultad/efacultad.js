@@ -61,7 +61,7 @@
       devuelta: ['rojo', 'Devuelta'], bloqueada: ['', 'Bloqueada'], programada: ['', 'Próximamente'], congelada: ['amarillo', 'Congelada'],
       Enviada: ['azul', 'Por corregir'], Corregida: ['verde', 'Calificada'], Devuelta: ['rojo', 'Devuelta'], Borrador: ['', 'Borrador'],
       Pendiente: ['naranja', 'Pendiente'], Aprobada: ['verde', 'Aprobada'], Rechazada: ['rojo', 'Rechazada'], Activa: ['verde', 'Activa'],
-      Congelada: ['amarillo', 'Congelada'], Retirada: ['', 'Retirada'], Finalizada: ['azul', 'Finalizada'], Anulada: ['rojo', 'Anulada'], 'No finalizada': ['rojo', 'No finalizada'] }[e];
+      Congelada: ['amarillo', 'Congelada'], 'En espera': ['', 'En espera'], Retirada: ['', 'Retirada'], Finalizada: ['azul', 'Finalizada'], Anulada: ['rojo', 'Anulada'], 'No finalizada': ['rojo', 'No finalizada'] }[e];
     return m ? '<span class="etq ' + m[0] + '">' + m[1] + '</span>' : '<span class="etq">' + h(e) + '</span>';
   }
   function descargar(nombre, contenido, tipo) {
@@ -136,6 +136,7 @@
     [/^#\/imprimir\/portafolio\/([\w-]+)$/, vImprimirPortafolio, 'sola'],
     [/^#\/inicio$/, vInicio, 'estudiante'],
     [/^#\/curso\/([\w-]+)$/, vCurso, 'estudiante'],
+    [/^#\/diplomado\/([\w-]+)$/, vDiplomadoCamino, 'estudiante'],
     [/^#\/semana\/([\w-]+)\/([\w-]+)$/, vSemana, 'estudiante'],
     [/^#\/vista\/([\w-]+)$/, vVistaPrevia, 'docente'],
     [/^#\/notas$/, vNotas, 'estudiante'],
@@ -313,26 +314,94 @@
     burbujaMensajes(d.noLeidos);
     const u = S.usuario;
     const mats = d.matriculas;
-    const contenedores = mats.filter(m => m.contenedor);
+    const planes = mats.filter(m => m.contenedor && m.plan);
     const cursos = mats.filter(m => !m.contenedor);
     const tarjeta = m => {
       const p = m.programa || {}; const pct = m.semanas ? Math.round(m.enviadas / m.semanas * 100) : 0;
-      return '<article class="prog" style="--c:' + h(p.color) + '"><div class="franja"></div><div class="cuerpo"><div class="tipo">' + h({ gratuito: 'Curso', ejecutivo: 'Curso ejecutivo', diplomado: 'Diplomado', paper: 'Paper', emprendedores: 'Emprendedores' }[p.tipo] || p.tipo) + '</div>' +
+      return '<article class="prog" style="--c:' + h(p.color) + '"><div class="franja"></div><div class="cuerpo"><div class="tipo">' + h(TIPO_PROG[p.tipo] || p.tipo) + (p.tipo === 'curso' || p.tipo === 'gratuito' ? ' · ' + m.semanas + ' semanas · ' + p.horas + ' horas' : '') + '</div>' +
         '<h3>' + h(p.nombre) + '</h3><div style="font-size:13px;color:var(--gris)">' + (m.inicio ? 'Inicio ' + fecha(m.inicio) : '') + (m.termino ? ' · Plazo hasta ' + fecha(m.termino) : '') + '</div>' +
         '<div class="barra-avance"><i style="width:' + pct + '%"></i></div><div style="font-size:12px;color:var(--gris)">' + m.enviadas + ' de ' + m.semanas + ' semanas enviadas</div>' +
         (m.actual ? '<div class="actual"><b>Semana ' + m.actual.n + ':</b> ' + h(m.actual.tema) + '</div>' : m.proxima ? '<div class="actual" style="background:var(--papel);border-color:var(--linea)">' + h(m.proxima.mensaje) + '</div>' : '') +
         '</div><div class="pie">' + (m.final ? notaHtml(m.final) : etqEstado(m.estado)) +
         '<div class="acciones">' + (m.actual ? '<a class="btn naranja chico" href="#/semana/' + m.id + '/' + m.actual.id + '">Ir a mi semana</a>' : '') + '<a class="btn claro chico" href="#/curso/' + m.id + '">Ver programa</a></div></div></article>';
     };
-    vista(portadaVista('estudiante', 'Hola, ' + h(u.nombres), cursos.some(m => m.actual) ? 'Tienes semanas disponibles. ¡A trabajar!' : 'Aquí están tus programas.', '<a class="btn naranja" href="#/mensajes">Escribir a IDEAX</a>', '75% 30%') +
-      (contenedores.length ? contenedores.map(c => '<div class="aviso info">Estás inscrito en el <b>' + h(c.programa.nombre) + '</b>. Sus diplomados, la Metodología y el paper aparecen abajo como programas separados, cada uno con su calendario.</div>').join('') : '') +
-      (cursos.length ? '<div class="rejilla r2">' + cursos.map(tarjeta).join('') + '</div>' : vacio('Aún no tienes programas en la eFacultad', 'Cuando se confirme tu inscripción aparecerán aquí.')));
+    const hayActual = cursos.some(m => m.actual) || planes.some(m => m.plan.grupos.some(g => g.cursos.some(c => c.actual)));
+    vista(portadaVista('estudiante', 'Hola, ' + h(u.nombres), hayActual ? 'Tienes semanas disponibles. ¡A trabajar!' : 'Aquí están tus programas.', '<a class="btn naranja" href="#/mensajes">Escribir a IDEAX</a>', '75% 30%') +
+      planes.map(htmlPlan).join('') +
+      (cursos.length ? '<div class="rejilla r2">' + cursos.map(tarjeta).join('') + '</div>' : planes.length ? '' : vacio('Aún no tienes programas en la eFacultad', 'Cuando se confirme tu inscripción aparecerán aquí.')) +
+      htmlCamino(d.camino || []));
+    activarPlan(vInicio);
+  }
+
+  /* Diplomado o master comprado: sus cursos en orden, uno tras otro, con la opción de adelantar el siguiente. */
+  const TIPO_CONT = { diplomado: 'diplomado', master: 'master', contenedor: 'programa' };
+  function itemPlan(c, m) {
+    const ok = /aprobado|convalidado/.test(c.estado), activo = c.estado === 'en curso';
+    const sub = ok ? (c.estado === 'convalidado' ? c.mensaje : 'Aprobado · ' + c.semanas + ' semanas')
+      : activo ? 'En curso · ' + (c.actual ? 'semana ' + c.actual.n + ' de ' + c.semanas + ' disponible' : c.enviadas + ' de ' + c.semanas + ' semanas enviadas')
+      : c.mensaje || '';
+    const der = ok ? notaHtml(c.nota)
+      : activo ? '<div class="acciones">' + (c.actual ? '<a class="btn naranja chico" href="#/semana/' + c.matricula + '/' + c.actual.id + '">Ir a mi semana</a>' : '<a class="btn claro chico" href="#/curso/' + c.matricula + '">Ver curso</a>') + '</div>'
+      : c.estado === 'terminado' || c.estado === 'programado' ? '<a class="btn claro chico" href="#/curso/' + c.matricula + '">Ver curso</a>'
+      : c.estado === 'proximo' ? (c.adelantar ? '<button class="btn claro chico" data-adelantar="' + h(c.matricula) + '" data-nombre="' + h(c.nombre) + '">Adelantar este curso</button>' : '<span class="etq">Próximamente</span>')
+      : c.estado === 'congelado' ? etqEstado('congelada') : '<span class="etq">Bloqueado</span>';
+    const cls = ok ? 'ok' : activo ? 'activo' : /proximo|terminado|programado/.test(c.estado) ? '' : 'espera';
+    return '<div class="plan-curso ' + cls + '"><span class="pc-num">' + (ok ? '✓' : c.n) + '</span><div class="pc-txt"><b>Curso ' + c.n + ' · ' + h(c.nombre) + '</b><small>' + h(sub) + '</small></div><div class="pc-der">' + der + '</div></div>';
+  }
+  function htmlPlan(m, completo) {
+    const p = m.programa, pl = m.plan, tipo = TIPO_CONT[p.tipo] || 'programa';
+    const pct = pl.cursos ? Math.round(pl.aprobados / pl.cursos * 100) : 0;
+    return '<section class="plan" style="--c:' + h(p.color) + '"><div class="plan-cab"><div class="tipo">' + h(TIPO_PROG[p.tipo] || p.tipo) + ' · ' + pl.cursos + ' cursos · ' + p.horas + ' horas</div>' +
+      (completo ? '' : '<h2>' + h(p.nombre) + '</h2>') + '<p>' + (m.inicio ? 'Inicio ' + fecha(m.inicio) : '') + (m.termino ? ' · Plazo hasta ' + fecha(m.termino) : '') + '</p>' +
+      '<div class="barra-avance"><i style="width:' + pct + '%"></i></div><small>' + pl.aprobados + ' de ' + pl.cursos + ' cursos aprobados' + (m.final ? ' · nota ' + (m.completo ? 'final' : 'parcial') + ' ' + coma(m.final.n7.toFixed(1)) : '') +
+      (pl.cursos > 1 ? ' · puedes tener hasta ' + pl.enCursoMax + ' cursos en curso a la vez' : '') + '</small></div>' +
+      pl.grupos.map(g => (g.nombre ? '<div class="plan-grupo">' + h(g.nombre) + '</div>' : '') + g.cursos.map(c => itemPlan(c, m)).join('')).join('') +
+      (completo ? '' : '<div class="plan-pie"><span>Al aprobar los ' + pl.cursos + ' cursos recibes el certificado de cada curso y el del ' + tipo + '.</span><a class="btn claro chico" href="#/curso/' + m.id + '">Ver ' + tipo + '</a></div>') + '</section>';
+  }
+  function activarPlan(recargar) {
+    $$('[data-adelantar]').forEach(b => b.onclick = async () => {
+      if (!await confirmar('¿Abrir ahora «' + b.dataset.nombre + '»? Quedará disponible desde hoy y lo cursarás en paralelo con el curso actual.', 'Adelantar curso')) return;
+      b.disabled = true;
+      try { await api('adelantarCurso', { matricula: b.dataset.adelantar }); toast('Listo. El curso ya está abierto.'); recargar(); }
+      catch (er) { toast(er.message, true); b.disabled = false; }
+    });
+  }
+
+  /* Cursos sueltos: a qué diplomados suman y cuánto falta para completarlos. */
+  const chipCurso = c => '<span class="chip ' + (c.estado === 'aprobado' ? 'ok' : c.estado ? 'en' : '') + '">' + (c.estado === 'aprobado' ? '✓ ' : '') + h(c.nombre) + (c.estado === 'en curso' ? ' · en curso' : '') + '</span>';
+  function htmlCamino(lista) {
+    if (!lista.length) return '';
+    return '<section class="camino"><h2>Tu camino hacia un diplomado</h2><p>Los cursos que llevas ya cuentan para estos diplomados. Si completas los que faltan, obtienes también el certificado del diplomado.</p>' +
+      lista.map((x, i) => '<div class="camino-item"><div class="ci-txt"><div class="tipo">' + h(x.area) + (x.master ? ' · ' + h(x.master) : '') + '</div><h3>' + h(x.nombre) + '</h3>' +
+        '<div class="barra-avance"><i style="width:' + Math.round(Math.max(x.aprobados, x.tomados * 0.25) / x.cursos.length * 100) + '%"></i></div>' +
+        '<small>' + (x.aprobados ? x.aprobados + ' de ' + x.cursos.length + ' cursos aprobados' : x.tomados + ' de ' + x.cursos.length + ' cursos tomados · ninguno aprobado aún') + '</small>' +
+        '<div class="chips">' + x.cursos.map(chipCurso).join('') + '</div></div><div class="ci-acc">' +
+        (i === 0 ? '<a class="btn naranja chico" href="' + h(x.inscripcion) + '" target="_blank" rel="noopener">Completar este diplomado</a>' : '<a class="btn claro chico" href="#/diplomado/' + h(x.cod) + '">Ver diplomado</a>') +
+        '</div></div>').join('') + '</section>';
+  }
+  async function vDiplomadoCamino(cod) {
+    const x = await api('diplomadoCamino', { programa: cod });
+    vista('<div class="miga"><a href="#/inicio">Inicio</a> › ' + h(x.nombre) + '</div><div class="encabezado-vista"><div><h1>' + h(x.nombre) + '</h1><p>' + h(x.area) + (x.master ? ' · parte del ' + h(x.master) : '') + ' · ' + x.cursos.length + ' cursos · ' + x.horas + ' horas</p></div>' +
+      '<div class="acciones"><a class="btn naranja" href="' + h(x.inscripcion) + '" target="_blank" rel="noopener">Completar este diplomado</a></div></div>' +
+      '<section class="plan" style="--c:' + h(x.color) + '"><div class="plan-cab"><small>' + x.aprobados + ' de ' + x.cursos.length + ' cursos aprobados. Al inscribirte en el diplomado, los cursos que ya aprobaste no se repiten: se cuentan para tu certificado.</small></div>' +
+      x.cursos.map((c, i) => '<div class="plan-curso ' + (c.estado === 'aprobado' ? 'ok' : c.estado ? 'activo' : 'espera') + '"><span class="pc-num">' + (c.estado === 'aprobado' ? '✓' : i + 1) + '</span><div class="pc-txt"><b>Curso ' + (i + 1) + ' · ' + h(c.nombre) + '</b><small>' +
+        (c.estado === 'aprobado' ? 'Aprobado' : c.estado === 'en curso' ? 'En curso' : 'Por tomar') + '</small></div><div class="pc-der"></div></div>').join('') + '</section>');
   }
 
   async function vCurso(mat) {
     const d = await api('curso', { matricula: mat });
     const p = d.programa;
-    let html = '<div class="miga"><a href="#/inicio">Inicio</a> › ' + h(p.nombre) + '</div><div class="encabezado-vista"><div><h1>' + h(p.nombre) + '</h1><p>' +
+    if (d.contenedor) {
+      vista('<div class="miga"><a href="#/inicio">Inicio</a> › ' + h(p.nombre) + '</div><div class="encabezado-vista"><div><h1>' + h(p.nombre) + '</h1><p>' +
+        (d.matricula.inicio ? 'Inicio ' + fecha(d.matricula.inicio) : '') + (d.matricula.termino ? ' · Plazo hasta ' + fecha(d.matricula.termino) : '') + ' · ' + p.horas + ' horas</p></div>' +
+        '<div class="acciones">' + (d.notas.final ? notaHtml(d.notas.final) : '') + '<a class="btn claro chico" href="#/notas">Ver mis notas</a></div></div>' +
+        (/congel/i.test(d.matricula.estado) ? '<div class="aviso alerta">Tu matrícula está congelada. Puedes consultar lo que ya hiciste, pero no hacer entregas.</div>' : '') +
+        htmlPlan(Object.assign({}, d.matricula, { programa: p, plan: d.plan, final: d.notas.final, completo: d.notas.completo }), true) +
+        '<div class="aviso info">Cada curso tiene su propio certificado. Cuando apruebes todos, puedes pedir el certificado del ' + (TIPO_CONT[p.tipo] || 'programa') + ' en Solicitudes; incluye una segunda hoja con la nota de cada curso.</div>');
+      activarPlan(() => vCurso(mat));
+      return;
+    }
+    let html = '<div class="miga"><a href="#/inicio">Inicio</a> › ' + (d.padre ? '<a href="#/curso/' + h(d.padre.id) + '">' + h(d.padre.nombre) + '</a> › ' : '') + h(p.nombre) + '</div><div class="encabezado-vista"><div><h1>' + h(p.nombre) + '</h1><p>' +
       (d.matricula.inicio ? 'Inicio ' + fecha(d.matricula.inicio) : '') + (d.matricula.termino ? ' · Plazo hasta ' + fecha(d.matricula.termino) : '') + ' · ' + p.horas + ' horas</p></div>' +
       '<div class="acciones">' + (d.notas.final ? notaHtml(d.notas.final) : '') + '<a class="btn claro chico" href="#/imprimir/portafolio/' + mat + '" target="_blank">Vista previa del portafolio</a></div></div>';
     if (/congel/i.test(d.matricula.estado)) html += '<div class="aviso alerta">Tu matrícula está congelada. Puedes consultar lo que ya hiciste, pero no hacer entregas.</div>';
@@ -463,17 +532,21 @@
   }
 
   /* =================== VER COMO ESTUDIANTE (docentes y administración) =================== */
-  const TIPO_PROG = { gratuito: 'Curso', ejecutivo: 'Curso ejecutivo', diplomado: 'Diplomado', paper: 'Paper', emprendedores: 'Emprendedores', master: 'Master Profesional' };
+  const TIPO_PROG = { curso: 'Curso', gratuito: 'Curso', ejecutivo: 'Curso ejecutivo', diplomado: 'Diplomado', paper: 'Paper', emprendedores: 'Emprendedores', master: 'Master Profesional' };
   async function vVistaProgramas() {
     const progs = await api('programasVista');
     const grupos = {};
-    progs.forEach(p => (grupos[p.tipo] = grupos[p.tipo] || []).push(p));
-    const tarjeta = p => '<article class="prog" style="--c:' + h(p.color) + '" data-item-tipo="' + h(p.tipo) + '" data-item-area="' + h(areaDe(p)) + '" data-buscar="' + h((p.nombre + ' ' + p.cod).toLowerCase()) + '"><div class="franja"></div><div class="cuerpo"><div class="tipo">' + h(TIPO_PROG[p.tipo] || p.tipo) + '</div>' +
+    progs.forEach(p => (grupos[tipoG(p)] = grupos[tipoG(p)] || []).push(p));
+    const dips = {};
+    progs.forEach(p => (p.diplomados || []).forEach(x => { dips[x.cod] = x.nombre; }));
+    const tarjeta = p => '<article class="prog" style="--c:' + h(p.color) + '" data-item-tipo="' + h(tipoG(p)) + '" data-item-area="' + h(areaDe(p)) + '" data-item-dips="' + h((p.diplomados || []).map(x => x.cod).join(' ')) + '" data-buscar="' + h((p.nombre + ' ' + p.cod).toLowerCase()) + '"><div class="franja"></div><div class="cuerpo"><div class="tipo">' + h(TIPO_PROG[p.tipo] || p.tipo) + '</div>' +
       '<h3>' + h(p.nombre) + '</h3><div style="font-size:13px;color:var(--gris)">' + p.semanas + ' semanas · ' + p.horas + ' horas</div>' +
       '<div class="barra-avance"><i style="width:' + Math.round(p.listas / p.semanas * 100) + '%"></i></div><div style="font-size:12px;color:var(--gris)">' + p.listas + ' de ' + p.semanas + ' semanas con material listo</div></div>' +
       '<div class="pie"><span></span><div class="acciones"><a class="btn naranja chico" href="#/ev/' + h(p.cod) + '">Entrar como estudiante</a></div></div></article>';
     vista('<div class="encabezado-vista"><div><h1>Ver como estudiante</h1><p>Elige un programa para recorrerlo tal como lo ve un estudiante, con todas sus semanas abiertas.</p></div>' +
-      '<input type="search" id="buscar-ev" placeholder="Buscar programa" style="max-width:280px"></div>' + htmlFiltros(progs, grupos) + SIN_RESULTADOS +
+      '<input type="search" id="buscar-ev" placeholder="Buscar programa" style="max-width:280px"></div>' + htmlFiltros(progs, grupos) +
+      (Object.keys(dips).length ? '<div class="segmento"><span class="seg-tit">Diplomado</span><select id="filtro-dip" style="max-width:420px"><option value="">Todos los diplomados</option>' +
+        Object.keys(dips).sort((a, b) => dips[a].localeCompare(dips[b], 'es')).map(c => '<option value="' + h(c) + '">' + h(dips[c]) + '</option>').join('') + '</select></div>' : '') + SIN_RESULTADOS +
       (progs.length ? Object.keys(TIPOS).filter(t => grupos[t]).map(t => '<h2 class="grupo-ev" data-grupo="' + t + '" style="margin-top:18px">' + TIPOS[t] + '</h2><div class="rejilla r2 grupo-ev" data-grupo="' + t + '">' + grupos[t].map(tarjeta).join('') + '</div>').join('')
         : vacio('No tienes programas para revisar', 'Cuando tengas programas asignados aparecerán aquí.')));
     activarFiltros();
@@ -773,7 +846,19 @@
   const celdasNota = n => n ? '<td class="num"><b>' + coma(n.pct) + '%</b></td><td class="num">' + coma(n.n7.toFixed(1)) + '</td><td class="num">' + coma(n.n10.toFixed(1)) + '</td><td>' + etqNivel(n) + '</td>'
     : '<td></td><td></td><td></td><td></td>';
   function pintarNotas(d, antes, enlacePortafolio, enlaceSemana) {
+    const estadoCurso = c => c.aprobado ? (c.convalidado ? 'Convalidado' : 'Aprobado') : c.nota ? 'En curso' : /En espera/.test(c.estadoMatricula) ? 'En espera' : c.matricula ? 'En curso' : 'Pendiente';
+    const filaCurso = (c, sangria) => '<tr><td' + (sangria ? ' style="padding-left:26px"' : '') + '>' + (sangria ? '' : c.n + '. ') + h(c.nombre) + '</td><td class="num">' + c.horas + '</td><td>' + h(estadoCurso(c)) + '</td>' + celdasNota(c.nota) + '</tr>';
+    const contenedor = x => {
+      const r = x.resumen;
+      return '<section class="tarjeta"><div class="encabezado-vista" style="margin-bottom:10px"><div><h2 style="margin:0">' + h(x.programa.nombre) + '</h2><p>' + r.cursos.filter(c => c.aprobado).length + ' de ' + r.cursos.length + ' aprobados · la nota final pondera cada curso por sus horas</p></div>' +
+        '<div class="acciones">' + (r.final ? notaHtml(r.final) : '') + '</div></div>' +
+        '<div class="tabla-cont" style="box-shadow:none;border:1px solid var(--linea)"><table class="tabla tabla-notas"><thead><tr><th>Curso</th><th class="num">Horas</th><th>Estado</th><th class="num">Porcentaje de logro</th><th class="num">Escala de 1 a 7</th><th class="num">Escala de 1 a 10</th><th>Calificación</th></tr></thead><tbody>' +
+        r.cursos.map(c => c.detalle ? '<tr class="fila-grupo"><td><b>' + c.n + '. ' + h(c.nombre) + '</b></td><td class="num"><b>' + c.horas + '</b></td><td>' + h(estadoCurso(c)) + '</td>' + celdasNota(c.nota) + '</tr>' + c.detalle.map(k => filaCurso(k, true)).join('') : filaCurso(c)).join('') +
+        (r.final ? '<tr class="fila-final"><td><b>Nota final' + (r.completo ? '' : ' a la fecha') + '</b></td><td class="num">' + x.programa.horas + '</td><td></td>' + celdasNota(r.final) + '</tr>' : '') +
+        '</tbody></table></div></section>';
+    };
     vista((antes || '') + '<div class="encabezado-vista"><div><h1>Mis notas</h1><p>En porcentaje de logro, con sus equivalencias en las escalas de 1 a 7 y de 1 a 10. Se aprueba con 60%.</p></div></div>' + d.map(x => {
+      if (x.contenedor) return contenedor(x);
       const r = x.resumen;
       return '<section class="tarjeta"><div class="encabezado-vista" style="margin-bottom:10px"><div><h2 style="margin:0">' + h(x.programa.nombre) + '</h2><p>' + r.corregidas + ' de ' + r.semanas + ' semanas calificadas</p></div>' +
         '<div class="acciones">' + (r.final ? notaHtml(r.final) : '') + '<a class="btn claro chico" href="' + enlacePortafolio(x) + '" target="_blank">Vista previa del portafolio</a></div></div>' +
@@ -959,7 +1044,7 @@
     const opt = p => '<option value="' + h(p.cod) + '"' + (p.cod === elegido ? ' selected' : '') + '>' + h(p.nombre) + (p.matriculados ? ' (' + p.matriculados + ')' : '') + '</option>';
     const con = progs.filter(p => p.matriculados), sin = progs.filter(p => !p.matriculados);
     return (con.length ? '<optgroup label="Con estudiantes">' + con.map(opt).join('') + '</optgroup>' : '') +
-      Object.keys(TIPOS).filter(t => sin.some(p => p.tipo === t)).map(t => '<optgroup label="' + TIPOS[t] + '">' + sin.filter(p => p.tipo === t).map(opt).join('') + '</optgroup>').join('');
+      Object.keys(TIPOS).filter(t => sin.some(p => tipoG(p) === t)).map(t => '<optgroup label="' + TIPOS[t] + '">' + sin.filter(p => tipoG(p) === t).map(opt).join('') + '</optgroup>').join('');
   }
 
   async function vBandeja() {
@@ -1150,7 +1235,7 @@
   /* =================== CONTENIDOS (docente y gestión académica) =================== */
   /* Filtros de programas para docentes y administración: por tipo (masters, diplomados, cursos...) y por especialidad.
      Se combinan entre sí y con el buscador, y recuerdan la última elección. */
-  const TIPOS_CORTO = { master: 'Masters', diplomado: 'Diplomados', gratuito: 'Cursos', ejecutivo: 'Cursos ejecutivos', paper: 'Paper', emprendedores: 'Emprendedores', contenedor: 'Agrupadores' };
+  const TIPOS_CORTO = { master: 'Masters', diplomado: 'Diplomados', curso: 'Cursos', gratuito: 'Cursos', ejecutivo: 'Cursos ejecutivos', paper: 'Paper', emprendedores: 'Emprendedores', contenedor: 'Agrupadores' };
   const AREA_IGUAL = { 'Personas': 'Capital Humano', 'Operaciones y logística': 'Logística', 'Administración pública': 'Gestión Pública', 'Curso ejecutivo': 'Ejecutivos' };
   const areaDe = p => AREA_IGUAL[p.area] || p.area || 'Sin especialidad';
   function htmlFiltros(progs, grupos) {
@@ -1165,7 +1250,9 @@
       (nombresArea.length > 1 ? fila('Especialidad', 'area', 'Todas', nombresArea.map(a => [a, a, areas[a]])) : '');
   }
   function activarFiltros() {
-    const elegido = { tipo: leer('ef_filtro_tipo') || 'todos', area: leer('ef_filtro_area') || 'todos' };
+    const elegido = { tipo: leer('ef_filtro_tipo') || 'todos', area: leer('ef_filtro_area') || 'todos', dip: leer('ef_filtro_dip') || '' };
+    const selDip = $('#filtro-dip');
+    if (selDip) { if (!Array.from(selDip.options).some(o => o.value === elegido.dip)) elegido.dip = ''; selDip.value = elegido.dip; }
     const aplicar = () => {
       ['tipo', 'area'].forEach(k => {
         const bs = $$('[data-filtro-' + k + ']');
@@ -1174,7 +1261,9 @@
         escribir('ef_filtro_' + k, elegido[k]);
       });
       $$('[data-item-tipo]').forEach(el => el.classList.toggle('oculto-filtro',
-        (elegido.tipo !== 'todos' && el.dataset.itemTipo !== elegido.tipo) || (elegido.area !== 'todos' && el.dataset.itemArea !== elegido.area)));
+        (elegido.tipo !== 'todos' && el.dataset.itemTipo !== elegido.tipo) || (elegido.area !== 'todos' && el.dataset.itemArea !== elegido.area) ||
+        (!!selDip && !!elegido.dip && (' ' + (el.dataset.itemDips || '') + ' ').indexOf(' ' + elegido.dip + ' ') < 0)));
+      if (selDip) escribir('ef_filtro_dip', elegido.dip);
       $$('[data-grupo]').forEach(g => {
         const hay = $$('[data-item-tipo="' + g.dataset.grupo + '"]').some(el => !el.classList.contains('oculto-filtro'));
         g.classList.toggle('oculto-filtro', !hay);
@@ -1183,20 +1272,23 @@
       if (vacio) vacio.classList.toggle('oculto', $$('[data-item-tipo]').some(el => !el.classList.contains('oculto-filtro')));
     };
     ['tipo', 'area'].forEach(k => $$('[data-filtro-' + k + ']').forEach(b => b.onclick = () => { elegido[k] = b.getAttribute('data-filtro-' + k); aplicar(); }));
+    if (selDip) selDip.onchange = () => { elegido.dip = selDip.value; aplicar(); };
     aplicar();
   }
   const SIN_RESULTADOS = '<div id="sin-resultados" class="vacio oculto"><b>No hay programas con esa combinación</b>Prueba con otro tipo o con otra especialidad.</div>';
 
-  const TIPOS = { master: 'Masters Profesionales', diplomado: 'Diplomados', gratuito: 'Cursos', ejecutivo: 'Cursos ejecutivos', paper: 'Paper', emprendedores: 'Emprendedores', contenedor: 'Programas agrupadores' };
+  /* Desde la 1.9.0 el curso es la unidad base. Los antiguos «cursos gratuitos» se muestran junto a los demás cursos. */
+  const tipoG = p => p.tipo === 'gratuito' ? 'curso' : p.tipo;
+  const TIPOS = { master: 'Masters Profesionales', diplomado: 'Diplomados', curso: 'Cursos', ejecutivo: 'Cursos ejecutivos', paper: 'Paper', emprendedores: 'Emprendedores', contenedor: 'Programas agrupadores' };
   async function vContenidos() {
     const progs = await api('programas');
     const academico = tiene('gestion_academica');
     const grupos = {};
-    progs.forEach(p => (grupos[p.tipo] = grupos[p.tipo] || []).push(p));
+    progs.forEach(p => (grupos[tipoG(p)] = grupos[tipoG(p)] || []).push(p));
     vista('<div class="encabezado-vista"><div><h1>' + (S.ambiente === 'gestion' ? 'Programas y docentes' : 'Contenidos') + '</h1><p>Todos los programas tienen sus semanas creadas. Carga los recursos, la ficha de entrega, la rúbrica y la autoevaluación de cada semana, y márcala como lista.</p></div>' +
       '<input type="search" id="buscar-prog" placeholder="Buscar programa" style="max-width:280px"></div>' + htmlFiltros(progs, grupos) + SIN_RESULTADOS +
       Object.keys(TIPOS).filter(t => grupos[t]).map(t => '<h2 class="grupo-prog" data-grupo="' + t + '" style="margin-top:18px">' + TIPOS[t] + '</h2><div class="tabla-cont grupo-prog" data-grupo="' + t + '"><table class="tabla"><thead><tr><th>Programa</th><th class="num">Semanas listas</th><th class="num">Matriculados</th><th>Docentes</th><th></th></tr></thead><tbody>' +
-        grupos[t].map(p => '<tr data-item-tipo="' + h(p.tipo) + '" data-item-area="' + h(areaDe(p)) + '" data-buscar="' + h((p.nombre + ' ' + p.cod).toLowerCase()) + '"><td><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:' + h(p.color) + ';margin-right:8px"></span>' + (p.semanas ? '<a class="enlace-prog" href="#/programa/' + p.cod + '"><b>' + h(p.nombre) + '</b></a>' : '<b>' + h(p.nombre) + '</b>') + '<br><small>' + h(p.cod) + ' · ' + p.horas + ' h</small></td>' +
+        grupos[t].map(p => '<tr data-item-tipo="' + h(tipoG(p)) + '" data-item-area="' + h(areaDe(p)) + '" data-buscar="' + h((p.nombre + ' ' + p.cod).toLowerCase()) + '"><td><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:' + h(p.color) + ';margin-right:8px"></span>' + (p.semanas ? '<a class="enlace-prog" href="#/programa/' + p.cod + '"><b>' + h(p.nombre) + '</b></a>' : '<b>' + h(p.nombre) + '</b>') + '<br><small>' + h(p.cod) + ' · ' + p.horas + ' h</small></td>' +
           '<td class="num">' + (p.semanas ? '<span class="etq ' + (p.listas === p.semanas ? 'verde' : p.listas ? 'naranja' : '') + '">' + p.listas + ' de ' + p.semanas + '</span>' : '') + '</td><td class="num">' + p.matriculados + '</td>' +
           '<td>' + (p.docentes.map(x => h(x.nombre)).join('<br>') || '<small>Sin asignar</small>') + '</td><td class="num"><div class="acciones" style="justify-content:flex-end">' +
           (academico ? '<button class="btn claro chico" data-docentes="' + p.cod + '">Docentes</button>' : '') + (p.semanas ? '<a class="btn claro chico" href="#/ev/' + p.cod + '" title="Ver como estudiante">👁 Ver</a><a class="btn chico" href="#/programa/' + p.cod + '">Semanas</a>' : '') + '</div></td></tr>').join('') + '</tbody></table></div>').join(''));

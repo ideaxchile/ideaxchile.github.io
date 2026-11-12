@@ -357,3 +357,47 @@ table.rubrica{width:100%;border-collapse:separate;border-spacing:0;font-size:13p
 .visor-cargando{position:absolute;inset:0;display:grid;place-items:center;color:var(--gris);font-size:14px}
 .enlace-bajar{background:var(--noche);color:#fff}
 @media (max-width:640px){.velo:has(.modal.visor){padding:0}.modal.visor{height:100vh;border-radius:0}.visor-cab small{display:none}}
+
+/* ---------- diplomados y masters: cursos en cadena (1.9.0) ---------- */
+.plan{background:#fff;border-radius:var(--radio);box-shadow:var(--sombra);overflow:hidden;margin:0 0 18px;border-top:6px solid var(--c,var(--noche))}
+.plan-cab{padding:18px 20px 8px}
+.plan-cab .tipo{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--c,var(--naranja));font-weight:700}
+.plan-cab h2{margin:4px 0 6px;font-size:20px}
+.plan-cab p{font-size:13px;color:var(--gris);margin:0}
+.plan-cab small{font-size:12px;color:var(--gris)}
+.plan-grupo{margin:14px 20px 0;font-size:12px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:var(--noche)}
+.plan-curso{display:flex;align-items:center;gap:14px;margin:10px 20px;padding:14px 16px;border:1px solid var(--linea);border-radius:10px;background:#fff}
+.plan-curso .pc-num{flex:none;width:30px;height:30px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:14px;background:var(--papel);color:var(--gris)}
+.plan-curso .pc-txt{flex:1;min-width:0}
+.plan-curso .pc-txt b{display:block;color:var(--noche)}
+.plan-curso .pc-txt small{color:var(--gris);font-size:13px}
+.plan-curso .pc-der{flex:none;display:flex;align-items:center;gap:8px}
+.plan-curso.ok .pc-num{background:var(--verde-suave);color:var(--verde)}
+.plan-curso.activo{border-color:var(--naranja);box-shadow:0 0 0 1px var(--naranja) inset}
+.plan-curso.activo .pc-num{background:var(--naranja);color:#fff}
+.plan-curso.espera .pc-txt b,.plan-curso.espera .pc-txt small{color:var(--gris2)}
+.plan-pie{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 20px;margin-top:14px;border-top:1px solid var(--linea);background:#FBFCFD;font-size:14px;color:var(--gris)}
+.plan>.plan-curso:last-child{margin-bottom:18px}
+.camino{background:#fff;border-radius:var(--radio);box-shadow:var(--sombra);border-left:4px solid var(--azul2);padding:18px 22px;margin:18px 0}
+.camino>p{color:var(--gris);font-size:14px;border-bottom:1px solid var(--linea);padding-bottom:10px}
+.camino-item{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--linea)}
+.camino-item:last-child{border-bottom:0}
+.camino-item .tipo{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--azul2);font-weight:700}
+.camino-item h3{margin:2px 0 4px;font-size:16px}
+.camino-item .barra-avance{max-width:320px;margin:6px 0 2px}
+.camino-item .barra-avance i{background:var(--azul2)}
+.camino-item small{font-size:12px;color:var(--gris)}
+.ci-txt{flex:1;min-width:0}
+.ci-acc{flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-size:12px;border:1px solid var(--linea);border-radius:20px;padding:3px 10px;color:var(--gris);background:#fff}
+.chip.ok{background:var(--verde-suave);border-color:#BFE3DC;color:#0E6B5C}
+.chip.en{background:var(--naranja-suave);border-color:#F6D2AE;color:var(--n2)}
+.tabla-notas tr.fila-grupo td{background:#F7F4EC}
+@media(max-width:640px){
+  .plan-curso{flex-wrap:wrap;margin:8px 12px;padding:12px}
+  .plan-curso .pc-der{width:100%;justify-content:flex-end}
+  .plan-cab,.plan-pie{padding-left:14px;padding-right:14px}
+  .camino{padding:14px}
+  .camino-item{flex-direction:column;align-items:flex-start}
+}
