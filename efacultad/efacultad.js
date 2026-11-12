@@ -139,6 +139,7 @@
     [/^#\/diplomado\/([\w-]+)$/, vDiplomadoCamino, 'estudiante'],
     [/^#\/semana\/([\w-]+)\/([\w-]+)$/, vSemana, 'estudiante'],
     [/^#\/vista\/([\w-]+)$/, vVistaPrevia, 'docente'],
+    [/^#\/encuesta\/([\w-]+)$/, vEncuesta, 'estudiante'],
     [/^#\/notas$/, vNotas, 'estudiante'],
     [/^#\/documentos$/, vDocumentos, 'estudiante'],
     [/^#\/solicitudes$/, vSolicitudes, 'estudiante'],
@@ -160,6 +161,8 @@
     [/^#\/ev$/, vVistaProgramas, 'vista'],
     [/^#\/ev\/([\w-]+)$/, vVistaCurso, 'vista'],
     [/^#\/ev\/([\w-]+)\/([\w-]+)$/, vVistaSemana, 'vista'],
+    [/^#\/ev-encuesta\/([\w-]+)$/, vEvEncuesta, 'vista'],
+    [/^#\/encuestas$/, vResultadosEncuestas, null],
     [/^#\/ev-notas$/, vEvNotas, 'vista'],
     [/^#\/ev-documentos$/, vEvDocumentos, 'vista'],
     [/^#\/ev-mensajes$/, vEvMensajes, 'vista'],
@@ -203,11 +206,11 @@
   function navDe(amb) {
     if (amb === 'estudiante') return [['#/inicio', 'Inicio'], ['#/notas', 'Notas'], ['#/mensajes', 'Mensajes', 'msj'], ['#/documentos', 'Documentos'], ['#/solicitudes', 'Solicitudes']];
     if (amb === 'vista') return [['#/ev', 'Programas'], ['#/ev-notas', 'Notas'], ['#/ev-mensajes', 'Mensajes'], ['#/ev-documentos', 'Documentos'], ['#/ev-solicitudes', 'Solicitudes']];
-    if (amb === 'docente') return [['#/bandeja', 'Bandeja'], ['#/libro', 'Libro de notas'], ['#/contenidos', 'Contenidos'], ['#/mensajes', 'Mensajes']];
+    if (amb === 'docente') return [['#/bandeja', 'Bandeja'], ['#/libro', 'Libro de notas'], ['#/contenidos', 'Contenidos'], ['#/encuestas', 'Encuestas'], ['#/mensajes', 'Mensajes']];
     const n = [['#/gestion', 'Resumen']];
     if (tiene('gestion_administrativa')) n.push(['#/matriculas', 'Matrículas'], ['#/cuentas', 'Cuentas']);
     if (tiene('gestion_administrativa') || tiene('certificados')) n.push(['#/solicitudes-gestion', 'Solicitudes']);
-    if (tiene('gestion_academica')) n.push(['#/programas', 'Programas']);
+    if (tiene('gestion_academica')) n.push(['#/programas', 'Programas'], ['#/encuestas', 'Encuestas']);
     if (tiene('crm')) n.push(['#/crm', 'CRM']);
     n.push(['#/mensajes', 'Mensajes']);
     return n;
@@ -215,7 +218,7 @@
 
   function pintarMarco(hash) {
     const u = S.usuario, ambs = ambientesDe(u);
-    const nav = navDe(S.ambiente).map(n => '<a href="' + n[0] + '"' + ((hash.indexOf(n[0]) === 0 && !(n[0] === '#/ev' && /^#\/ev-/.test(hash))) || (n[0] === '#/inicio' && /^#\/(curso|semana)/.test(hash)) || (n[0] === '#/ev' && /^#\/ev(\/|$)/.test(hash)) || (n[0] === '#/ev-mensajes' && /^#\/ev-hilo/.test(hash)) || (n[0] === '#/bandeja' && /^#\/corregir/.test(hash)) || (n[0] === '#/contenidos' && /^#\/(programa|editar)\//.test(hash) && S.ambiente === 'docente') || (n[0] === '#/programas' && /^#\/(programa|editar)\//.test(hash)) || (n[0] === '#/mensajes' && /^#\/hilo/.test(hash)) ? ' class="activo"' : '') + '>' + h(n[1]) + (n[2] ? '<span class="burbuja oculto" id="burbuja-msj"></span>' : '') + '</a>').join('');
+    const nav = navDe(S.ambiente).map(n => '<a href="' + n[0] + '"' + ((hash.indexOf(n[0]) === 0 && !(n[0] === '#/ev' && /^#\/ev-/.test(hash))) || (n[0] === '#/inicio' && /^#\/(curso|semana|encuesta\/)/.test(hash)) || (n[0] === '#/ev' && /^#\/ev(\/|$)/.test(hash)) || (n[0] === '#/ev-mensajes' && /^#\/ev-hilo/.test(hash)) || (n[0] === '#/bandeja' && /^#\/corregir/.test(hash)) || (n[0] === '#/contenidos' && /^#\/(programa|editar)\//.test(hash) && S.ambiente === 'docente') || (n[0] === '#/programas' && /^#\/(programa|editar)\//.test(hash)) || (n[0] === '#/mensajes' && /^#\/hilo/.test(hash)) ? ' class="activo"' : '') + '>' + h(n[1]) + (n[2] ? '<span class="burbuja oculto" id="burbuja-msj"></span>' : '') + '</a>').join('');
     app.innerHTML = '<header class="barra no-imprimir"><a class="marca" href="' + INICIO[S.ambiente] + '"><img src="../img/logo-ideax-blanco.png" alt=""><span>IDEA<i>X</i></span><small>eFACULTAD</small></a>' +
       '<nav class="nav" aria-label="Secciones">' + nav + '</nav><span class="espacio"></span>' +
       (ambs.length > 1 ? '<div class="ambientes" role="tablist">' + ambs.map(a => '<button data-amb="' + a[0] + '" class="' + (a[0] === S.ambiente ? 'activo' : '') + '"' + (a[0] === 'vista' ? ' title="Ver como estudiante">👁<span class="amb-largo"> Ver como estudiante</span>' : '>' + a[1]) + '</button>').join('') + '</div>' : '') +
@@ -327,6 +330,7 @@
     };
     const hayActual = cursos.some(m => m.actual) || planes.some(m => m.plan.grupos.some(g => g.cursos.some(c => c.actual)));
     vista(portadaVista('estudiante', 'Hola, ' + h(u.nombres), hayActual ? 'Tienes semanas disponibles. ¡A trabajar!' : 'Aquí están tus programas.', '<a class="btn naranja" href="#/mensajes">Escribir a IDEAX</a>', '75% 30%') +
+      (d.encuestas || []).map(e => '<div class="aviso-encuesta"><div><b>Tienes una encuesta pendiente: ' + h(e.programa) + '</b><span>Terminaste tus entregas. Toma unos 3 minutos y es necesaria para pedir tu certificado.</span></div><a class="btn naranja chico" href="#/encuesta/' + h(e.matricula) + '">Responder encuesta</a></div>').join('') +
       planes.map(htmlPlan).join('') +
       (cursos.length ? '<div class="rejilla r2">' + cursos.map(tarjeta).join('') + '</div>' : planes.length ? '' : vacio('Aún no tienes programas en la eFacultad', 'Cuando se confirme tu inscripción aparecerán aquí.')) +
       htmlCamino(d.camino || []));
@@ -557,7 +561,8 @@
     const d = await api('cursoVista', { programa: cod });
     escribir('ef_ev_prog', cod);
     const p = d.programa;
-    let html = '<div class="miga"><a href="#/ev">Ver como estudiante</a> › ' + h(p.nombre) + '</div><div class="encabezado-vista"><div><h1>' + h(p.nombre) + '</h1><p>' + d.semanas.length + ' semanas · ' + p.horas + ' horas</p></div></div>';
+    let html = '<div class="miga"><a href="#/ev">Ver como estudiante</a> › ' + h(p.nombre) + '</div><div class="encabezado-vista"><div><h1>' + h(p.nombre) + '</h1><p>' + d.semanas.length + ' semanas · ' + p.horas + ' horas</p></div>' +
+      '<a class="btn claro" href="#/ev-encuesta/' + h(p.cod) + '">Ver la encuesta del curso</a></div>';
     let materia = null;
     html += '<div class="semanas">';
     d.semanas.forEach(s => {
@@ -795,10 +800,10 @@
       if (!await confirmar('¿Enviar tu entrega definitiva? Después no podrás modificarla.', 'Sí, enviar')) return;
       try {
         pendiente = true; await guardar();
-        await api('enviarEntrega', { matricula: mat, semana: s.id });
+        const r = await api('enviarEntrega', { matricula: mat, semana: s.id });
         escribir(claveLocal, null); window.onbeforeunload = null; S.salir = null;
         toast('¡Entrega enviada! Te llegará una confirmación por correo.');
-        vSemana(mat, s.id);
+        if (r && r.encuesta) irA('#/encuesta/' + r.encuesta); else vSemana(mat, s.id);
       } catch (er) { toast(er.message, true); }
     };
     // ---- adjuntos
@@ -948,6 +953,107 @@
       const f = m.el.querySelector('form');
       f.tipo.onchange = () => { $('#ayuda-tipo').textContent = { Certificado: 'El certificado se solicita cuando todas tus entregas están calificadas y tu nota final es de al menos 60%.', 'Prórroga': 'La primera prórroga es gratuita; la segunda tiene costo (ver el manual del estudiante).', Congelamiento: 'Por fuerza mayor, por 6 meses prorrogables. Mientras dura, no puedes hacer entregas.', 'Retiro parcial': 'Conservas lo aprobado y lo no cursado queda como saldo a favor por 24 meses.', Otra: '' }[f.tipo.value]; };
       f.onsubmit = async e => { e.preventDefault(); try { await api('solicitar', { matricula: f.matricula.value, tipo: f.tipo.value, detalle: f.detalle.value }); m.cerrar(); toast('Solicitud enviada.'); vSolicitudes(); } catch (er) { toast(er.message, true); } };
+    };
+  }
+
+  /* =================== ENCUESTA DE SATISFACCIÓN =================== */
+  async function vEncuesta(matricula) { await pintarEncuesta(await api('encuesta', { matricula }), '#/inicio'); }
+  async function vEvEncuesta(cod) { await pintarEncuesta(await api('encuesta', { programa: cod }), '#/ev/' + cod); }
+
+  async function pintarEncuesta(d, volver) {
+    const p = d.programa;
+    const miga = '<div class="miga"><a href="' + volver + '">' + (d.simulacion ? h(p.nombre) : 'Inicio') + '</a> › ' + (d.simulacion ? '' : h(p.nombre) + ' › ') + 'Encuesta</div>';
+    if (d.respondida) { vista(miga + '<h1>¡Gracias!</h1>' + vacio('Ya respondiste la encuesta de ' + p.nombre, 'Tu opinión nos ayuda a mejorar el curso.') + '<p><a class="btn claro" href="' + volver + '">Volver</a></p>'); return; }
+    const R = { afirmaciones: {}, interes: [] };
+    const escala = (campo, desde, hasta, izq, der) => {
+      let b = ''; for (let n = desde; n <= hasta; n++) b += '<button type="button" data-campo="' + campo + '" data-v="' + n + '">' + n + '</button>';
+      return '<div class="esc">' + b + '</div><div class="esc-ext" style="max-width:' + ((hasta - desde + 1) * 48) + 'px"><span>' + izq + '</span><span>' + der + '</span></div>';
+    };
+    const pills = (campo, ops, multiple) => '<div class="pills">' + ops.map(o => '<button type="button" class="pill" data-pill="' + campo + '"' + (multiple ? ' data-multi="1"' : '') + ' data-v="' + h(o.cod || o) + '">' + h(o.nombre || o) + '</button>').join('') + '</div>';
+    const preg = (n, t, cuerpo, extra) => '<div class="preg"><span class="n">' + n + '</span><b>' + t + '</b>' + (extra ? ' <small style="color:var(--gris)">' + extra + '</small>' : '') + cuerpo + '</div>';
+    vista(miga + (d.simulacion ? '<div class="aviso info">Vista previa: así ve la encuesta el estudiante al enviar la última entrega del curso. Lo que respondas aquí no se guarda.</div>' : '') +
+      '<div class="encabezado-vista"><div><h1>¿Cómo te fue en ' + h(p.nombre) + '?</h1><p>Terminaste tus entregas. Tu opinión nos ayuda a mejorar el curso. Es confidencial: tu docente ve solo resultados agrupados, sin nombres. Responderla es necesario para pedir tu certificado.</p></div></div>' +
+      '<section class="tarjeta encuesta">' +
+      '<div class="paso-enc">El curso en general</div>' +
+      preg(1, 'En general, ¿qué nota le pones al curso?', escala('nota', 1, 7, 'Muy malo', 'Excelente')) +
+      preg(2, '¿Qué tan probable es que recomiendes este curso a un colega?', escala('nps', 0, 10, 'Nada probable', 'Muy probable')) +
+      '<div class="paso-enc" style="margin-top:14px">Cada parte del curso</div>' +
+      preg(3, '¿Cuánto estás de acuerdo con cada afirmación?', '<div class="lik-cont"><table class="lik"><thead><tr><th></th>' + d.acuerdo.map(a => '<th>' + h(a) + '</th>').join('') + '</tr></thead><tbody>' +
+        d.afirmaciones.map(a => '<tr><td>' + h(a.texto) + '</td>' + [1, 2, 3, 4, 5].map(k => '<td data-l="' + h(d.acuerdo[k - 1]) + '"><button type="button" class="radio" title="' + h(d.acuerdo[k - 1]) + '" aria-label="' + h(d.acuerdo[k - 1]) + '" data-af="' + a.id + '" data-v="' + k + '"></button></td>').join('') + '</tr>').join('') + '</tbody></table></div>') +
+      preg(4, 'En promedio, ¿cuántas horas dedicaste cada semana?', pills('horas', d.horas)) +
+      preg(5, 'La carga de trabajo te pareció…', pills('carga', d.carga)) +
+      '<div class="paso-enc" style="margin-top:14px">En tus palabras</div>' +
+      preg(6, '¿Qué fue lo que más te sirvió?', '<textarea id="enc-sirvio" maxlength="2000"></textarea>') +
+      preg(7, '¿Qué mejorarías?', '<textarea id="enc-mejorar" maxlength="2000"></textarea>', 'Opcional') +
+      preg(8, '¿Qué te gustaría estudiar después?', pills('interes', d.intereses, true), 'Opcional, puedes marcar varios') +
+      '<div class="preg"><label class="check"><input type="checkbox" id="enc-testimonio"> Autorizo a IDEAX a publicar mi respuesta a la pregunta 6 como testimonio, con mi nombre y el nombre del curso.</label></div>' +
+      '<div class="acciones" style="justify-content:flex-end;margin-top:8px"><a class="btn claro" href="' + volver + '">Responder después</a><button class="btn naranja" id="btn-encuesta">Enviar encuesta</button></div></section>');
+    $$('[data-campo]').forEach(b => b.onclick = () => { R[b.dataset.campo] = Number(b.dataset.v); $$('[data-campo="' + b.dataset.campo + '"]').forEach(x => x.classList.toggle('sel', x === b)); });
+    $$('[data-af]').forEach(b => b.onclick = () => { R.afirmaciones[b.dataset.af] = Number(b.dataset.v); $$('[data-af="' + b.dataset.af + '"]').forEach(x => x.classList.toggle('sel', x === b)); });
+    $$('[data-pill]').forEach(b => b.onclick = () => {
+      const c = b.dataset.pill, v = b.dataset.v;
+      if (b.dataset.multi) { const i = R[c].indexOf(v); if (i >= 0) R[c].splice(i, 1); else R[c].push(v); b.classList.toggle('sel', i < 0); }
+      else { R[c] = v; $$('[data-pill="' + c + '"]').forEach(x => x.classList.toggle('sel', x === b)); }
+    });
+    $('#btn-encuesta').onclick = async () => {
+      const falta = [];
+      if (!R.nota) falta.push('1');
+      if (R.nps === undefined) falta.push('2');
+      if (d.afirmaciones.some(a => !R.afirmaciones[a.id])) falta.push('3');
+      if (!R.horas) falta.push('4');
+      if (!R.carga) falta.push('5');
+      if (!$('#enc-sirvio').value.trim()) falta.push('6');
+      if (falta.length) { toast((falta.length > 1 ? 'Te faltan las preguntas ' + falta.slice(0, -1).join(', ') + ' y ' + falta[falta.length - 1] : 'Te falta la pregunta ' + falta[0]) + '.', true); return; }
+      const b = $('#btn-encuesta'); b.disabled = true; b.textContent = 'Enviando…';
+      try {
+        await api('enviarEncuesta', Object.assign({ matricula: d.matricula, sirvio: $('#enc-sirvio').value, mejorar: $('#enc-mejorar').value, testimonio: $('#enc-testimonio').checked }, R));
+        toast(d.simulacion ? 'Vista previa: la encuesta no se guardó.' : '¡Gracias por responder! Podrás pedir tu certificado cuando tus entregas estén calificadas.');
+        irA(volver);
+      } catch (er) { toast(er.message, true); b.disabled = false; b.textContent = 'Enviar encuesta'; }
+    };
+  }
+
+  /* Resultados agrupados por curso: gestión ve todo; el docente, sus cursos sin nombres y desde 3 respuestas. */
+  async function vResultadosEncuestas() {
+    const d = await api('resultadosEncuestas');
+    const num = x => x === null || x === undefined ? '' : String(x).replace('.', ',');
+    const barra = (v, max) => '<span class="enc-barra"><i style="width:' + Math.round((v || 0) / max * 100) + '%"></i></span>';
+    const dist = l => { const t = l.reduce((a, x) => a + x.n, 0) || 1; return l.map(x => '<div class="enc-dist"><span>' + h(x.opcion) + '</span>' + barra(x.n, t) + '<b>' + x.n + '</b></div>').join(''); };
+    const coment = (t, l) => l.length ? '<h4>' + t + '</h4><ul class="enc-coment">' + l.map(x => '<li>' + h(x.texto) + '<small>' + (x.nombre ? h(x.nombre) + ' · ' : '') + fecha(x.fecha) + '</small></li>').join('') + '</ul>' : '';
+    vista('<div class="encabezado-vista"><div><h1>Encuestas de satisfacción</h1><p>' + d.total + ' respuesta' + (d.total === 1 ? '' : 's') + (d.gestion ? ' en todos los cursos.' : ' en tus cursos. Por confidencialidad, cada curso se muestra desde ' + d.minimo + ' respuestas y sin nombres.') + '</p></div>' +
+      (d.cursos.length ? '<button class="btn claro" id="btn-xlsx-enc">Exportar</button>' : '') + '</div>' +
+      (d.cursos.length ? '<div class="tabla-cont"><table class="tabla"><thead><tr><th>Curso</th><th class="num">Respuestas</th><th class="num">Nota (1 a 7)</th><th class="num">NPS</th><th></th></tr></thead><tbody>' +
+        d.cursos.map(c => '<tr><td><b>' + h(c.nombre) + '</b></td><td class="num">' + c.n + '</td>' + (c.oculto ? '<td colspan="3"><small style="color:var(--gris)">Se muestra desde ' + d.minimo + ' respuestas</small></td>'
+          : '<td class="num">' + num(c.nota) + '</td><td class="num">' + (c.nps > 0 ? '+' : '') + c.nps + '</td><td><button class="btn claro chico" data-enc="' + h(c.cod) + '">Ver detalle</button></td>') + '</tr>').join('') + '</tbody></table></div><div id="enc-detalle"></div>'
+        : vacio('Aún no hay respuestas', 'Las encuestas aparecen cuando los estudiantes envían la última entrega de un curso.')));
+    $$('[data-enc]').forEach(b => b.onclick = () => {
+      const c = d.cursos.find(x => x.cod === b.dataset.enc);
+      $('#enc-detalle').innerHTML = '<section class="tarjeta" style="margin-top:16px"><h2>' + h(c.nombre) + '</h2>' +
+        '<div class="rejilla r4"><div class="cifra"><b>' + c.n + '</b><span>Respuestas</span></div><div class="cifra"><b>' + num(c.nota) + '</b><span>Nota promedio (1 a 7)</span></div>' +
+        '<div class="cifra"><b>' + (c.nps > 0 ? '+' : '') + c.nps + '</b><span>NPS</span></div><div class="cifra"><b>' + c.promotores + ' · ' + c.pasivos + ' · ' + c.detractores + '</b><span>Promotores · pasivos · detractores</span></div></div>' +
+        '<h4>Acuerdo con cada afirmación (1 a 5)</h4>' + c.afirmaciones.map(a => '<div class="enc-dist"><span>' + h(a.texto) + '</span>' + barra(a.promedio, 5) + '<b>' + num(a.promedio) + '</b></div>').join('') +
+        '<div class="rejilla r2"><div><h4>Horas por semana</h4>' + dist(c.horas) + '</div><div><h4>Carga de trabajo</h4>' + dist(c.carga) + '</div></div>' +
+        (c.intereses.length ? '<h4>Qué les gustaría estudiar después</h4>' + c.intereses.map(x => '<div class="enc-dist"><span>' + h(x.nombre) + '</span>' + barra(x.n, c.n) + '<b>' + x.n + '</b></div>').join('') : '') +
+        coment('Lo que más les sirvió', c.sirvio) + coment('Qué mejorarían', c.mejorar) + (c.testimonios ? coment('Testimonios autorizados para publicar', c.testimonios) : '') + '</section>';
+      $('#enc-detalle').scrollIntoView({ behavior: 'smooth' });
+    });
+    if ($('#btn-xlsx-enc')) $('#btn-xlsx-enc').onclick = async () => {
+      const XLSX = await XLSXlib(); const lb = XLSX.utils.book_new();
+      const vis = d.cursos.filter(c => !c.oculto);
+      XLSX.utils.book_append_sheet(lb, XLSX.utils.json_to_sheet(vis.map(c => {
+        const f = { Curso: c.nombre, Código: c.cod, Respuestas: c.n, 'Nota promedio': c.nota, NPS: c.nps, Promotores: c.promotores, Pasivos: c.pasivos, Detractores: c.detractores };
+        c.afirmaciones.forEach(a => { f[a.texto] = a.promedio; });
+        return f;
+      })), 'Resumen');
+      const com = [];
+      vis.forEach(c => { c.sirvio.forEach(x => com.push({ Curso: c.nombre, Tipo: 'Lo que más sirvió', Comentario: x.texto })); c.mejorar.forEach(x => com.push({ Curso: c.nombre, Tipo: 'Qué mejoraría', Comentario: x.texto })); });
+      XLSX.utils.book_append_sheet(lb, XLSX.utils.json_to_sheet(com.length ? com : [{ Curso: '', Tipo: '', Comentario: '' }]), 'Comentarios');
+      if (d.gestion) {
+        const tes = [];
+        vis.forEach(c => (c.testimonios || []).forEach(x => tes.push({ Curso: c.nombre, Nombre: x.nombre, Testimonio: x.texto, Fecha: x.fecha ? new Date(x.fecha) : '' })));
+        XLSX.utils.book_append_sheet(lb, XLSX.utils.json_to_sheet(tes.length ? tes : [{ Curso: '', Nombre: '', Testimonio: '', Fecha: '' }]), 'Testimonios');
+      }
+      XLSX.writeFile(lb, 'Encuestas eFacultad.xlsx');
     };
   }
 
