@@ -28,10 +28,20 @@
     const hh = Math.round(m / 60); if (hh < 24) return 'hace ' + hh + ' h';
     return fecha(iso);
   }
+  /* Calificación conceptual según el porcentaje de logro (se aprueba con 60%). */
+  function nivelNota(pct) {
+    pct = Number(pct);
+    if (pct >= 90) return ['Aprobado con Distinción Máxima', 'maxima'];
+    if (pct >= 80) return ['Aprobado con Distinción', 'distincion'];
+    if (pct >= 60) return ['Aprobado', 'aprobado'];
+    return ['Reprobado', 'reprobado'];
+  }
+  const etqNivel = n => { const v = nivelNota(n.pct); return '<span class="nivel ' + v[1] + '">' + v[0] + '</span>'; };
   function notaHtml(n, grande) {
     if (!n) return '<span class="etq">Sin nota</span>';
-    if (grande) return '<div class="nota-grande' + (n.aprobado ? '' : ' reprobada') + '"><div><b>' + coma(n.pct) + '%</b></div><div><span>Escala de 1 a 7</span><br><b style="font-size:20px">' + coma(n.n7.toFixed(1)) + '</b></div><div><span>Escala de 1 a 10</span><br><b style="font-size:20px">' + coma(n.n10.toFixed(1)) + '</b></div><div><span class="etq ' + (n.aprobado ? 'verde' : 'rojo') + '">' + (n.aprobado ? 'Aprobado' : 'Reprobado') + '</span></div></div>';
-    return '<span class="nota' + (n.aprobado ? '' : ' reprobada') + '"><span class="pct">' + coma(n.pct) + '%</span><small>' + coma(n.n7.toFixed(1)) + ' · ' + coma(n.n10.toFixed(1)) + '</small></span>';
+    if (grande) return '<table class="nota-tabla"><thead><tr><th>Porcentaje de logro</th><th>Escala de 1 a 7</th><th>Escala de 1 a 10</th><th>Calificación</th></tr></thead>' +
+      '<tbody><tr><td><b>' + coma(n.pct) + '%</b></td><td><b>' + coma(n.n7.toFixed(1)) + '</b></td><td><b>' + coma(n.n10.toFixed(1)) + '</b></td><td>' + etqNivel(n) + '</td></tr></tbody></table>';
+    return '<span class="nota' + (n.aprobado ? '' : ' reprobada') + '"><span class="pct">' + coma(n.pct) + '%</span><small>' + coma(n.n7.toFixed(1)) + ' · ' + coma(n.n10.toFixed(1)) + '</small>' + etqNivel(n) + '</span>';
   }
   const clp = n => '$' + String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   function iniciales(nombre) { return String(nombre || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(x => x[0]).join('').toUpperCase(); }
@@ -154,7 +164,7 @@
     [/^#\/ev-mensajes$/, vEvMensajes, 'vista'],
     [/^#\/ev-hilo\/(\d+)$/, vEvHilo, 'vista'],
     [/^#\/ev-solicitudes$/, vEvSolicitudes, 'vista'],
-    [/^#\/ev-portafolio\/([\w-]+)$/, vEvPortafolio, 'sola']
+    [/^#\/ev-portafolio\/([\w-]+)(?:\/(oficial))?$/, vEvPortafolio, 'sola']
   ];
   const INICIO = { estudiante: '#/inicio', docente: '#/bandeja', gestion: '#/gestion', vista: '#/ev' };
 
@@ -490,11 +500,11 @@
     pintarNotas(d.notas, avisoDemo(d), () => '#/ev-portafolio/' + d.programa.cod, (x, s) => '#/ev/' + d.programa.cod + '/' + s.id);
   }
 
-  async function vEvPortafolio(cod) {
+  async function vEvPortafolio(cod, oficial) {
     vista(cargando('Preparando el portafolio de ejemplo'));
     S.datos.demo = S.datos.demo || {};
     const d = S.datos.demo[cod] || (S.datos.demo[cod] = await api('demoVista', { programa: cod }));
-    pintarPortafolio(d.portafolio);
+    pintarPortafolio(oficial ? Object.assign({}, d.portafolio, { oficial: true, folio: 'EJEMPLO', codigo: 'EJEMPLO' }) : d.portafolio);
   }
 
   async function vEvDocumentos() {
@@ -509,11 +519,11 @@
       '<div class="tabla-cont"><table class="tabla"><thead><tr><th>Documento</th><th>Programa</th><th>Folio</th><th>Emitido</th><th>Certificado</th><th>Portafolio</th></tr></thead><tbody>' +
       '<tr><td><b>Certificado</b>' + (c.nota ? '<br>' + notaHtml(c.nota) : '') + '</td><td>' + h(c.nombrePrograma) + '</td><td>' + h(c.folio) + '<br><small>Código ' + h(c.codigo) + '</small></td><td>' + fecha(c.emitido) + '</td>' +
       '<td><button class="btn claro chico" id="btn-cert-ej">Descargar ejemplo</button><br><small style="color:var(--gris)">Con el diseño oficial y tu nombre</small></td>' +
-      '<td><a class="btn claro chico" href="#/ev-portafolio/' + h(d.programa.cod) + '" target="_blank">Ver ejemplo</a></td></tr></tbody></table></div>');
+      '<td><a class="btn claro chico" href="#/ev-portafolio/' + h(d.programa.cod) + '/oficial" target="_blank">Ver ejemplo</a><br><small style="color:var(--gris)">Portafolio oficial, con código</small></td></tr></tbody></table></div>');
     $$('[data-solo-vista]').forEach(b => b.onclick = soloVista);
     $('#btn-cert-ej').onclick = async () => {
       const b = $('#btn-cert-ej'); b.disabled = true; b.textContent = 'Generando…';
-      try { guardarPdf(await api('certificadoEjemplo', { programa: d.programa.cod })); toast('Certificado de ejemplo descargado.'); }
+      try { guardarPdf(await api('certificadoEjemplo', { programa: d.programa.cod, nota: c.nota ? c.nota.pct : '' })); toast('Certificado de ejemplo descargado.'); }
       catch (er) { toast(er.message, true); }
       b.disabled = false; b.textContent = 'Descargar ejemplo';
     };
@@ -746,6 +756,8 @@
     if (!d.length) { vista('<h1>Notas</h1>' + vacio('Aún no tienes notas', 'Aparecerán aquí cuando tu docente califique tus entregas.')); return; }
     pintarNotas(d, '', x => '#/imprimir/portafolio/' + x.matricula, (x, s) => '#/semana/' + x.matricula + '/' + s.id);
   }
+  const celdasNota = n => n ? '<td class="num"><b>' + coma(n.pct) + '%</b></td><td class="num">' + coma(n.n7.toFixed(1)) + '</td><td class="num">' + coma(n.n10.toFixed(1)) + '</td><td>' + etqNivel(n) + '</td>'
+    : '<td></td><td></td><td></td><td></td>';
   function pintarNotas(d, antes, enlacePortafolio, enlaceSemana) {
     vista((antes || '') + '<div class="encabezado-vista"><div><h1>Mis notas</h1><p>En porcentaje de logro, con sus equivalencias en las escalas de 1 a 7 y de 1 a 10. Se aprueba con 60%.</p></div></div>' + d.map(x => {
       const r = x.resumen;
@@ -753,8 +765,9 @@
         '<div class="acciones">' + (r.final ? notaHtml(r.final) : '') + '<a class="btn claro chico" href="' + enlacePortafolio(x) + '" target="_blank">Vista previa del portafolio</a></div></div>' +
         (r.materias.length > 1 ? '<div class="tabla-cont" style="margin-bottom:12px;box-shadow:none;border:1px solid var(--linea)"><table class="tabla"><thead><tr><th>Materia</th><th>Calificadas</th><th class="num">Nota</th></tr></thead><tbody>' +
           r.materias.map(m => '<tr><td>' + m.n + '. ' + h(m.nombre) + '</td><td>' + m.corregidas + ' de ' + m.semanas + '</td><td class="num">' + notaHtml(m.nota) + '</td></tr>').join('') + '</tbody></table></div>' : '') +
-        '<div class="tabla-cont" style="box-shadow:none;border:1px solid var(--linea)"><table class="tabla"><thead><tr><th>Semana</th><th>Tema</th><th>Estado</th><th class="num">Nota</th></tr></thead><tbody>' +
-        x.semanas.map(s => '<tr class="' + (/corregida|enviada|disponible|en curso|devuelta/.test(s.estado) ? 'clic' : '') + '" data-ir="' + enlaceSemana(x, s) + '"><td>' + s.n + '</td><td>' + h(s.tema) + '</td><td>' + etqEstado(s.estado) + '</td><td class="num">' + (s.nota ? notaHtml(s.nota) : '') + '</td></tr>').join('') +
+        '<div class="tabla-cont" style="box-shadow:none;border:1px solid var(--linea)"><table class="tabla tabla-notas"><thead><tr><th>Semana</th><th>Tema</th><th>Estado</th><th class="num">Porcentaje de logro</th><th class="num">Escala de 1 a 7</th><th class="num">Escala de 1 a 10</th><th>Calificación</th></tr></thead><tbody>' +
+        x.semanas.map(s => '<tr class="' + (/corregida|enviada|disponible|en curso|devuelta/.test(s.estado) ? 'clic' : '') + '" data-ir="' + enlaceSemana(x, s) + '"><td>' + s.n + '</td><td>' + h(s.tema) + '</td><td>' + etqEstado(s.estado) + '</td>' + celdasNota(s.nota) + '</tr>').join('') +
+        (r.final ? '<tr class="fila-final"><td></td><td><b>Nota final' + (r.completo ? '' : ' a la fecha') + '</b></td><td></td>' + celdasNota(r.final) + '</tr>' : '') +
         '</tbody></table></div></section>';
     }).join(''));
     $$('tr.clic').forEach(tr => tr.onclick = () => irA(tr.dataset.ir));
@@ -927,6 +940,14 @@
   }
 
   /* =================== DOCENTE =================== */
+  /* Lista de programas agrupada: primero los que tienen estudiantes, después por tipo. */
+  function opcionesProgramas(progs, elegido) {
+    const opt = p => '<option value="' + h(p.cod) + '"' + (p.cod === elegido ? ' selected' : '') + '>' + h(p.nombre) + (p.matriculados ? ' (' + p.matriculados + ')' : '') + '</option>';
+    const con = progs.filter(p => p.matriculados), sin = progs.filter(p => !p.matriculados);
+    return (con.length ? '<optgroup label="Con estudiantes">' + con.map(opt).join('') + '</optgroup>' : '') +
+      Object.keys(TIPOS).filter(t => sin.some(p => p.tipo === t)).map(t => '<optgroup label="' + TIPOS[t] + '">' + sin.filter(p => p.tipo === t).map(opt).join('') + '</optgroup>').join('');
+  }
+
   async function vBandeja() {
     const estado = S.datos.filtroBandeja || 'Enviada';
     const [d, progs] = await Promise.all([api('bandeja', { estado }), api('programas').catch(() => [])]);
@@ -935,7 +956,7 @@
     vista(portadaVista('docente', 'Bandeja de corrección', estado === 'Enviada' ? d.entregas.length + ' entrega' + (d.entregas.length === 1 ? '' : 's') + ' por corregir.' : 'Entregas ' + estado.toLowerCase() + 's.',
       '<select id="f-estado"><option value="Enviada">Por corregir</option><option value="Corregida">Calificadas</option><option value="Devuelta">Devueltas</option><option value="Todas">Todas</option></select>', '80% 30%') +
       '<section class="tarjeta"><h3>Corrección en bloque</h3><p style="color:var(--gris);font-size:14px">Descarga todas las entregas de una semana en un ZIP, con cada entrega lista para leer o imprimir y una planilla de calificación con la rúbrica. Después sube la planilla completa y se cargan juntas las notas y las retroalimentaciones.</p>' +
-      '<div class="fila-campos" style="align-items:end"><label class="campo" style="margin:0"><span>Programa</span><select id="m-prog">' + conEntregas.map(p => '<option value="' + p.cod + '">' + h(p.nombre) + '</option>').join('') + '</select></label>' +
+      '<div class="fila-campos" style="align-items:end"><label class="campo" style="margin:0"><span>Programa</span><select id="m-prog">' + opcionesProgramas(conEntregas) + '</select></label>' +
       '<label class="campo" style="margin:0"><span>Semana</span><select id="m-sem"></select></label>' +
       '<label class="check" style="margin-bottom:10px"><input type="checkbox" id="m-todas"> Incluir las ya calificadas</label></div>' +
       '<div class="acciones" style="margin-top:12px"><button class="btn" id="btn-zip">Descargar paquete (ZIP)</button><label class="btn claro">Cargar planilla calificada<input type="file" id="in-planilla" class="sr" accept=".xlsx,.xls,.csv"></label></div></section>' +
@@ -1161,10 +1182,10 @@
     vista('<div class="encabezado-vista"><div><h1>' + (S.ambiente === 'gestion' ? 'Programas y docentes' : 'Contenidos') + '</h1><p>Todos los programas tienen sus semanas creadas. Carga los recursos, la ficha de entrega, la rúbrica y la autoevaluación de cada semana, y márcala como lista.</p></div>' +
       '<input type="search" id="buscar-prog" placeholder="Buscar programa" style="max-width:280px"></div>' + htmlFiltros(progs, grupos) + SIN_RESULTADOS +
       Object.keys(TIPOS).filter(t => grupos[t]).map(t => '<h2 class="grupo-prog" data-grupo="' + t + '" style="margin-top:18px">' + TIPOS[t] + '</h2><div class="tabla-cont grupo-prog" data-grupo="' + t + '"><table class="tabla"><thead><tr><th>Programa</th><th class="num">Semanas listas</th><th class="num">Matriculados</th><th>Docentes</th><th></th></tr></thead><tbody>' +
-        grupos[t].map(p => '<tr data-item-tipo="' + h(p.tipo) + '" data-item-area="' + h(areaDe(p)) + '" data-buscar="' + h((p.nombre + ' ' + p.cod).toLowerCase()) + '"><td><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:' + h(p.color) + ';margin-right:8px"></span><b>' + h(p.nombre) + '</b><br><small>' + h(p.cod) + ' · ' + p.horas + ' h</small></td>' +
+        grupos[t].map(p => '<tr data-item-tipo="' + h(p.tipo) + '" data-item-area="' + h(areaDe(p)) + '" data-buscar="' + h((p.nombre + ' ' + p.cod).toLowerCase()) + '"><td><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:' + h(p.color) + ';margin-right:8px"></span>' + (p.semanas ? '<a class="enlace-prog" href="#/programa/' + p.cod + '"><b>' + h(p.nombre) + '</b></a>' : '<b>' + h(p.nombre) + '</b>') + '<br><small>' + h(p.cod) + ' · ' + p.horas + ' h</small></td>' +
           '<td class="num">' + (p.semanas ? '<span class="etq ' + (p.listas === p.semanas ? 'verde' : p.listas ? 'naranja' : '') + '">' + p.listas + ' de ' + p.semanas + '</span>' : '') + '</td><td class="num">' + p.matriculados + '</td>' +
           '<td>' + (p.docentes.map(x => h(x.nombre)).join('<br>') || '<small>Sin asignar</small>') + '</td><td class="num"><div class="acciones" style="justify-content:flex-end">' +
-          (academico ? '<button class="btn claro chico" data-docentes="' + p.cod + '">Docentes</button>' : '') + (p.semanas ? '<a class="btn chico" href="#/programa/' + p.cod + '">Semanas</a>' : '') + '</div></td></tr>').join('') + '</tbody></table></div>').join(''));
+          (academico ? '<button class="btn claro chico" data-docentes="' + p.cod + '">Docentes</button>' : '') + (p.semanas ? '<a class="btn claro chico" href="#/ev/' + p.cod + '" title="Ver como estudiante">👁 Ver</a><a class="btn chico" href="#/programa/' + p.cod + '">Semanas</a>' : '') + '</div></td></tr>').join('') + '</tbody></table></div>').join(''));
     activarFiltros();
     $('#buscar-prog').oninput = e => { const q = e.target.value.toLowerCase(); $$('tr[data-buscar]').forEach(tr => tr.classList.toggle('oculto', q && tr.dataset.buscar.indexOf(q) < 0)); };
     $$('[data-docentes]').forEach(b => b.onclick = async () => {

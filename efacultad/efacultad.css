@@ -328,3 +328,20 @@ table.rubrica{width:100%;border-collapse:separate;border-spacing:0;font-size:13p
 .ruta-semana .accion{flex:0 0 auto}
 .ruta-semana .podcast-drive{margin-top:10px}
 @media print{.ruta-semana{display:none}}
+/* calificaciones */
+.nota .nivel{margin-left:4px}
+.nivel{display:inline-block;font-size:12px;font-weight:600;border-radius:6px;padding:2px 8px;white-space:nowrap}
+.nivel.maxima{background:#0F2747;color:#fff}
+.nivel.distincion{background:#DDF1E2;color:#0F5E3A}
+.nivel.aprobado{background:#E7F0FA;color:#1D4E89}
+.nivel.reprobado{background:var(--rojo-suave);color:var(--rojo)}
+.nota-tabla{width:100%;border-collapse:collapse;margin:6px 0 16px;background:#fff;border:1px solid var(--linea);border-radius:8px;overflow:hidden}
+.nota-tabla th{background:#F7F9FC;font-size:12px;font-weight:600;color:var(--gris);text-align:center;padding:9px 10px;border-bottom:1px solid var(--linea)}
+.nota-tabla td{text-align:center;padding:12px 10px;font-size:20px}
+.nota-tabla td + td,.nota-tabla th + th{border-left:1px solid var(--linea)}
+.nota-tabla td b{font-family:"IBM Plex Serif",Georgia,serif;color:var(--noche)}
+.nota-tabla td .nivel{font-size:14px;padding:4px 12px}
+.nota-tabla td small{display:block;font-size:12px;color:var(--gris);margin-top:4px}
+.tabla-notas .fila-final td{background:#F7F9FC;border-top:2px solid var(--linea)}
+.enlace-prog{color:inherit;text-decoration:none}.enlace-prog:hover b{text-decoration:underline}
+@media print{.nota-tabla,.nivel{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
