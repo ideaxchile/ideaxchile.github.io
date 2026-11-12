@@ -484,3 +484,18 @@ table.rubrica{width:100%;border-collapse:separate;border-spacing:0;font-size:13p
 .ayuda-cuerpo .pie-ayuda{grid-column:1/-1;margin-top:12px;padding-top:10px;border-top:1px solid var(--linea)}
 #f-resp+.ayuda-msj{margin-top:16px}
 @media (max-width:640px){.ayuda-cuerpo{grid-template-columns:1fr}.redactor .herr .h{padding:6px 10px}.captura,.audio,.video,.adj{max-width:100%}}
+
+/* ===== 1.12.0 · limpieza automática ===== */
+.adj.borrado{opacity:.75;background:#fff;border-style:dashed}.adj.borrado .tipo{background:#DCE2EA;color:var(--gris);font-size:15px}
+.adjunto.borrado{opacity:.7;border-style:dashed}
+.nota-limpieza{font-size:13px;color:var(--gris);margin-top:14px}
+.ayuda-msj summary{flex-wrap:wrap}
+.ayuda-msj summary .tit{flex:1;min-width:220px}
+.ayuda-msj .pincha{display:inline-flex;align-items:center;gap:6px;background:var(--naranja);color:#fff;border-radius:18px;padding:6px 14px;font-size:13px;font-weight:600;white-space:nowrap}
+.ayuda-msj .pincha::after{content:'▾';font-size:12px}
+.ayuda-msj[open] .pincha{background:var(--papel);color:var(--gris);border:1px solid var(--linea)}
+.ayuda-msj[open] .pincha::after{content:'▴'}
+.ayuda-msj .pincha .abierto,.ayuda-msj[open] .pincha .cerrado{display:none}
+.ayuda-msj[open] .pincha .abierto{display:inline}
+.ayuda-msj:not([open]){border:1px solid #F6D2AE;background:var(--naranja-suave)}
+.ayuda-msj summary:hover .pincha{filter:brightness(1.05)}
