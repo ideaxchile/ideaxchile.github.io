@@ -1057,34 +1057,240 @@
     };
   }
 
+  /* =================== REDACTOR CON ADJUNTOS (mensajes) =================== */
+  const ICO = {
+    clip: '<svg class="ico" viewBox="0 0 24 24"><path d="M21 12.5l-8.5 8.5a6 6 0 01-8.5-8.5l9-9a4 4 0 015.7 5.7l-9 9a2 2 0 01-2.8-2.8l8.4-8.4"/></svg>',
+    img: '<svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg>',
+    mic: '<svg class="ico" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg>',
+    video: '<svg class="ico" viewBox="0 0 24 24"><rect x="2" y="5" width="15" height="14" rx="2"/><path d="M17 10l5-3v10l-5-3"/></svg>',
+    play: '<svg class="ico relleno" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+    pausa: '<svg class="ico relleno" viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>'
+  };
+  const mmss = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  const TIPOS_ARCHIVO = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv,image/*';
+  const ext = n => (String(n).match(/\.(\w{2,4})$/) || [])[1] || '';
+  const tipoCorto = a => { const e = ext(a.nombre).toLowerCase(); return /xls|csv/.test(e) ? ['xls', 'XLS'] : /doc/.test(e) ? ['doc', 'DOC'] : /ppt/.test(e) ? ['ppt', 'PPT'] : /pdf/.test(e) ? ['pdf', 'PDF'] : ['otro', (e || 'ARCH').toUpperCase()]; };
+
+  /** Adjuntos ya enviados, dentro de una burbuja. */
+  function htmlAdjuntosMensaje(lista) {
+    if (!lista || !lista.length) return '';
+    return lista.map(a => {
+      if (a.clase === 'audio') return '<div class="audio" data-audio="' + h(a.audio) + '" data-seg="' + h(a.seg) + '"><button type="button" class="play" aria-label="Reproducir audio">' + ICO.play + '</button>' +
+        '<span class="onda"><i style="width:0%"></i></span><small>' + (a.seg ? mmss(a.seg) : 'Audio') + '</small><a href="' + h(a.url) + '" target="_blank" rel="noopener" class="abrir" title="Abrir en Drive si no se reproduce">↗</a></div>';
+      if (a.clase === 'video') return '<a class="video" href="' + h(a.url) + '" target="_blank" rel="noopener"><span class="mini"' + (a.miniatura ? ' style="background-image:url(' + h(a.miniatura) + ')"' : '') + '>' + ICO.play + '</span><span class="t"><b>' + h(a.nombre || 'Video') + '</b><small>' + h(a.sitio || 'Enlace de video') + '</small></span></a>';
+      if (a.miniatura) return '<a class="captura" href="' + h(a.url) + '" target="_blank" rel="noopener" title="' + h(a.nombre) + '"><img src="' + h(a.miniatura) + '" alt="' + h(a.nombre) + '" referrerpolicy="no-referrer" loading="lazy"></a>';
+      const t = tipoCorto(a);
+      return '<a class="adj" href="' + h(a.url) + '" target="_blank" rel="noopener"><span class="tipo ' + t[0] + '">' + t[1] + '</span><span class="t"><b>' + h(a.nombre) + '</b><small>' + (a.kb ? a.kb + ' KB · ' : '') + 'Abrir</small></span></a>';
+    }).join('');
+  }
+  /** Reproductor de los audios de una vista (uno a la vez). */
+  function activarAudios(raiz) {
+    let actual = null;
+    $$('[data-audio]', raiz).forEach(box => {
+      const btn = box.querySelector('.play'), barra = box.querySelector('.onda i'), t = box.querySelector('small');
+      let au = null;
+      btn.onclick = () => {
+        if (!au) {
+          au = new Audio(box.dataset.audio);
+          au.ontimeupdate = () => { const d = au.duration && isFinite(au.duration) ? au.duration : Number(box.dataset.seg) || 1; barra.style.width = Math.min(100, au.currentTime / d * 100) + '%'; t.textContent = mmss(au.currentTime); };
+          au.onended = () => { btn.innerHTML = ICO.play; barra.style.width = '0%'; t.textContent = box.dataset.seg ? mmss(Number(box.dataset.seg)) : 'Audio'; };
+          au.onerror = () => { toast('No se pudo reproducir aquí. Ábrelo con la flecha ↗.', true); btn.innerHTML = ICO.play; };
+        }
+        if (au.paused) { if (actual && actual !== au) actual.pause(); actual = au; au.play().catch(() => toast('No se pudo reproducir aquí. Ábrelo con la flecha ↗.', true)); btn.innerHTML = ICO.pausa; }
+        else { au.pause(); btn.innerHTML = ICO.play; }
+      };
+    });
+  }
+
+  /**
+   * Redactor con adjuntos para responder o abrir una consulta.
+   * o: { staff, placeholder, boton, ayuda } → { html, activar(contenedor), datos(), limpiar(), ocupado() }
+   */
+  function redactor(o) {
+    const pend = [];          // adjuntos listos o subiendo
+    let rec = null;           // grabación en curso
+    const html = '<div class="redactor">' +
+      '<textarea name="texto" placeholder="' + h(o.placeholder || 'Escribe tu mensaje') + '"></textarea>' +
+      '<div class="pend"></div><div class="grabando oculto"></div>' +
+      '<div class="herr">' +
+        '<label class="h" title="Adjunta PDF, Word, Excel, PowerPoint o imágenes, de hasta 10 MB">' + ICO.clip + 'Archivo<input type="file" class="sr" data-in="archivo" multiple accept="' + TIPOS_ARCHIVO + '"></label>' +
+        '<label class="h" title="Sube una captura de pantalla o pégala con Ctrl+V en el cuadro de texto">' + ICO.img + 'Captura<input type="file" class="sr" data-in="captura" accept="image/*"></label>' +
+        '<button type="button" class="h" data-grabar title="Graba un audio de hasta 3 minutos">' + ICO.mic + 'Audio</button>' +
+        (o.staff ? '<button type="button" class="h" data-video title="Comparte un enlace de YouTube, Vimeo, Loom o Drive">' + ICO.video + 'Video</button>' : '') +
+        '<span class="esp"></span><button class="btn naranja chico" data-enviar>' + h(o.boton || 'Enviar') + '</button>' +
+      '</div>' +
+      '<p class="ayuda-redactor">' + (o.ayuda || 'Puedes pegar capturas con <b>Ctrl+V</b> (en Mac, <b>Cmd+V</b>) en el cuadro de texto. Hasta 5 adjuntos por mensaje.') + '</p></div>';
+    let raiz = null;
+    const pintarPend = () => {
+      $('.pend', raiz).innerHTML = pend.map((a, i) => '<span class="chip' + (a.subiendo ? ' subiendo' : '') + '">' +
+        (a.clase === 'audio' ? '🎙 Audio · ' + mmss(a.seg || 0) : a.clase === 'video' ? '🎬 ' + h(a.nombre || 'Video') : (a.clase === 'captura' ? '🖼 ' : '📄 ') + h(a.nombre)) +
+        (a.subiendo ? ' · subiendo…' : a.kb ? ' · ' + a.kb + ' KB' : '') + (a.subiendo ? '' : '<button type="button" data-quitar-pend="' + i + '" aria-label="Quitar">×</button>') + '</span>').join('');
+      $$('[data-quitar-pend]', raiz).forEach(b => b.onclick = () => {
+        const a = pend.splice(Number(b.dataset.quitarPend), 1)[0];
+        if (a && a.id) api('quitarAdjuntoMensaje', { id: a.id }).catch(() => { });
+        pintarPend();
+      });
+    };
+    const espacio = () => { if (pend.length >= 5) { toast('Puedes adjuntar hasta 5 elementos por mensaje.', true); return false; } return true; };
+    const subir = async (clase, nombre, tipo, datos, segundos) => {
+      if (!espacio()) return;
+      const item = { clase, nombre, subiendo: true, seg: segundos };
+      pend.push(item); pintarPend();
+      try { Object.assign(item, await api('subirAdjuntoMensaje', { clase, nombre, tipo, datos, segundos }), { subiendo: false }); }
+      catch (er) { pend.splice(pend.indexOf(item), 1); toast(er.message, true); }
+      pintarPend();
+    };
+    const archivo = async (f, clase) => {
+      if (f.size > 10 * 1024 * 1024) { toast('«' + f.name + '» pesa más de 10 MB. Comprímelo o compártelo como enlace de Drive.', true); return; }
+      try {
+        if (/^image\//.test(f.type) && f.type !== 'image/gif') {
+          const datos = await reducirImagen(await leerArchivo(f), 1600, false);
+          await subir(clase === 'archivo' ? 'captura' : clase, f.name.replace(/\.\w+$/, '') + '.jpg', 'image/jpeg', datos);
+        } else await subir('archivo', f.name, f.type || '', await leerArchivo(f));
+      } catch (er) { toast(er.message, true); }
+    };
+    const pararGrabacion = cancelar => {
+      if (!rec) return;
+      rec.cancelado = !!cancelar;
+      clearInterval(rec.reloj);
+      try { rec.mr.stop(); } catch (e) { }
+      rec.stream.getTracks().forEach(t => t.stop());
+    };
+    const grabar = async () => {
+      if (rec) return;
+      if (!espacio()) return;
+      if (!navigator.mediaDevices || !window.MediaRecorder) { toast('Este navegador no permite grabar audio. Usa Chrome, Edge o Safari actualizados.', true); return; }
+      let stream;
+      try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+      catch (er) { toast('No pudimos usar el micrófono. Revisa que el navegador tenga permiso (el candado junto a la dirección de la página) y vuelve a intentarlo.', true); return; }
+      const tipo = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg'].find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) || '';
+      const mr = new MediaRecorder(stream, tipo ? { mimeType: tipo, audioBitsPerSecond: 48000 } : undefined);
+      const trozos = [], inicio = Date.now();
+      rec = { mr, stream, cancelado: false };
+      const caja = $('.grabando', raiz);
+      caja.classList.remove('oculto');
+      caja.innerHTML = '<span class="pt"></span><b>Grabando</b><span class="tiempo">0:00 de 3:00</span><span class="esp"></span><button type="button" class="btn claro chico" data-cancelar-rec>Cancelar</button><button type="button" class="btn naranja chico" data-listo-rec>Listo</button>';
+      $('[data-grabar]', raiz).classList.add('activo');
+      rec.reloj = setInterval(() => { const s = (Date.now() - inicio) / 1000; $('.tiempo', caja).textContent = mmss(s) + ' de 3:00'; if (s >= 180) pararGrabacion(false); }, 250);
+      $('[data-cancelar-rec]', caja).onclick = () => pararGrabacion(true);
+      $('[data-listo-rec]', caja).onclick = () => pararGrabacion(false);
+      mr.ondataavailable = e => { if (e.data && e.data.size) trozos.push(e.data); };
+      mr.onstop = async () => {
+        const seg = Math.round((Date.now() - inicio) / 1000), cancelado = rec.cancelado;
+        rec = null; caja.classList.add('oculto'); caja.innerHTML = ''; $('[data-grabar]', raiz).classList.remove('activo');
+        if (cancelado || !trozos.length) return;
+        if (seg < 1) { toast('El audio quedó muy corto.', true); return; }
+        const blob = new Blob(trozos, { type: (mr.mimeType || tipo || 'audio/webm') });
+        await subir('audio', 'Audio ' + new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }).replace(':', 'h'), blob.type, await leerArchivo(blob), seg);
+      };
+      mr.start(1000);
+    };
+    const video = () => {
+      if (!espacio()) return;
+      const m = modal('<div class="modal-cab"><h3>Compartir un video</h3><button class="cerrar" data-cerrar>×</button></div><form>' +
+        '<label class="campo"><span>Enlace</span><input type="url" name="url" placeholder="https://youtu.be/…" required><small>YouTube, Vimeo, Loom o Google Drive. Si el video está en Drive, compártelo como «Cualquier persona con el enlace».</small></label>' +
+        '<label class="campo"><span>Título (opcional)</span><input type="text" name="nombre" maxlength="120" placeholder="Ej.: Cómo se calcula el pronóstico"></label>' +
+        '<button class="btn naranja">Agregar al mensaje</button></form>');
+      const f = m.el.querySelector('form');
+      f.onsubmit = e => {
+        e.preventDefault();
+        const url = f.url.value.trim();
+        if (!/^https:\/\/(www\.|m\.)?(youtube\.com|youtu\.be|vimeo\.com|loom\.com|drive\.google\.com|docs\.google\.com)\//i.test(url)) { toast('Usa un enlace de YouTube, Vimeo, Loom o Google Drive que empiece con https://', true); return; }
+        pend.push({ clase: 'video', url, nombre: f.nombre.value.trim() || 'Video' }); pintarPend(); m.cerrar();
+      };
+    };
+    return {
+      html,
+      activar(cont) {
+        raiz = cont.querySelector('.redactor');
+        $$('[data-in]', raiz).forEach(inp => inp.onchange = async () => { const fs = Array.from(inp.files); inp.value = ''; for (const f of fs) await archivo(f, inp.dataset.in); });
+        $('[data-grabar]', raiz).onclick = grabar;
+        if ($('[data-video]', raiz)) $('[data-video]', raiz).onclick = video;
+        $('textarea', raiz).addEventListener('paste', async e => {
+          const imgs = Array.from((e.clipboardData || {}).items || []).filter(i => /^image\//.test(i.type)).map(i => i.getAsFile()).filter(Boolean);
+          if (!imgs.length) return;
+          e.preventDefault();
+          for (const f of imgs) await archivo(new File([f], 'Captura ' + new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }).replace(':', 'h') + '.png', { type: f.type }), 'captura');
+        });
+        return raiz;
+      },
+      ocupado: () => !!rec || pend.some(a => a.subiendo),
+      datos: () => ({ texto: $('textarea', raiz).value, adjuntos: pend.map(a => a.clase === 'video' ? { clase: 'video', url: a.url, nombre: a.nombre } : { id: a.id, clase: a.clase, nombre: a.nombre, tipo: a.tipo, seg: a.seg }) }),
+      vacio: () => !$('textarea', raiz).value.trim() && !pend.length,
+      boton: () => $('[data-enviar]', raiz),
+      soltar: () => { pararGrabacion(true); }
+    };
+  }
+
+  /** Guía de uso de los mensajes, para estudiantes y para el equipo. */
+  function ayudaMensajes(equipo) {
+    if (equipo) return '<details class="ayuda-msj"><summary>Cómo sacarle partido a los mensajes</summary><div class="ayuda-cuerpo">' +
+      '<div><h4>' + ICO.mic + ' Responde con audio</h4><p>Para explicar un razonamiento o un cálculo, un audio de uno o dos minutos suele ser más claro y cercano que un texto largo. Graba directo desde el navegador, hasta 3 minutos.</p></div>' +
+      '<div><h4>' + ICO.video + ' Comparte un video</h4><p>Para mostrar paso a paso cómo usar una planilla, graba tu pantalla con Loom o súbela a YouTube como «no listado» y pega el enlace. No se suben videos a la eFacultad.</p></div>' +
+      '<div><h4>' + ICO.img + ' Marca la captura</h4><p>Si el problema está en una celda o un gráfico, saca una captura, márcala y pégala con Ctrl+V. Ahorra varias idas y vueltas.</p></div>' +
+      '<div><h4>' + ICO.clip + ' Adjunta material</h4><p>Puedes enviar una guía en PDF, una planilla corregida o un ejemplo. Hasta 5 adjuntos de 10 MB por mensaje.</p></div>' +
+      '<p class="pie-ayuda">Plazo comprometido: responder en hasta <b>dos días hábiles</b>. Cada mañana recibes un resumen por correo con los mensajes sin leer. Los adjuntos se borran solos 30 días después del cierre del curso; si algo debe quedar, súbelo como material del curso.</p></div></details>';
+    return '<details class="ayuda-msj"><summary>¿Cómo comunicarte con tu docente y con IDEAX?</summary><div class="ayuda-cuerpo">' +
+      '<div><h4>Elige bien el tipo de consulta</h4><p><b>Académica:</b> dudas de contenidos, casos, planillas y entregas. La responde tu docente. <b>Administrativa:</b> pagos, plazos, accesos y certificados. La responde el equipo de IDEAX. Respondemos en hasta dos días hábiles.</p></div>' +
+      '<div><h4>' + ICO.img + ' Muestra lo que ves</h4><p>Saca una captura de pantalla y pégala con <b>Ctrl+V</b> en el cuadro de texto. En Windows: <b>Windows+Shift+S</b>. En Mac: <b>Cmd+Ctrl+Shift+4</b> y luego <b>Cmd+V</b>. En el celular, toma la captura y súbela con el botón <b>Captura</b>.</p></div>' +
+      '<div><h4>' + ICO.mic + ' Explícalo con un audio</h4><p>Presiona <b>Audio</b>, permite el micrófono cuando el navegador lo pida y habla hasta 3 minutos. Si no te convence, quítalo con la × y graba otro antes de enviar.</p></div>' +
+      '<div><h4>' + ICO.clip + ' Adjunta tu archivo</h4><p>Envía tu planilla, tu documento o un PDF para que tu docente vea exactamente dónde estás. Hasta 5 adjuntos de 10 MB por mensaje.</p></div>' +
+      '<p class="pie-ayuda"><b>Consejos:</b> una consulta por conversación, indica la semana y la casilla, y cuenta qué intentaste. Para trámites formales, como certificados, prórrogas o congelamientos, usa <a href="#/solicitudes">Solicitudes</a>. Tus adjuntos solo los ven tú y el equipo de IDEAX, y se borran solos 30 días después del cierre del curso.</p></div></details>';
+  }
+
   /* =================== MENSAJES =================== */
   async function vMensajes() {
     const equipo = S.ambiente !== 'estudiante';
     const d = await api('mensajes', { como: equipo ? 'equipo' : 'alumno' });
     if (!equipo) burbujaMensajes(d.hilos.filter(x => x.noLeido).length);
     vista('<div class="encabezado-vista"><div><h1>Mensajes</h1><p>' + (equipo ? 'Consultas de estudiantes en tus programas.' : 'Escríbenos tus consultas académicas o administrativas. Respondemos en hasta dos días hábiles.') + '</p></div>' +
-      (!equipo ? '<button class="btn naranja" id="btn-nuevo">Nueva consulta</button>' : '') + '</div>' +
-      (d.hilos.length ? '<div class="hilos">' + d.hilos.map(x => '<a class="hilo-item' + (x.noLeido ? ' nuevo' : '') + '" href="#/hilo/' + x.hilo + '"><span class="t"><b>' + h(x.asunto) + '</b><small>' + h(x.tipo) + (x.programa ? ' · ' + h(x.programa) : '') + (equipo ? ' · ' + h(x.alumno) : '') + ' · ' + haceCuanto(x.ultimo) + '</small><p>' + h(x.extracto) + '</p></span>' + (x.noLeido ? '<span class="etq naranja">Nuevo</span>' : '') + '</a>').join('') + '</div>'
+      (!equipo ? '<button class="btn naranja" id="btn-nuevo">Nueva consulta</button>' : '') + '</div>' + ayudaMensajes(equipo) +
+      (d.hilos.length ? '<div class="hilos">' + d.hilos.map(x => '<a class="hilo-item' + (x.noLeido ? ' nuevo' : '') + '" href="#/hilo/' + x.hilo + '"><span class="t"><b>' + h(x.asunto) + '</b><small>' + h(x.tipo) + (x.programa ? ' · ' + h(x.programa) : '') + (equipo ? ' · ' + h(x.alumno) : '') + ' · ' + haceCuanto(x.ultimo) + (x.adjuntos ? ' · 📎 ' + x.adjuntos : '') + '</small><p>' + h(x.extracto) + '</p></span>' + (x.noLeido ? '<span class="etq naranja">Nuevo</span>' : '') + '</a>').join('') + '</div>'
         : vacio('No hay conversaciones', equipo ? '' : 'Usa "Nueva consulta" para escribirnos.')));
     if (!equipo) $('#btn-nuevo').onclick = async () => {
       const panel = await api('panel');
       const progs = panel.matriculas.filter(m => !m.contenedor);
+      const R = redactor({ staff: false, placeholder: 'Cuéntanos tu consulta' });
       const m = modal('<div class="modal-cab"><h3>Nueva consulta</h3><button class="cerrar" data-cerrar>×</button></div><form>' +
         '<label class="campo"><span>Tipo de consulta</span><select name="tipo"><option>Académica</option><option>Administrativa</option></select><small>Académica: contenidos, casos y entregas (la responde tu docente). Administrativa: pagos, plazos, certificados, accesos.</small></label>' +
         '<label class="campo"><span>Programa</span><select name="programa">' + progs.map(x => '<option value="' + x.programa.cod + '">' + h(x.programa.nombre) + '</option>').join('') + '</select></label>' +
         '<label class="campo"><span>Asunto</span><input type="text" name="asunto" maxlength="160" required></label>' +
-        '<label class="campo"><span>Mensaje</span><textarea name="texto" required></textarea><small>Una consulta por mensaje. Si es sobre una semana, indica cuál.</small></label><button class="btn naranja">Enviar</button></form>');
+        '<div class="campo-msj"><span class="et">Mensaje</span>' + R.html + '<small>Una consulta por mensaje. Si es sobre una semana, indica cuál y qué intentaste.</small></div></form>', 'ancho');
       const f = m.el.querySelector('form');
-      f.onsubmit = async e => { e.preventDefault(); try { const r = await api('escribir', { tipo: f.tipo.value, programa: f.programa.value, asunto: f.asunto.value, texto: f.texto.value }); m.cerrar(); irA('#/hilo/' + r.hilo); } catch (er) { toast(er.message, true); } };
+      R.activar(f);
+      f.onsubmit = e => e.preventDefault();
+      R.boton().onclick = async e => {
+        e.preventDefault();
+        if (R.ocupado()) { toast('Espera a que terminen de subirse los adjuntos o de grabarse el audio.', true); return; }
+        if (!f.asunto.value.trim()) { toast('Escribe el asunto.', true); return; }
+        if (R.vacio()) { toast('Escribe tu mensaje o adjunta algo.', true); return; }
+        const b = R.boton(); b.disabled = true; b.textContent = 'Enviando…';
+        try { const r = await api('escribir', Object.assign({ tipo: f.tipo.value, programa: f.programa.value, asunto: f.asunto.value }, R.datos())); m.cerrar(); irA('#/hilo/' + r.hilo); }
+        catch (er) { toast(er.message, true); b.disabled = false; b.textContent = 'Enviar'; }
+      };
     };
   }
 
   async function vHilo(id) {
     const d = await api('hilo', { hilo: id });
+    const R = redactor({ staff: d.puedeVideo, placeholder: 'Escribe tu respuesta', boton: 'Enviar respuesta' });
     vista('<div class="miga"><a href="#/mensajes">Mensajes</a> › ' + h(d.asunto) + '</div><div class="encabezado-vista"><div><h1>' + h(d.asunto) + '</h1><p>' + h(d.tipo) + (d.programa ? ' · ' + h(d.programa) : '') + (S.ambiente !== 'estudiante' ? ' · ' + h(d.alumno) : '') + '</p></div></div>' +
-      '<div class="burbujas">' + d.lista.map(m => '<div class="msj' + (m.propio ? ' propio' : '') + '"><div class="de">' + h(m.autor) + (m.deIdeax && !m.propio ? ' · IDEAX' : '') + ' · ' + fechaHora(m.fecha) + '</div><div class="tx">' + h(m.texto) + '</div></div>').join('') + '</div>' +
-      '<form id="f-resp" class="tarjeta"><label class="campo"><span>Responder</span><textarea name="texto" required></textarea></label><button class="btn naranja">Enviar respuesta</button></form>');
-    $('#f-resp').onsubmit = async e => { e.preventDefault(); try { await api('escribir', { hilo: id, texto: e.target.texto.value }); vHilo(id); } catch (er) { toast(er.message, true); } };
+      '<div class="burbujas">' + d.lista.map(m => '<div class="msj' + (m.propio ? ' propio' : '') + '"><div class="de">' + h(m.autor) + (m.deIdeax && !m.propio ? ' · IDEAX' : '') + ' · ' + fechaHora(m.fecha) + '</div>' +
+        (m.texto ? '<div class="tx">' + h(m.texto) + '</div>' : '') + (m.adjuntos && m.adjuntos.length ? '<div class="adj-lista">' + htmlAdjuntosMensaje(m.adjuntos) + '</div>' : '') + '</div>').join('') + '</div>' +
+      '<form id="f-resp"><div class="rotulo-resp">Responder</div>' + R.html + '</form>' + ayudaMensajes(d.puedeVideo));
+    activarAudios($('#vista'));
+    const f = $('#f-resp');
+    R.activar(f);
+    S.salir = () => R.soltar();
+    f.onsubmit = e => e.preventDefault();
+    R.boton().onclick = async e => {
+      e.preventDefault();
+      if (R.ocupado()) { toast('Espera a que terminen de subirse los adjuntos o de grabarse el audio.', true); return; }
+      if (R.vacio()) { toast('Escribe tu respuesta o adjunta algo.', true); return; }
+      const b = R.boton(); b.disabled = true; b.textContent = 'Enviando…';
+      try { await api('escribir', Object.assign({ hilo: id }, R.datos())); S.salir = null; vHilo(id); }
+      catch (er) { toast(er.message, true); b.disabled = false; b.textContent = 'Enviar respuesta'; }
+    };
   }
 
   /* =================== PERFIL =================== */
