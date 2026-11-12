@@ -148,7 +148,13 @@
     [/^#\/crm$/, vCrm, 'gestion'],
     [/^#\/ev$/, vVistaProgramas, 'vista'],
     [/^#\/ev\/([\w-]+)$/, vVistaCurso, 'vista'],
-    [/^#\/ev\/([\w-]+)\/([\w-]+)$/, vVistaSemana, 'vista']
+    [/^#\/ev\/([\w-]+)\/([\w-]+)$/, vVistaSemana, 'vista'],
+    [/^#\/ev-notas$/, vEvNotas, 'vista'],
+    [/^#\/ev-documentos$/, vEvDocumentos, 'vista'],
+    [/^#\/ev-mensajes$/, vEvMensajes, 'vista'],
+    [/^#\/ev-hilo\/(\d+)$/, vEvHilo, 'vista'],
+    [/^#\/ev-solicitudes$/, vEvSolicitudes, 'vista'],
+    [/^#\/ev-portafolio\/([\w-]+)$/, vEvPortafolio, 'sola']
   ];
   const INICIO = { estudiante: '#/inicio', docente: '#/bandeja', gestion: '#/gestion', vista: '#/ev' };
 
@@ -185,7 +191,7 @@
 
   function navDe(amb) {
     if (amb === 'estudiante') return [['#/inicio', 'Inicio'], ['#/notas', 'Notas'], ['#/mensajes', 'Mensajes', 'msj'], ['#/documentos', 'Documentos'], ['#/solicitudes', 'Solicitudes']];
-    if (amb === 'vista') return [['#/ev', 'Programas']];
+    if (amb === 'vista') return [['#/ev', 'Programas'], ['#/ev-notas', 'Notas'], ['#/ev-mensajes', 'Mensajes'], ['#/ev-documentos', 'Documentos'], ['#/ev-solicitudes', 'Solicitudes']];
     if (amb === 'docente') return [['#/bandeja', 'Bandeja'], ['#/libro', 'Libro de notas'], ['#/contenidos', 'Contenidos'], ['#/mensajes', 'Mensajes']];
     const n = [['#/gestion', 'Resumen']];
     if (tiene('gestion_administrativa')) n.push(['#/matriculas', 'Matrículas'], ['#/cuentas', 'Cuentas']);
@@ -198,7 +204,7 @@
 
   function pintarMarco(hash) {
     const u = S.usuario, ambs = ambientesDe(u);
-    const nav = navDe(S.ambiente).map(n => '<a href="' + n[0] + '"' + (hash.indexOf(n[0]) === 0 || (n[0] === '#/inicio' && /^#\/(curso|semana)/.test(hash)) || (n[0] === '#/ev' && /^#\/ev/.test(hash)) || (n[0] === '#/bandeja' && /^#\/corregir/.test(hash)) || (n[0] === '#/contenidos' && /^#\/(programa|editar)\//.test(hash) && S.ambiente === 'docente') || (n[0] === '#/programas' && /^#\/(programa|editar)\//.test(hash)) || (n[0] === '#/mensajes' && /^#\/hilo/.test(hash)) ? ' class="activo"' : '') + '>' + h(n[1]) + (n[2] ? '<span class="burbuja oculto" id="burbuja-msj"></span>' : '') + '</a>').join('');
+    const nav = navDe(S.ambiente).map(n => '<a href="' + n[0] + '"' + ((hash.indexOf(n[0]) === 0 && !(n[0] === '#/ev' && /^#\/ev-/.test(hash))) || (n[0] === '#/inicio' && /^#\/(curso|semana)/.test(hash)) || (n[0] === '#/ev' && /^#\/ev(\/|$)/.test(hash)) || (n[0] === '#/ev-mensajes' && /^#\/ev-hilo/.test(hash)) || (n[0] === '#/bandeja' && /^#\/corregir/.test(hash)) || (n[0] === '#/contenidos' && /^#\/(programa|editar)\//.test(hash) && S.ambiente === 'docente') || (n[0] === '#/programas' && /^#\/(programa|editar)\//.test(hash)) || (n[0] === '#/mensajes' && /^#\/hilo/.test(hash)) ? ' class="activo"' : '') + '>' + h(n[1]) + (n[2] ? '<span class="burbuja oculto" id="burbuja-msj"></span>' : '') + '</a>').join('');
     app.innerHTML = '<header class="barra no-imprimir"><a class="marca" href="' + INICIO[S.ambiente] + '"><img src="../img/logo-ideax-blanco.png" alt=""><span>IDEA<i>X</i></span><small>eFACULTAD</small></a>' +
       '<nav class="nav" aria-label="Secciones">' + nav + '</nav><span class="espacio"></span>' +
       (ambs.length > 1 ? '<div class="ambientes" role="tablist">' + ambs.map(a => '<button data-amb="' + a[0] + '" class="' + (a[0] === S.ambiente ? 'activo' : '') + '"' + (a[0] === 'vista' ? ' title="Ver como estudiante">👁<span class="amb-largo"> Ver como estudiante</span>' : '>' + a[1]) + '</button>').join('') + '</div>' : '') +
@@ -301,7 +307,7 @@
     const cursos = mats.filter(m => !m.contenedor);
     const tarjeta = m => {
       const p = m.programa || {}; const pct = m.semanas ? Math.round(m.enviadas / m.semanas * 100) : 0;
-      return '<article class="prog" style="--c:' + h(p.color) + '"><div class="franja"></div><div class="cuerpo"><div class="tipo">' + h({ gratuito: 'Curso gratuito', ejecutivo: 'Curso ejecutivo', diplomado: 'Diplomado', paper: 'Paper', emprendedores: 'Emprendedores' }[p.tipo] || p.tipo) + '</div>' +
+      return '<article class="prog" style="--c:' + h(p.color) + '"><div class="franja"></div><div class="cuerpo"><div class="tipo">' + h({ gratuito: 'Curso', ejecutivo: 'Curso ejecutivo', diplomado: 'Diplomado', paper: 'Paper', emprendedores: 'Emprendedores' }[p.tipo] || p.tipo) + '</div>' +
         '<h3>' + h(p.nombre) + '</h3><div style="font-size:13px;color:var(--gris)">' + (m.inicio ? 'Inicio ' + fecha(m.inicio) : '') + (m.termino ? ' · Plazo hasta ' + fecha(m.termino) : '') + '</div>' +
         '<div class="barra-avance"><i style="width:' + pct + '%"></i></div><div style="font-size:12px;color:var(--gris)">' + m.enviadas + ' de ' + m.semanas + ' semanas enviadas</div>' +
         (m.actual ? '<div class="actual"><b>Semana ' + m.actual.n + ':</b> ' + h(m.actual.tema) + '</div>' : m.proxima ? '<div class="actual" style="background:var(--papel);border-color:var(--linea)">' + h(m.proxima.mensaje) + '</div>' : '') +
@@ -332,7 +338,6 @@
     vista(html + '</div>');
   }
 
-  const ICONOS = { cuaderno: ['📘', 'Cuaderno de estudio', 'Conceptos y herramientas'], caso: ['🗂️', 'Caso de la semana', 'Lo que debes resolver'], herramienta: ['🧰', 'Herramienta', 'Plantilla o planilla'], lectura: ['📄', 'Lectura complementaria', 'Opcional'] };
 
   /* Podcast de la semana: se escucha en la misma página y se puede descargar.
      Si el enlace es de Drive, se usa su reproductor; si es un audio directo, la etiqueta <audio>. */
@@ -340,15 +345,55 @@
     const m = String(url || '').match(/\/d\/([\w-]{20,})/) || String(url || '').match(/[?&]id=([\w-]{20,})/);
     return m ? m[1] : '';
   }
-  function htmlPodcast(url, n) {
-    if (!url) return '';
-    const id = idDrive(url);
-    const reproductor = id
-      ? '<iframe class="podcast-drive" src="https://drive.google.com/file/d/' + h(id) + '/preview" allow="autoplay" loading="lazy" title="Podcast de la semana ' + n + '"></iframe>'
-      : '<audio controls preload="none" src="' + h(url) + '" style="width:100%"></audio>';
-    const bajar = id ? 'https://drive.google.com/uc?export=download&id=' + encodeURIComponent(id) : url;
-    return '<section class="podcast"><div class="podcast-cab"><span class="ico">🎧</span><span><b>Podcast de la semana</b><small>Escúchalo aquí o descárgalo para oírlo donde quieras</small></span>' +
-      '<a class="btn claro chico" href="' + h(bajar) + '" target="_blank" rel="noopener" download>Descargar audio</a></div>' + reproductor + '</section>';
+  /* Ruta de la semana: los recursos y las tareas en el orden en que conviene abordarlos.
+     Los pasos de lectura se marcan como vistos en este equipo; autoevaluación y entrega, según lo hecho. */
+  function htmlRutaSemana(s, d, e, claveVisto) {
+    const vistos = JSON.parse(leer(claveVisto) || '{}');
+    const r = s.recursos || {};
+    const pasos = [];
+    const recurso = (k, titulo, texto, boton) => pasos.push({ k: k, titulo: titulo, texto: texto,
+      accion: r[k] ? '<a class="btn claro chico" data-visto="' + k + '" href="' + h(r[k]) + '" target="_blank" rel="noopener">' + boton + '</a>' : '<span class="etq">Disponible pronto</span>',
+      hecho: !!vistos[k], pendiente: !r[k] });
+    recurso('cuaderno', 'Lee el cuaderno de la semana', 'Los conceptos, el modelo aplicado y los errores frecuentes. Es la base de todo lo demás.', 'Abrir cuaderno');
+    if (r.podcast) {
+      const id = idDrive(r.podcast);
+      const bajar = id ? 'https://drive.google.com/uc?export=download&id=' + encodeURIComponent(id) : r.podcast;
+      pasos.push({ k: 'podcast', titulo: 'Escucha el podcast', texto: 'Un repaso conversado de la semana. Escúchalo aquí o descárgalo para oírlo donde quieras.',
+        accion: '<a class="btn claro chico" data-visto="podcast" href="' + h(bajar) + '" target="_blank" rel="noopener" download>Descargar audio</a>', hecho: !!vistos.podcast,
+        extra: id ? '<iframe class="podcast-drive" src="https://drive.google.com/file/d/' + h(id) + '/preview" allow="autoplay" loading="lazy" title="Podcast de la semana ' + s.n + '"></iframe>'
+          : '<audio controls preload="none" src="' + h(r.podcast) + '" style="width:100%"></audio>' });
+    }
+    recurso('caso', 'Estudia el caso', 'La situación que vas a analizar. Léelo completo una vez y vuelve a él con las preguntas en mente.', 'Abrir caso');
+    recurso('herramienta', 'Trabaja con la herramienta', 'La planilla o plantilla de la semana, con los datos del caso. Adjúntala a tu entrega.', 'Abrir herramienta');
+    if (r.lectura) recurso('lectura', 'Lectura complementaria', 'Opcional, para profundizar.', 'Abrir lectura');
+    if (d.autoevaluacion.preguntas.length) pasos.push({ k: 'auto', titulo: 'Haz la autoevaluación', texto: d.autoevaluacion.preguntas.length + ' preguntas para comprobar que entendiste los conceptos. No lleva nota y puedes repetirla.',
+      accion: '<button class="btn claro chico" data-ir-pest="auto">Ir a la autoevaluación</button>', hecho: !!d.autoevaluacion.intento });
+    pasos.push({ k: 'rubrica', titulo: 'Revisa la rúbrica', texto: 'Antes de escribir, mira cómo se evaluará tu entrega y qué distingue un trabajo destacado.',
+      accion: '<button class="btn claro chico" data-ir-pest="rubrica" data-visto="rubrica">Ver rúbrica</button>', hecho: !!vistos.rubrica });
+    const enviada = e && /Enviada|Corregida/.test(e.estado);
+    pasos.push({ k: 'ficha', titulo: 'Desarrolla tu entrega', texto: 'Completa cada casilla de la ficha. Se guarda sola mientras escribes; usa las ayudas de cada casilla.',
+      accion: '<button class="btn claro chico" data-ir-pest="ficha">Ir a mi entrega</button>', hecho: !!(e && (enviada || Object.keys(e.contenido || {}).length)) });
+    pasos.push({ k: 'enviar', titulo: 'Envía tu entrega', texto: enviada ? 'Entrega enviada el ' + fechaHora(e.enviada) + '.' : 'Cuando todas las casillas estén completas, envía la entrega definitiva. Después ya no se puede modificar.',
+      accion: enviada ? etqEstado(e.estado) : '<button class="btn naranja chico" data-ir-pest="ficha" data-ir-enviar>Enviar entrega</button>', hecho: !!enviada });
+    const hechos = pasos.filter(x => x.hecho).length;
+    return '<section class="ruta-semana"><div class="ruta-cab"><h2>Tu ruta de la semana</h2><span>' + hechos + ' de ' + pasos.length + ' pasos</span></div><ol>' +
+      pasos.map((x, i) => '<li class="paso' + (x.hecho ? ' hecho' : '') + (x.pendiente ? ' pendiente' : '') + '" data-paso="' + x.k + '"><span class="num">' + (x.hecho ? '✓' : i + 1) + '</span>' +
+        '<div class="cuerpo"><div class="fila"><div><small>Paso ' + (i + 1) + '</small><b>' + h(x.titulo) + '</b><p>' + h(x.texto) + '</p></div><div class="accion">' + x.accion + '</div></div>' + (x.extra || '') + '</div></li>').join('') +
+      '</ol></section>';
+  }
+  function activarRutaSemana(claveVisto) {
+    const marcar = k => {
+      const v = JSON.parse(leer(claveVisto) || '{}'); if (v[k]) return; v[k] = 1; escribir(claveVisto, JSON.stringify(v));
+      const li = $('.ruta-semana [data-paso="' + k + '"]'); if (li) { li.classList.add('hecho'); li.querySelector('.num').textContent = '✓'; }
+      const n = $$('.ruta-semana li.hecho').length, t = $$('.ruta-semana li').length, c = $('.ruta-cab span'); if (c) c.textContent = n + ' de ' + t + ' pasos';
+    };
+    S.marcarPaso = marcar;
+    $$('[data-visto]').forEach(a => a.addEventListener('click', () => marcar(a.dataset.visto)));
+    $$('[data-ir-pest]').forEach(b => b.addEventListener('click', () => {
+      const pb = $('.pestanas [data-pest="' + b.dataset.irPest + '"]'); if (!pb) return;
+      pb.click(); pb.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (b.hasAttribute('data-ir-enviar')) { const be = $('#btn-enviar'); if (be) setTimeout(() => be.focus(), 400); }
+    }));
   }
 
   function htmlRubrica(rub, puntajes, editable) {
@@ -373,6 +418,8 @@
     }).join('');
   }
 
+  /* Los títulos de casilla suelen venir numerados («1. Dos estrategias»); la pantalla ya pone el número. */
+  const sinNumero = t => String(t || '').replace(/^\s*\d+\s*[.)]\s*/, '');
   function contarPalabras(t) { return String(t || '').trim().split(/\s+/).filter(Boolean).length; }
 
   function htmlAdjuntos(lista, editable) {
@@ -392,24 +439,26 @@
   }
 
   /* =================== VER COMO ESTUDIANTE (docentes y administración) =================== */
-  const TIPO_PROG = { gratuito: 'Curso gratuito', ejecutivo: 'Curso ejecutivo', diplomado: 'Diplomado', paper: 'Paper', emprendedores: 'Emprendedores', master: 'Master Profesional' };
+  const TIPO_PROG = { gratuito: 'Curso', ejecutivo: 'Curso ejecutivo', diplomado: 'Diplomado', paper: 'Paper', emprendedores: 'Emprendedores', master: 'Master Profesional' };
   async function vVistaProgramas() {
     const progs = await api('programasVista');
     const grupos = {};
     progs.forEach(p => (grupos[p.tipo] = grupos[p.tipo] || []).push(p));
-    const tarjeta = p => '<article class="prog" style="--c:' + h(p.color) + '" data-buscar="' + h((p.nombre + ' ' + p.cod).toLowerCase()) + '"><div class="franja"></div><div class="cuerpo"><div class="tipo">' + h(TIPO_PROG[p.tipo] || p.tipo) + '</div>' +
+    const tarjeta = p => '<article class="prog" style="--c:' + h(p.color) + '" data-item-tipo="' + h(p.tipo) + '" data-item-area="' + h(areaDe(p)) + '" data-buscar="' + h((p.nombre + ' ' + p.cod).toLowerCase()) + '"><div class="franja"></div><div class="cuerpo"><div class="tipo">' + h(TIPO_PROG[p.tipo] || p.tipo) + '</div>' +
       '<h3>' + h(p.nombre) + '</h3><div style="font-size:13px;color:var(--gris)">' + p.semanas + ' semanas · ' + p.horas + ' horas</div>' +
       '<div class="barra-avance"><i style="width:' + Math.round(p.listas / p.semanas * 100) + '%"></i></div><div style="font-size:12px;color:var(--gris)">' + p.listas + ' de ' + p.semanas + ' semanas con material listo</div></div>' +
       '<div class="pie"><span></span><div class="acciones"><a class="btn naranja chico" href="#/ev/' + h(p.cod) + '">Entrar como estudiante</a></div></div></article>';
     vista('<div class="encabezado-vista"><div><h1>Ver como estudiante</h1><p>Elige un programa para recorrerlo tal como lo ve un estudiante, con todas sus semanas abiertas.</p></div>' +
-      '<input type="search" id="buscar-ev" placeholder="Buscar programa" style="max-width:280px"></div>' +
-      (progs.length ? Object.keys(TIPOS).filter(t => grupos[t]).map(t => '<h2 class="grupo-ev" style="margin-top:18px">' + TIPOS[t] + '</h2><div class="rejilla r2 grupo-ev">' + grupos[t].map(tarjeta).join('') + '</div>').join('')
+      '<input type="search" id="buscar-ev" placeholder="Buscar programa" style="max-width:280px"></div>' + htmlFiltros(progs, grupos) + SIN_RESULTADOS +
+      (progs.length ? Object.keys(TIPOS).filter(t => grupos[t]).map(t => '<h2 class="grupo-ev" data-grupo="' + t + '" style="margin-top:18px">' + TIPOS[t] + '</h2><div class="rejilla r2 grupo-ev" data-grupo="' + t + '">' + grupos[t].map(tarjeta).join('') + '</div>').join('')
         : vacio('No tienes programas para revisar', 'Cuando tengas programas asignados aparecerán aquí.')));
+    activarFiltros();
     $('#buscar-ev').oninput = ev => { const q = ev.target.value.toLowerCase(); $$('article[data-buscar]').forEach(a => a.classList.toggle('oculto', q && a.dataset.buscar.indexOf(q) < 0)); };
   }
 
   async function vVistaCurso(cod) {
     const d = await api('cursoVista', { programa: cod });
+    escribir('ef_ev_prog', cod);
     const p = d.programa;
     let html = '<div class="miga"><a href="#/ev">Ver como estudiante</a> › ' + h(p.nombre) + '</div><div class="encabezado-vista"><div><h1>' + h(p.nombre) + '</h1><p>' + d.semanas.length + ' semanas · ' + p.horas + ' horas</p></div></div>';
     let materia = null;
@@ -420,6 +469,108 @@
         (s.materialListo ? etqEstado('disponible') : '<span class="etq">Pendiente</span>') + '</a>';
     });
     vista(html + '</div>');
+  }
+
+  /* Notas, documentos, mensajes y solicitudes con datos de ejemplo del último programa abierto. */
+  async function demoVista() {
+    const cod = leer('ef_ev_prog');
+    if (!cod) {
+      vista('<h1>Vista como estudiante</h1>' + vacio('Primero elige un programa', 'Entra a un programa desde «Programas» y aquí verás sus notas, documentos y comunicaciones con datos de ejemplo.'));
+      return null;
+    }
+    S.datos.demo = S.datos.demo || {};
+    if (!S.datos.demo[cod]) S.datos.demo[cod] = await api('demoVista', { programa: cod });
+    return S.datos.demo[cod];
+  }
+  const avisoDemo = d => '<div class="aviso info no-imprimir">Datos de ejemplo del programa <b>' + h(d.programa.nombre) + '</b>. Para ver otro, entra a él desde <a href="#/ev">Programas</a>.</div>';
+  const soloVista = () => toast('Estás en la vista como estudiante: aquí no se envía ni se emite nada.');
+
+  async function vEvNotas() {
+    const d = await demoVista(); if (!d) return;
+    pintarNotas(d.notas, avisoDemo(d), () => '#/ev-portafolio/' + d.programa.cod, (x, s) => '#/ev/' + d.programa.cod + '/' + s.id);
+  }
+
+  async function vEvPortafolio(cod) {
+    vista(cargando('Preparando el portafolio de ejemplo'));
+    S.datos.demo = S.datos.demo || {};
+    const d = S.datos.demo[cod] || (S.datos.demo[cod] = await api('demoVista', { programa: cod }));
+    pintarPortafolio(d.portafolio);
+  }
+
+  async function vEvDocumentos() {
+    const d = await demoVista(); if (!d) return;
+    const c = d.certificado;
+    vista(avisoDemo(d) + '<h1>Mis documentos</h1>' +
+      '<div class="rejilla r2"><section class="tarjeta"><h3>Certificado de alumno regular</h3><p style="color:var(--gris)">Acredita que eres estudiante vigente. Se genera al instante, con folio y código de verificación, y te llega también por correo. No tiene límite de descargas.</p>' +
+      '<div class="acciones"><select style="flex:1"><option>' + h(d.programa.nombre) + '</option></select><button class="btn naranja" data-solo-vista>Generar</button></div></section>' +
+      '<section class="tarjeta"><h3>Vista previa del portafolio</h3><p style="color:var(--gris)">Todas tus entregas con su calificación, rúbrica y retroalimentación. La vista previa no tiene código de verificación; el portafolio oficial en PDF aparece abajo cuando se emite tu certificado.</p>' +
+      '<div class="acciones"><select style="flex:1"><option>' + h(d.programa.nombre) + '</option></select><a class="btn claro" href="#/ev-portafolio/' + h(d.programa.cod) + '" target="_blank">Abrir</a></div></section></div>' +
+      '<h2 style="margin-top:10px">Certificados y portafolios oficiales</h2><p style="color:var(--gris);margin-top:-4px">Cada certificado y su portafolio se descargan una vez. Si los pierdes, puedes pedir una copia de ambos, que te llega al correo.</p>' +
+      '<div class="tabla-cont"><table class="tabla"><thead><tr><th>Documento</th><th>Programa</th><th>Folio</th><th>Emitido</th><th>Certificado</th><th>Portafolio</th></tr></thead><tbody>' +
+      '<tr><td><b>Certificado</b>' + (c.nota ? '<br>' + notaHtml(c.nota) : '') + '</td><td>' + h(c.nombrePrograma) + '</td><td>' + h(c.folio) + '<br><small>Código ' + h(c.codigo) + '</small></td><td>' + fecha(c.emitido) + '</td>' +
+      '<td><button class="btn claro chico" id="btn-cert-ej">Descargar ejemplo</button><br><small style="color:var(--gris)">Con el diseño oficial y tu nombre</small></td>' +
+      '<td><a class="btn claro chico" href="#/ev-portafolio/' + h(d.programa.cod) + '" target="_blank">Ver ejemplo</a></td></tr></tbody></table></div>');
+    $$('[data-solo-vista]').forEach(b => b.onclick = soloVista);
+    $('#btn-cert-ej').onclick = async () => {
+      const b = $('#btn-cert-ej'); b.disabled = true; b.textContent = 'Generando…';
+      try { guardarPdf(await api('certificadoEjemplo', { programa: d.programa.cod })); toast('Certificado de ejemplo descargado.'); }
+      catch (er) { toast(er.message, true); }
+      b.disabled = false; b.textContent = 'Descargar ejemplo';
+    };
+  }
+
+  function hilosDemo(d) {
+    const hace = dias => new Date(Date.now() - dias * 86400000).toISOString();
+    const yo = S.usuario.nombre;
+    return [
+      { asunto: 'Duda sobre la ficha de la semana 2', tipo: 'Académica', ultimo: hace(1), extracto: 'Sí, puedes usar las cifras del anexo 2 directamente; lo importante es que expliques el cálculo.', lista: [
+        { autor: yo, propio: true, fecha: hace(2), texto: '¿En la casilla 3 puedo usar las cifras del anexo 2 tal como vienen o tengo que recalcularlas en la planilla?' },
+        { autor: 'Docente del programa', deIdeax: true, fecha: hace(1), texto: 'Sí, puedes usar las cifras del anexo 2 directamente; lo importante es que expliques el cálculo y adjuntes la planilla para que pueda revisarlo.' }] },
+      { asunto: 'Plazo para enviar la semana 3', tipo: 'Administrativa', ultimo: hace(4), extracto: 'Te dimos una prórroga de 7 días. La semana 3 queda abierta hasta el lunes.', lista: [
+        { autor: yo, propio: true, fecha: hace(5), texto: 'Tuve un viaje de trabajo y no alcanzo a enviar la semana 3 a tiempo. ¿Es posible tener unos días más?' },
+        { autor: 'IDEAX', deIdeax: true, fecha: hace(4), texto: 'Te dimos una prórroga de 7 días. La semana 3 queda abierta hasta el lunes. Si necesitas más tiempo, escríbenos de nuevo.' }] }
+    ].map(x => Object.assign(x, { programa: d.programa.nombre }));
+  }
+  async function vEvMensajes() {
+    const d = await demoVista(); if (!d) return;
+    const hs = hilosDemo(d);
+    vista(avisoDemo(d) + '<div class="encabezado-vista"><div><h1>Mensajes</h1><p>Escríbenos tus consultas académicas o administrativas. Respondemos en hasta dos días hábiles.</p></div><button class="btn naranja" id="btn-nuevo">Nueva consulta</button></div>' +
+      '<div class="hilos">' + hs.map((x, i) => '<a class="hilo-item" href="#/ev-hilo/' + i + '"><span class="t"><b>' + h(x.asunto) + '</b><small>' + h(x.tipo) + ' · ' + h(x.programa) + ' · ' + haceCuanto(x.ultimo) + '</small><p>' + h(x.extracto) + '</p></span></a>').join('') + '</div>');
+    $('#btn-nuevo').onclick = () => {
+      const m = modal('<div class="modal-cab"><h3>Nueva consulta</h3><button class="cerrar" data-cerrar>×</button></div><form>' +
+        '<label class="campo"><span>Tipo de consulta</span><select name="tipo"><option>Académica</option><option>Administrativa</option></select><small>Académica: contenidos, casos y entregas (la responde tu docente). Administrativa: pagos, plazos, certificados, accesos.</small></label>' +
+        '<label class="campo"><span>Programa</span><select><option>' + h(d.programa.nombre) + '</option></select></label>' +
+        '<label class="campo"><span>Asunto</span><input type="text" maxlength="160"></label>' +
+        '<label class="campo"><span>Mensaje</span><textarea></textarea><small>Una consulta por mensaje. Si es sobre una semana, indica cuál.</small></label><button class="btn naranja">Enviar</button></form>');
+      m.el.querySelector('form').onsubmit = e => { e.preventDefault(); soloVista(); };
+    };
+  }
+  async function vEvHilo(i) {
+    const d = await demoVista(); if (!d) return;
+    const x = hilosDemo(d)[Number(i)];
+    if (!x) { irA('#/ev-mensajes'); return; }
+    vista(avisoDemo(d) + '<div class="miga"><a href="#/ev-mensajes">Mensajes</a> › ' + h(x.asunto) + '</div><div class="encabezado-vista"><div><h1>' + h(x.asunto) + '</h1><p>' + h(x.tipo) + ' · ' + h(x.programa) + '</p></div></div>' +
+      '<div class="burbujas">' + x.lista.map(m => '<div class="msj' + (m.propio ? ' propio' : '') + '"><div class="de">' + h(m.autor) + (m.deIdeax && !m.propio ? ' · IDEAX' : '') + ' · ' + fechaHora(m.fecha) + '</div><div class="tx">' + h(m.texto) + '</div></div>').join('') + '</div>' +
+      '<form id="f-resp" class="tarjeta"><label class="campo"><span>Responder</span><textarea></textarea></label><button class="btn naranja">Enviar respuesta</button></form>');
+    $('#f-resp').onsubmit = e => { e.preventDefault(); soloVista(); };
+  }
+
+  async function vEvSolicitudes() {
+    const d = await demoVista(); if (!d) return;
+    const hace = dias => new Date(Date.now() - dias * 86400000).toISOString();
+    const lista = [
+      { tipo: 'Prórroga', programa: d.programa.nombre, estado: 'Aprobada', creado: hace(5), respuesta: 'Te dimos 7 días adicionales para la semana 3.' },
+      { tipo: 'Certificado', programa: d.programa.nombre, estado: 'Pendiente', creado: hace(1), respuesta: '' }];
+    vista(avisoDemo(d) + '<div class="encabezado-vista"><div><h1>Solicitudes</h1><p>Certificados, prórrogas, congelamientos y retiros.</p></div><button class="btn naranja" id="btn-nueva">Nueva solicitud</button></div>' +
+      '<div class="tabla-cont"><table class="tabla"><thead><tr><th>Tipo</th><th>Programa</th><th>Estado</th><th>Fecha</th><th>Respuesta</th></tr></thead><tbody>' +
+      lista.map(s => '<tr><td><b>' + h(s.tipo) + '</b></td><td>' + h(s.programa) + '</td><td>' + etqEstado(s.estado) + '</td><td>' + fecha(s.creado) + '</td><td style="white-space:pre-wrap">' + h(s.respuesta) + '</td></tr>').join('') + '</tbody></table></div>');
+    $('#btn-nueva').onclick = () => {
+      const m = modal('<div class="modal-cab"><h3>Nueva solicitud</h3><button class="cerrar" data-cerrar>×</button></div><form>' +
+        '<label class="campo"><span>Programa</span><select><option>' + h(d.programa.nombre) + '</option></select></label>' +
+        '<label class="campo"><span>Tipo</span><select><option>Certificado</option><option>Prórroga</option><option>Congelamiento</option><option>Retiro parcial</option><option>Otra</option></select></label>' +
+        '<label class="campo"><span>Detalle</span><textarea></textarea></label><button class="btn naranja">Enviar solicitud</button></form>');
+      m.el.querySelector('form').onsubmit = e => { e.preventDefault(); soloVista(); };
+    };
   }
 
   async function vVistaSemana(cod, sem) {
@@ -436,19 +587,13 @@
       const local = JSON.parse(leer(claveLocal) || 'null');
       if (local && (!e || !e.guardado || local.t > new Date(e.guardado).getTime())) Object.assign(contenido, local.c);
     }
-    const rec = Object.keys(ICONOS).map(k => {
-      const url = s.recursos[k], i = ICONOS[k];
-      if (!url && k === 'lectura') return '';
-      return url ? '<a class="recurso" href="' + h(url) + '" target="_blank" rel="noopener"><span class="ico">' + i[0] + '</span><span><b>' + i[1] + '</b><small>' + i[2] + '</small></span></a>'
-        : '<div class="recurso pendiente"><span class="ico">' + i[0] + '</span><span><b>' + i[1] + '</b><small>Disponible pronto</small></span></div>';
-    }).join('');
     const pest = [['ficha', 'Mi entrega'], ['rubrica', 'Rúbrica'], d.autoevaluacion.preguntas.length ? ['auto', 'Autoevaluación'] : null].filter(Boolean);
     let html = '<div class="miga no-imprimir">' + (simulacion ? '<a href="#/ev">Ver como estudiante</a> › <a href="#/ev/' + h(p.cod) + '">' + h(p.nombre) + '</a>' : mat ? '<a href="#/inicio">Inicio</a> › <a href="#/curso/' + mat + '">' + h(p.nombre) + '</a>' : '<a href="#/programa/' + p.cod + '">' + h(p.nombre) + '</a> › Vista previa') + ' › Semana ' + s.n + '</div>' +
       '<div class="semana-cab" style="--c:' + h(p.color) + '"><div class="sup">' + (s.materia && s.materia !== p.nombre ? 'Materia ' + s.materia_n + ' · ' + h(s.materia) + ' · ' : '') + 'Semana ' + s.n + '</div><h1>' + h(s.tema) + '</h1>' +
       (s.descripcion ? '<p>' + h(s.descripcion) + '</p>' : '') + (s.entrega ? '<p style="margin-top:8px"><b style="color:#F8B57A">Entrega:</b> ' + h(s.entrega) + '</p>' : '') + '</div>' +
       (d.vistaPrevia && !simulacion ? '<div class="aviso info">Vista previa del docente: así ven esta semana los estudiantes. No se puede escribir.</div>' : '') +
       (!s.materialListo && (!d.vistaPrevia || simulacion) ? '<div class="aviso alerta">El material de esta semana se está terminando de cargar. Te avisaremos apenas esté completo.</div>' : '') +
-      '<div class="recursos">' + rec + '</div>' + htmlPodcast(s.recursos.podcast, s.n) +
+      htmlRutaSemana(s, d, e, 'ef_ruta_' + (simulacion ? 'vista_' : '') + s.id) +
       '<div class="pestanas">' + pest.map((x, i) => '<button data-pest="' + x[0] + '" class="' + (i === 0 ? 'activo' : '') + '">' + x[1] + '</button>').join('') + '</div>';
 
     // ---- ficha
@@ -461,7 +606,7 @@
     else if (d.soloLectura && mat) ficha += '<div class="aviso alerta">El plazo de tu programa terminó. Puedes solicitar una prórroga en Solicitudes.</div>';
     ficha += d.ficha.casillas.map((c, i) => {
       const val = contenido[c.id] || '';
-      return '<section class="casilla" data-casilla="' + h(c.id) + '"><h3><em>' + (i + 1) + '</em>' + h(c.titulo) + '</h3>' + (c.instruccion ? '<div class="instr">' + h(c.instruccion) + '</div>' : '') +
+      return '<section class="casilla" data-casilla="' + h(c.id) + '"><h3><em>' + (i + 1) + '</em>' + h(sinNumero(c.titulo)) + '</h3>' + (c.instruccion ? '<div class="instr">' + h(c.instruccion) + '</div>' : '') +
         '<div class="ayudas">' + (c.explicacion ? '<button class="ayuda-btn" data-ayuda="explicacion">Explicación</button>' : '') + (c.ejemplo ? '<button class="ayuda-btn" data-ayuda="ejemplo">Ejemplo</button>' : '') + (c.pauta ? '<button class="ayuda-btn" data-ayuda="pauta">Qué se evalúa</button>' : '') + '</div>' +
         (c.explicacion ? '<div class="ayuda explicacion oculto">' + h(c.explicacion) + '</div>' : '') + (c.ejemplo ? '<div class="ayuda ejemplo oculto">' + h(c.ejemplo) + '</div>' : '') + (c.pauta ? '<div class="ayuda pauta oculto">' + h(c.pauta) + '</div>' : '') +
         (editable ? '<textarea data-id="' + h(c.id) + '" rows="' + (c.tipo === 'corto' ? 2 : 7) + '" placeholder="Escribe aquí">' + h(val) + '</textarea><div class="contador" data-cont="' + h(c.id) + '" data-max="' + (c.palabras_max || 0) + '"></div>'
@@ -481,6 +626,7 @@
     vista(html);
 
     $$('[data-pest]').forEach(b => b.onclick = () => { $$('[data-pest]').forEach(x => x.classList.toggle('activo', x === b)); $$('[data-panel]').forEach(p => p.classList.toggle('oculto', p.dataset.panel !== b.dataset.pest)); });
+    activarRutaSemana('ef_ruta_' + (simulacion ? 'vista_' : '') + s.id);
     $$('.ayuda-btn').forEach(b => b.onclick = () => { const caja = b.closest('.casilla').querySelector('.ayuda.' + b.dataset.ayuda); caja.classList.toggle('oculto'); b.classList.toggle('activo'); });
 
     if (auto.preguntas.length) $('#f-auto').onsubmit = async ev => {
@@ -491,6 +637,7 @@
         const r = await api('autoevaluar', { semana: s.id, respuestas: resp, simulacion: !!simulacion });
         r.detalle.forEach((x, i) => { $('.res-q[data-q="' + i + '"]').innerHTML = '<div class="aviso ' + (x.ok ? 'ok' : 'error') + '" style="margin:10px 0 0">' + (x.ok ? '¡Correcto!' : 'La respuesta correcta es la ' + x.correcta + '.') + (x.explicacion ? ' ' + h(x.explicacion) : '') + '</div>'; });
         toast('Obtuviste ' + r.aciertos + ' de ' + r.total + '.');
+        if (S.marcarPaso) S.marcarPaso('auto');
       } catch (er) { toast(er.message, true); }
     };
 
@@ -597,14 +744,17 @@
   async function vNotas() {
     const d = await api('notas');
     if (!d.length) { vista('<h1>Notas</h1>' + vacio('Aún no tienes notas', 'Aparecerán aquí cuando tu docente califique tus entregas.')); return; }
-    vista('<div class="encabezado-vista"><div><h1>Mis notas</h1><p>En porcentaje de logro, con sus equivalencias en las escalas de 1 a 7 y de 1 a 10. Se aprueba con 60%.</p></div></div>' + d.map(x => {
+    pintarNotas(d, '', x => '#/imprimir/portafolio/' + x.matricula, (x, s) => '#/semana/' + x.matricula + '/' + s.id);
+  }
+  function pintarNotas(d, antes, enlacePortafolio, enlaceSemana) {
+    vista((antes || '') + '<div class="encabezado-vista"><div><h1>Mis notas</h1><p>En porcentaje de logro, con sus equivalencias en las escalas de 1 a 7 y de 1 a 10. Se aprueba con 60%.</p></div></div>' + d.map(x => {
       const r = x.resumen;
       return '<section class="tarjeta"><div class="encabezado-vista" style="margin-bottom:10px"><div><h2 style="margin:0">' + h(x.programa.nombre) + '</h2><p>' + r.corregidas + ' de ' + r.semanas + ' semanas calificadas</p></div>' +
-        '<div class="acciones">' + (r.final ? notaHtml(r.final) : '') + '<a class="btn claro chico" href="#/imprimir/portafolio/' + x.matricula + '" target="_blank">Vista previa del portafolio</a></div></div>' +
+        '<div class="acciones">' + (r.final ? notaHtml(r.final) : '') + '<a class="btn claro chico" href="' + enlacePortafolio(x) + '" target="_blank">Vista previa del portafolio</a></div></div>' +
         (r.materias.length > 1 ? '<div class="tabla-cont" style="margin-bottom:12px;box-shadow:none;border:1px solid var(--linea)"><table class="tabla"><thead><tr><th>Materia</th><th>Calificadas</th><th class="num">Nota</th></tr></thead><tbody>' +
           r.materias.map(m => '<tr><td>' + m.n + '. ' + h(m.nombre) + '</td><td>' + m.corregidas + ' de ' + m.semanas + '</td><td class="num">' + notaHtml(m.nota) + '</td></tr>').join('') + '</tbody></table></div>' : '') +
         '<div class="tabla-cont" style="box-shadow:none;border:1px solid var(--linea)"><table class="tabla"><thead><tr><th>Semana</th><th>Tema</th><th>Estado</th><th class="num">Nota</th></tr></thead><tbody>' +
-        x.semanas.map(s => '<tr class="' + (/corregida|enviada|disponible|en curso|devuelta/.test(s.estado) ? 'clic' : '') + '" data-ir="#/semana/' + x.matricula + '/' + s.id + '"><td>' + s.n + '</td><td>' + h(s.tema) + '</td><td>' + etqEstado(s.estado) + '</td><td class="num">' + (s.nota ? notaHtml(s.nota) : '') + '</td></tr>').join('') +
+        x.semanas.map(s => '<tr class="' + (/corregida|enviada|disponible|en curso|devuelta/.test(s.estado) ? 'clic' : '') + '" data-ir="' + enlaceSemana(x, s) + '"><td>' + s.n + '</td><td>' + h(s.tema) + '</td><td>' + etqEstado(s.estado) + '</td><td class="num">' + (s.nota ? notaHtml(s.nota) : '') + '</td></tr>').join('') +
         '</tbody></table></div></section>';
     }).join(''));
     $$('tr.clic').forEach(tr => tr.onclick = () => irA(tr.dataset.ir));
@@ -739,7 +889,7 @@
   /* =================== IMPRESIÓN (PDF) =================== */
   function hojaImpresion(tipo, cuerpo, pie) {
     return '<div class="barra-imprimir no-imprimir"><span>Vista para imprimir o guardar en PDF</span><div class="acciones"><button class="btn naranja chico" onclick="window.print()">Guardar como PDF</button><button class="btn claro chico" onclick="window.close()">Cerrar</button></div></div>' +
-      '<div class="hoja-impresion"><div class="imp-cab"><span class="marca"><img src="../img/logo-ideax-blanco.png" alt="" style="width:34px;height:34px"> IDEA<i>X</i></span><span class="doc">' + h(tipo) + '<br>eFacultad</span></div><div class="imp-franja"></div>' +
+      '<div class="hoja-impresion"><div class="imp-cab"><span class="marca"><img src="../img/logo-ideax-blanco.png" alt="" style="width:34px;height:34px"><span>IDEA<i>X</i></span></span><span class="doc">' + h(tipo) + '<br>eFacultad</span></div><div class="imp-franja"></div>' +
       cuerpo + '<div class="imp-pie">' + (pie || '') + 'IDEAX · Instituto de Administración y Dirección Ejecutiva · www.ideax.cl · contacto@ideax.cl</div></div>';
   }
   function bloqueEntrega(x) {
@@ -747,7 +897,7 @@
     return '<div class="imp-cuerpo imp-entrega"><div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--naranja);font-weight:700">Semana ' + h(x.semana.n) + (x.semana.materia && x.semana.materia !== x.programaNombre ? ' · ' + h(x.semana.materia) : '') + '</div><h1>' + h(x.semana.tema) + '</h1>' +
       '<div class="imp-datos"><div><span>Estudiante:</span> <b>' + h(x.estudiante) + '</b></div><div><span>Docente:</span> ' + h(x.docente || 'Por asignar') + '</div><div><span>Enviada:</span> ' + fechaHora(e.enviada) + '</div><div><span>Estado:</span> ' + h(e.estado) + '</div></div>' +
       (e.nota ? notaHtml(e.nota, true) : '') +
-      x.ficha.casillas.map((c, i) => '<div class="imp-casilla"><h3>' + (i + 1) + '. ' + h(c.titulo) + '</h3><div class="tx">' + h(e.contenido[c.id] || '') + '</div></div>').join('') +
+      x.ficha.casillas.map((c, i) => '<div class="imp-casilla"><h3>' + (i + 1) + '. ' + h(sinNumero(c.titulo)) + '</h3><div class="tx">' + h(e.contenido[c.id] || '') + '</div></div>').join('') +
       (e.adjuntos && e.adjuntos.length ? '<div class="imp-casilla"><h3>Archivos adjuntos</h3>' + e.adjuntos.map(a => '<div>' + h(a.nombre) + ' · <a href="' + h(a.url) + '">' + h(a.url) + '</a></div>').join('') + '</div>' : '') +
       (e.puntajes ? '<div class="imp-casilla"><h3>Evaluación con rúbrica</h3>' + htmlRubrica(x.rubrica, e.puntajes) + '</div>' : '') +
       (e.retro ? '<div class="imp-casilla"><h3>Retroalimentación</h3><div class="retro">' + h(e.retro) + '</div></div>' : '') + '</div>';
@@ -761,7 +911,9 @@
   }
   async function vImprimirPortafolio(mat) {
     vista(cargando('Preparando tu portafolio'));
-    const d = await api('portafolio', { matricula: mat });
+    pintarPortafolio(await api('portafolio', { matricula: mat }));
+  }
+  function pintarPortafolio(d) {
     document.title = 'Portafolio · ' + d.estudiante + ' · ' + d.programa.nombre;
     const r = d.resumen;
     const portada = '<div class="imp-cuerpo"><div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--naranja);font-weight:700">Portafolio de entregas</div><h1 style="font-size:30px">' + h(d.estudiante) + '</h1>' +
@@ -809,13 +961,13 @@
   }
 
   function htmlEntregaSuelta(paq, e) {
-    const css = 'body{font-family:Poppins,Segoe UI,Arial,sans-serif;color:#13233B;max-width:820px;margin:0 auto;padding:24px;line-height:1.55}h1{color:#0F2747;font-size:22px;margin:4px 0}h3{color:#0F2747;border-bottom:2px solid #F07C1B;display:inline-block;padding-bottom:3px;margin:22px 0 6px}' +
+    const css = 'body{font-family:"IBM Plex Sans",Segoe UI,Arial,sans-serif;color:#13233B;max-width:820px;margin:0 auto;padding:24px;line-height:1.55}h1{color:#0F2747;font-size:22px;margin:4px 0}h3{color:#0F2747;border-bottom:2px solid #F07C1B;display:inline-block;padding-bottom:3px;margin:22px 0 6px}' +
       '.cab{background:#0F2747;color:#fff;padding:16px 22px;border-radius:10px}.cab b{font-size:20px}.cab i{color:#F07C1B;font-style:normal}.tx{white-space:pre-wrap}.datos{color:#4B5565;font-size:13px;margin:10px 0 18px}' +
       'table{border-collapse:collapse;width:100%;font-size:12px;margin-top:8px}td,th{border:1px solid #DCE2EA;padding:6px;vertical-align:top;text-align:left}th{background:#0F2747;color:#fff}@media print{.cab{-webkit-print-color-adjust:exact;print-color-adjust:exact}}';
     return '<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>' + h(e.estudiante) + ' · Semana ' + paq.semana.n + '</title><style>' + css + '</style></head><body>' +
       '<div class="cab"><b>IDEA<i>X</i></b> · eFacultad · ' + h(paq.programa.nombre) + '</div>' +
       '<h1>Semana ' + h(paq.semana.n) + ': ' + h(paq.semana.tema) + '</h1><div class="datos"><b>' + h(e.estudiante) + '</b> · ' + h(e.correo) + ' · Enviada ' + fechaHora(e.enviada) + ' · ID ' + h(e.id) + '</div>' +
-      paq.ficha.casillas.map((c, i) => '<h3>' + (i + 1) + '. ' + h(c.titulo) + '</h3><div class="tx">' + h(e.contenido[c.id] || '') + '</div>').join('') +
+      paq.ficha.casillas.map((c, i) => '<h3>' + (i + 1) + '. ' + h(sinNumero(c.titulo)) + '</h3><div class="tx">' + h(e.contenido[c.id] || '') + '</div>').join('') +
       (e.adjuntos.length ? '<h3>Adjuntos</h3>' + e.adjuntos.map(a => '<div><a href="' + h(a.url) + '">' + h(a.nombre) + '</a></div>').join('') : '') +
       '<h3>Rúbrica</h3><table><tr><th>Criterio</th><th>Destacado</th><th>Logrado</th><th>En desarrollo</th><th>Insuficiente</th></tr>' +
       paq.rubrica.criterios.map(c => '<tr><td><b>' + h(c.criterio) + '</b> (' + c.peso + '%)</td><td>' + h(c.destacado) + '</td><td>' + h(c.logrado) + '</td><td>' + h(c.en_desarrollo) + '</td><td>' + h(c.insuficiente) + '</td></tr>').join('') + '</table></body></html>';
@@ -908,7 +1060,7 @@
       '<div class="encabezado-vista"><div class="acciones" style="gap:14px">' + avatar(d.estudiante.nombre, d.estudiante.foto) + '<div><h1 style="margin:0">' + h(d.estudiante.nombre) + '</h1><p>' + h(d.programa.nombre) + ' · Semana ' + s.n + ': ' + h(s.tema) + ' · enviada ' + fechaHora(e.enviada) + '</p></div></div>' +
       '<div class="acciones">' + etqEstado(e.estado) + '<a class="btn claro chico" href="#/imprimir/entrega/' + e.id + '" target="_blank">PDF</a></div></div>' +
       '<div class="rejilla" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:start" id="rej-corr"><div>' +
-      d.ficha.casillas.map((c, i) => '<section class="casilla"><h3><em>' + (i + 1) + '</em>' + h(c.titulo) + '</h3>' + (c.pauta ? '<div class="ayuda pauta">' + h(c.pauta) + '</div>' : '') + '<div class="solo-lectura">' + h(e.contenido[c.id] || '') + '</div><div class="contador">' + contarPalabras(e.contenido[c.id]) + ' palabras' + (c.palabras_max ? ' de ' + c.palabras_max + ' sugeridas' : '') + '</div></section>').join('') +
+      d.ficha.casillas.map((c, i) => '<section class="casilla"><h3><em>' + (i + 1) + '</em>' + h(sinNumero(c.titulo)) + '</h3>' + (c.pauta ? '<div class="ayuda pauta">' + h(c.pauta) + '</div>' : '') + '<div class="solo-lectura">' + h(e.contenido[c.id] || '') + '</div><div class="contador">' + contarPalabras(e.contenido[c.id]) + ' palabras' + (c.palabras_max ? ' de ' + c.palabras_max + ' sugeridas' : '') + '</div></section>').join('') +
       (e.adjuntos.length ? '<section class="casilla"><h3>Adjuntos</h3>' + htmlAdjuntos(e.adjuntos) + '</section>' : '') + '</div>' +
       '<div style="position:sticky;top:76px;max-height:calc(100vh - 90px);overflow-y:auto"><section class="tarjeta"><h3>Calificación con rúbrica</h3><p style="font-size:13px;color:var(--gris)">Elige un nivel para proponer su porcentaje, o escribe el porcentaje de logro directamente.</p>' + htmlRubricaCompacta(d.rubrica, puntajes) +
       '<div id="nota-calc" style="margin:14px 0"></div><label class="campo"><span>Retroalimentación para el estudiante</span><textarea id="retro" rows="8" placeholder="Qué hizo bien, qué debe mejorar y cómo.">' + h(e.retro || '') + '</textarea></label>' +
@@ -961,19 +1113,59 @@
   }
 
   /* =================== CONTENIDOS (docente y gestión académica) =================== */
-  const TIPOS = { master: 'Masters Profesionales', diplomado: 'Diplomados', gratuito: 'Cursos gratuitos', ejecutivo: 'Cursos ejecutivos', paper: 'Paper', emprendedores: 'Emprendedores', contenedor: 'Programas agrupadores' };
+  /* Filtros de programas para docentes y administración: por tipo (masters, diplomados, cursos...) y por especialidad.
+     Se combinan entre sí y con el buscador, y recuerdan la última elección. */
+  const TIPOS_CORTO = { master: 'Masters', diplomado: 'Diplomados', gratuito: 'Cursos', ejecutivo: 'Cursos ejecutivos', paper: 'Paper', emprendedores: 'Emprendedores', contenedor: 'Agrupadores' };
+  const AREA_IGUAL = { 'Personas': 'Capital Humano', 'Operaciones y logística': 'Logística', 'Administración pública': 'Gestión Pública', 'Curso ejecutivo': 'Ejecutivos' };
+  const areaDe = p => AREA_IGUAL[p.area] || p.area || 'Sin especialidad';
+  function htmlFiltros(progs, grupos) {
+    const tipos = Object.keys(TIPOS).filter(t => grupos[t]);
+    const areas = {};
+    progs.forEach(p => { const a = areaDe(p); areas[a] = (areas[a] || 0) + 1; });
+    const nombresArea = Object.keys(areas).sort((a, b) => a.localeCompare(b, 'es'));
+    const fila = (titulo, clave, todos, ops) => '<div class="segmento" role="tablist" aria-label="Filtrar por ' + titulo.toLowerCase() + '"><span class="seg-tit">' + titulo + '</span>' +
+      '<button data-filtro-' + clave + '="todos">' + todos + ' <small>' + progs.length + '</small></button>' +
+      ops.map(o => '<button data-filtro-' + clave + '="' + h(o[0]) + '">' + h(o[1]) + ' <small>' + o[2] + '</small></button>').join('') + '</div>';
+    return (tipos.length > 1 ? fila('Tipo', 'tipo', 'Todos', tipos.map(t => [t, TIPOS_CORTO[t], grupos[t].length])) : '') +
+      (nombresArea.length > 1 ? fila('Especialidad', 'area', 'Todas', nombresArea.map(a => [a, a, areas[a]])) : '');
+  }
+  function activarFiltros() {
+    const elegido = { tipo: leer('ef_filtro_tipo') || 'todos', area: leer('ef_filtro_area') || 'todos' };
+    const aplicar = () => {
+      ['tipo', 'area'].forEach(k => {
+        const bs = $$('[data-filtro-' + k + ']');
+        if (!bs.some(b => b.getAttribute('data-filtro-' + k) === elegido[k])) elegido[k] = 'todos';
+        bs.forEach(b => b.classList.toggle('activo', b.getAttribute('data-filtro-' + k) === elegido[k]));
+        escribir('ef_filtro_' + k, elegido[k]);
+      });
+      $$('[data-item-tipo]').forEach(el => el.classList.toggle('oculto-filtro',
+        (elegido.tipo !== 'todos' && el.dataset.itemTipo !== elegido.tipo) || (elegido.area !== 'todos' && el.dataset.itemArea !== elegido.area)));
+      $$('[data-grupo]').forEach(g => {
+        const hay = $$('[data-item-tipo="' + g.dataset.grupo + '"]').some(el => !el.classList.contains('oculto-filtro'));
+        g.classList.toggle('oculto-filtro', !hay);
+      });
+      const vacio = $('#sin-resultados');
+      if (vacio) vacio.classList.toggle('oculto', $$('[data-item-tipo]').some(el => !el.classList.contains('oculto-filtro')));
+    };
+    ['tipo', 'area'].forEach(k => $$('[data-filtro-' + k + ']').forEach(b => b.onclick = () => { elegido[k] = b.getAttribute('data-filtro-' + k); aplicar(); }));
+    aplicar();
+  }
+  const SIN_RESULTADOS = '<div id="sin-resultados" class="vacio oculto"><b>No hay programas con esa combinación</b>Prueba con otro tipo o con otra especialidad.</div>';
+
+  const TIPOS = { master: 'Masters Profesionales', diplomado: 'Diplomados', gratuito: 'Cursos', ejecutivo: 'Cursos ejecutivos', paper: 'Paper', emprendedores: 'Emprendedores', contenedor: 'Programas agrupadores' };
   async function vContenidos() {
     const progs = await api('programas');
     const academico = tiene('gestion_academica');
     const grupos = {};
     progs.forEach(p => (grupos[p.tipo] = grupos[p.tipo] || []).push(p));
     vista('<div class="encabezado-vista"><div><h1>' + (S.ambiente === 'gestion' ? 'Programas y docentes' : 'Contenidos') + '</h1><p>Todos los programas tienen sus semanas creadas. Carga los recursos, la ficha de entrega, la rúbrica y la autoevaluación de cada semana, y márcala como lista.</p></div>' +
-      '<input type="search" id="buscar-prog" placeholder="Buscar programa" style="max-width:280px"></div>' +
-      Object.keys(TIPOS).filter(t => grupos[t]).map(t => '<h2 class="grupo-prog" style="margin-top:18px">' + TIPOS[t] + '</h2><div class="tabla-cont grupo-prog"><table class="tabla"><thead><tr><th>Programa</th><th class="num">Semanas listas</th><th class="num">Matriculados</th><th>Docentes</th><th></th></tr></thead><tbody>' +
-        grupos[t].map(p => '<tr data-buscar="' + h((p.nombre + ' ' + p.cod).toLowerCase()) + '"><td><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:' + h(p.color) + ';margin-right:8px"></span><b>' + h(p.nombre) + '</b><br><small>' + h(p.cod) + ' · ' + p.horas + ' h</small></td>' +
+      '<input type="search" id="buscar-prog" placeholder="Buscar programa" style="max-width:280px"></div>' + htmlFiltros(progs, grupos) + SIN_RESULTADOS +
+      Object.keys(TIPOS).filter(t => grupos[t]).map(t => '<h2 class="grupo-prog" data-grupo="' + t + '" style="margin-top:18px">' + TIPOS[t] + '</h2><div class="tabla-cont grupo-prog" data-grupo="' + t + '"><table class="tabla"><thead><tr><th>Programa</th><th class="num">Semanas listas</th><th class="num">Matriculados</th><th>Docentes</th><th></th></tr></thead><tbody>' +
+        grupos[t].map(p => '<tr data-item-tipo="' + h(p.tipo) + '" data-item-area="' + h(areaDe(p)) + '" data-buscar="' + h((p.nombre + ' ' + p.cod).toLowerCase()) + '"><td><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:' + h(p.color) + ';margin-right:8px"></span><b>' + h(p.nombre) + '</b><br><small>' + h(p.cod) + ' · ' + p.horas + ' h</small></td>' +
           '<td class="num">' + (p.semanas ? '<span class="etq ' + (p.listas === p.semanas ? 'verde' : p.listas ? 'naranja' : '') + '">' + p.listas + ' de ' + p.semanas + '</span>' : '') + '</td><td class="num">' + p.matriculados + '</td>' +
           '<td>' + (p.docentes.map(x => h(x.nombre)).join('<br>') || '<small>Sin asignar</small>') + '</td><td class="num"><div class="acciones" style="justify-content:flex-end">' +
           (academico ? '<button class="btn claro chico" data-docentes="' + p.cod + '">Docentes</button>' : '') + (p.semanas ? '<a class="btn chico" href="#/programa/' + p.cod + '">Semanas</a>' : '') + '</div></td></tr>').join('') + '</tbody></table></div>').join(''));
+    activarFiltros();
     $('#buscar-prog').oninput = e => { const q = e.target.value.toLowerCase(); $$('tr[data-buscar]').forEach(tr => tr.classList.toggle('oculto', q && tr.dataset.buscar.indexOf(q) < 0)); };
     $$('[data-docentes]').forEach(b => b.onclick = async () => {
       const p = progs.find(x => x.cod === b.dataset.docentes);

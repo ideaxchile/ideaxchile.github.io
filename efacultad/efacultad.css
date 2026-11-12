@@ -7,9 +7,9 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
-body{font-family:Poppins,"Segoe UI",system-ui,sans-serif;color:var(--tinta);background:var(--papel);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body{font-family:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;color:var(--tinta);background:var(--papel);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
 a{color:var(--azul2)}
-h1,h2,h3,h4{color:var(--noche);line-height:1.25;margin:0 0 .5em}
+h1,h2,h3,h4{color:var(--noche);line-height:1.25;margin:0 0 .5em;font-family:"IBM Plex Serif",Georgia,serif;font-weight:600}
 h1{font-size:26px}h2{font-size:21px}h3{font-size:17px}h4{font-size:15px}
 p{margin:0 0 .8em}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -300,3 +300,31 @@ table.rubrica{width:100%;border-collapse:separate;border-spacing:0;font-size:13p
 .banda-vista{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between;background:#FFF4E8;border-bottom:2px solid #F07C1B;color:var(--tinta);padding:10px 20px;font-size:14px}
 .banda-vista .btn{flex:0 0 auto}
 @media (max-width:640px){.amb-largo{display:none}.banda-vista{padding:10px 14px;font-size:13px}}
+.segmento{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 8px;align-items:center}
+.segmento button{border:1px solid var(--linea);background:#fff;color:var(--tinta);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.segmento button small{font-weight:500;color:var(--gris);margin-left:4px}
+.segmento button:hover{border-color:#F07C1B}
+.segmento button.activo{background:#0F2747;border-color:#0F2747;color:#fff}
+.segmento button.activo small{color:#F8B57A}
+.oculto-filtro{display:none!important}
+.segmento .seg-tit{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gris);align-self:center;min-width:104px}
+@media (max-width:640px){.segmento .seg-tit{min-width:100%}}
+/* ruta de la semana */
+.ruta-semana{background:#fff;border-radius:var(--radio);box-shadow:var(--sombra);padding:18px 20px;margin-bottom:18px}
+.ruta-cab{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px}
+.ruta-cab h2{margin:0;font-size:20px}.ruta-cab span{font-size:13px;color:var(--gris)}
+.ruta-semana ol{list-style:none;margin:0;padding:0}
+.ruta-semana .paso{display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--linea)}
+.ruta-semana .paso:first-child{border-top:0}
+.ruta-semana .num{width:34px;height:34px;border-radius:50%;border:2px solid var(--noche);color:var(--noche);display:grid;place-items:center;font-weight:700;font-size:15px;flex:0 0 auto;font-family:"IBM Plex Serif",Georgia,serif}
+.ruta-semana .paso.hecho .num{background:var(--verde);border-color:var(--verde);color:#fff}
+.ruta-semana .paso.pendiente{opacity:.6}
+.ruta-semana .cuerpo{flex:1;min-width:0}
+.ruta-semana .fila{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.ruta-semana .fila > div:first-child{flex:1;min-width:220px}
+.ruta-semana small{display:block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--n2)}
+.ruta-semana b{display:block;font-size:16px;color:var(--noche)}
+.ruta-semana p{margin:2px 0 0;font-size:14px;color:var(--gris)}
+.ruta-semana .accion{flex:0 0 auto}
+.ruta-semana .podcast-drive{margin-top:10px}
+@media print{.ruta-semana{display:none}}
