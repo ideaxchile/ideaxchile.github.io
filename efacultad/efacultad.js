@@ -362,7 +362,8 @@
     const r = s.recursos || {};
     const pasos = [];
     const recurso = (k, titulo, texto, boton) => pasos.push({ k: k, titulo: titulo, texto: texto,
-      accion: r[k] ? '<a class="btn claro chico" data-visto="' + k + '" href="' + h(r[k]) + '" target="_blank" rel="noopener">' + boton + '</a>' : '<span class="etq">Disponible pronto</span>',
+      accion: r[k] ? '<div class="acciones" style="gap:6px"><button class="btn claro chico" data-visto="' + k + '" data-visor="' + h(r[k]) + '" data-visor-tit="' + h({ cuaderno: 'Cuaderno de estudio', caso: 'Caso de la semana', herramienta: 'Herramienta de la semana', lectura: 'Lectura complementaria' }[k] + ' · Semana ' + s.n) + '">' + boton + '</button>' +
+        '<a class="btn chico enlace-bajar" data-visto="' + k + '" href="' + h(urlDescarga(r[k])) + '" target="_blank" rel="noopener" title="Descargar a tu equipo">Descargar</a></div>' : '<span class="etq">Disponible pronto</span>',
       hecho: !!vistos[k], pendiente: !r[k] });
     recurso('cuaderno', 'Lee el cuaderno de la semana', 'Los conceptos, el modelo aplicado y los errores frecuentes. Es la base de todo lo demás.', 'Abrir cuaderno');
     if (r.podcast) {
@@ -391,6 +392,18 @@
         '<div class="cuerpo"><div class="fila"><div><small>Paso ' + (i + 1) + '</small><b>' + h(x.titulo) + '</b><p>' + h(x.texto) + '</p></div><div class="accion">' + x.accion + '</div></div>' + (x.extra || '') + '</div></li>').join('') +
       '</ol></section>';
   }
+  /* Visor de materiales dentro de la eFacultad: usa el visor de Drive y ofrece descargar el archivo. */
+  const urlDescarga = url => { const id = idDrive(url); return id ? 'https://drive.google.com/uc?export=download&id=' + encodeURIComponent(id) : url; };
+  function abrirVisor(url, titulo) {
+    const id = idDrive(url);
+    const fuente = id ? 'https://drive.google.com/file/d/' + encodeURIComponent(id) + '/preview' : url;
+    const m = modal('<div class="visor-cab"><div><b>' + h(titulo) + '</b><small>Puedes leerlo aquí o descargarlo para tenerlo en tu equipo.</small></div>' +
+      '<div class="acciones" style="gap:6px"><a class="btn naranja chico" href="' + h(urlDescarga(url)) + '" target="_blank" rel="noopener">Descargar</a>' +
+      '<a class="btn claro chico" href="' + h(url) + '" target="_blank" rel="noopener">Abrir en otra pestaña</a><button class="cerrar" data-cerrar aria-label="Cerrar">×</button></div></div>' +
+      '<div class="visor-cuerpo"><div class="visor-cargando">Cargando el documento…</div><iframe src="' + h(fuente) + '" title="' + h(titulo) + '" allow="autoplay" loading="eager"></iframe></div>', 'visor');
+    const ifr = m.el.querySelector('iframe'); ifr.onload = () => { const c = m.el.querySelector('.visor-cargando'); if (c) c.remove(); };
+  }
+
   function activarRutaSemana(claveVisto) {
     const marcar = k => {
       const v = JSON.parse(leer(claveVisto) || '{}'); if (v[k]) return; v[k] = 1; escribir(claveVisto, JSON.stringify(v));
@@ -399,6 +412,7 @@
     };
     S.marcarPaso = marcar;
     $$('[data-visto]').forEach(a => a.addEventListener('click', () => marcar(a.dataset.visto)));
+    $$('[data-visor]').forEach(b => b.addEventListener('click', () => abrirVisor(b.dataset.visor, b.dataset.visorTit)));
     $$('[data-ir-pest]').forEach(b => b.addEventListener('click', () => {
       const pb = $('.pestanas [data-pest="' + b.dataset.irPest + '"]'); if (!pb) return;
       pb.click(); pb.scrollIntoView({ behavior: 'smooth', block: 'start' });
