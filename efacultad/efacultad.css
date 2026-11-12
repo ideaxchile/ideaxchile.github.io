@@ -143,7 +143,7 @@ a.sem:hover{box-shadow:0 2px 4px rgba(15,39,71,.08),0 8px 24px rgba(15,39,71,.1)
 .podcast-cab .ico{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-size:19px;background:#FFF4E8;flex:0 0 auto}
 .podcast-cab b{display:block;font-size:14px}.podcast-cab small{color:var(--gris);font-size:12px}
 .podcast-cab > span:nth-child(2){flex:1;min-width:180px}
-.podcast-drive{width:100%;height:72px;border:0;border-radius:8px;background:var(--papel);display:block}
+.podcast-drive{width:100%;height:150px;border:0;border-radius:8px;background:var(--papel);display:block}
 @media print{.podcast{display:none}}
 .pestanas{display:flex;gap:4px;border-bottom:2px solid var(--linea);margin-bottom:16px;overflow-x:auto}
 .pestanas button{background:none;border:0;padding:10px 14px;font-weight:600;color:var(--gris);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
