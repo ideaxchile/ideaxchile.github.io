@@ -636,25 +636,34 @@
   async function vEvMensajes() {
     const d = await demoVista(); if (!d) return;
     const hs = hilosDemo(d);
-    vista(avisoDemo(d) + '<div class="encabezado-vista"><div><h1>Mensajes</h1><p>Escríbenos tus consultas académicas o administrativas. Respondemos en hasta dos días hábiles.</p></div><button class="btn naranja" id="btn-nuevo">Nueva consulta</button></div>' +
+    vista(avisoDemo(d) + '<div class="encabezado-vista"><div><h1>Mensajes</h1><p>Escríbenos tus consultas académicas o administrativas. Respondemos en hasta dos días hábiles.</p></div><button class="btn naranja" id="btn-nuevo">Nueva consulta</button></div>' + ayudaMensajes(false) +
       '<div class="hilos">' + hs.map((x, i) => '<a class="hilo-item" href="#/ev-hilo/' + i + '"><span class="t"><b>' + h(x.asunto) + '</b><small>' + h(x.tipo) + ' · ' + h(x.programa) + ' · ' + haceCuanto(x.ultimo) + '</small><p>' + h(x.extracto) + '</p></span></a>').join('') + '</div>');
     $('#btn-nuevo').onclick = () => {
+      const R = redactor({ staff: false, simulacion: true, placeholder: 'Cuéntanos tu consulta' });
       const m = modal('<div class="modal-cab"><h3>Nueva consulta</h3><button class="cerrar" data-cerrar>×</button></div><form>' +
         '<label class="campo"><span>Tipo de consulta</span><select name="tipo"><option>Académica</option><option>Administrativa</option></select><small>Académica: contenidos, casos y entregas (la responde tu docente). Administrativa: pagos, plazos, certificados, accesos.</small></label>' +
         '<label class="campo"><span>Programa</span><select><option>' + h(d.programa.nombre) + '</option></select></label>' +
         '<label class="campo"><span>Asunto</span><input type="text" maxlength="160"></label>' +
-        '<label class="campo"><span>Mensaje</span><textarea></textarea><small>Una consulta por mensaje. Si es sobre una semana, indica cuál.</small></label><button class="btn naranja">Enviar</button></form>');
-      m.el.querySelector('form').onsubmit = e => { e.preventDefault(); soloVista(); };
+        '<div class="campo-msj"><span class="et">Mensaje</span>' + R.html + '<small>Una consulta por mensaje. Si es sobre una semana, indica cuál y qué intentaste.</small></div></form>', 'ancho');
+      const f = m.el.querySelector('form');
+      R.activar(f);
+      f.onsubmit = e => e.preventDefault();
+      R.boton().onclick = e => { e.preventDefault(); soloVista(); };
     };
   }
   async function vEvHilo(i) {
     const d = await demoVista(); if (!d) return;
     const x = hilosDemo(d)[Number(i)];
     if (!x) { irA('#/ev-mensajes'); return; }
+    const R = redactor({ staff: false, simulacion: true, placeholder: 'Escribe tu respuesta', boton: 'Enviar respuesta' });
     vista(avisoDemo(d) + '<div class="miga"><a href="#/ev-mensajes">Mensajes</a> › ' + h(x.asunto) + '</div><div class="encabezado-vista"><div><h1>' + h(x.asunto) + '</h1><p>' + h(x.tipo) + ' · ' + h(x.programa) + '</p></div></div>' +
       '<div class="burbujas">' + x.lista.map(m => '<div class="msj' + (m.propio ? ' propio' : '') + '"><div class="de">' + h(m.autor) + (m.deIdeax && !m.propio ? ' · IDEAX' : '') + ' · ' + fechaHora(m.fecha) + '</div><div class="tx">' + h(m.texto) + '</div></div>').join('') + '</div>' +
-      '<form id="f-resp" class="tarjeta"><label class="campo"><span>Responder</span><textarea></textarea></label><button class="btn naranja">Enviar respuesta</button></form>');
-    $('#f-resp').onsubmit = e => { e.preventDefault(); soloVista(); };
+      '<form id="f-resp"><div class="rotulo-resp">Responder</div>' + R.html + '</form>' + ayudaMensajes(false));
+    const f = $('#f-resp');
+    R.activar(f);
+    S.salir = () => R.soltar();
+    f.onsubmit = e => e.preventDefault();
+    R.boton().onclick = e => { e.preventDefault(); soloVista(); };
   }
 
   async function vEvSolicitudes() {
@@ -1127,7 +1136,7 @@
         (a.subiendo ? ' · subiendo…' : a.kb ? ' · ' + a.kb + ' KB' : '') + (a.subiendo ? '' : '<button type="button" data-quitar-pend="' + i + '" aria-label="Quitar">×</button>') + '</span>').join('');
       $$('[data-quitar-pend]', raiz).forEach(b => b.onclick = () => {
         const a = pend.splice(Number(b.dataset.quitarPend), 1)[0];
-        if (a && a.id) api('quitarAdjuntoMensaje', { id: a.id }).catch(() => { });
+        if (a && a.id && !o.simulacion) api('quitarAdjuntoMensaje', { id: a.id }).catch(() => { });
         pintarPend();
       });
     };
@@ -1135,6 +1144,7 @@
     const subir = async (clase, nombre, tipo, datos, segundos) => {
       if (!espacio()) return;
       const item = { clase, nombre, subiendo: true, seg: segundos };
+      if (o.simulacion) { item.subiendo = false; item.kb = Math.round(String(datos || '').length * 0.75 / 1024); pend.push(item); pintarPend(); return; }
       pend.push(item); pintarPend();
       try { Object.assign(item, await api('subirAdjuntoMensaje', { clase, nombre, tipo, datos, segundos }), { subiendo: false }); }
       catch (er) { pend.splice(pend.indexOf(item), 1); toast(er.message, true); }
