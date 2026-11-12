@@ -138,6 +138,13 @@ a.sem:hover{box-shadow:0 2px 4px rgba(15,39,71,.08),0 8px 24px rgba(15,39,71,.1)
 .recurso .ico{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-size:19px;background:var(--papel);flex:0 0 auto}
 .recurso b{display:block;font-size:14px}.recurso small{color:var(--gris);font-size:12px}
 .recurso.pendiente{opacity:.55;box-shadow:none;border:1px dashed var(--linea)}
+.podcast{background:#fff;border-radius:10px;padding:14px;box-shadow:var(--sombra);margin-bottom:16px;border-left:4px solid #F07C1B}
+.podcast-cab{display:flex;gap:12px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.podcast-cab .ico{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-size:19px;background:#FFF4E8;flex:0 0 auto}
+.podcast-cab b{display:block;font-size:14px}.podcast-cab small{color:var(--gris);font-size:12px}
+.podcast-cab > span:nth-child(2){flex:1;min-width:180px}
+.podcast-drive{width:100%;height:72px;border:0;border-radius:8px;background:var(--papel);display:block}
+@media print{.podcast{display:none}}
 .pestanas{display:flex;gap:4px;border-bottom:2px solid var(--linea);margin-bottom:16px;overflow-x:auto}
 .pestanas button{background:none;border:0;padding:10px 14px;font-weight:600;color:var(--gris);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
 .pestanas button.activo{color:var(--noche);border-bottom-color:var(--naranja)}
@@ -290,3 +297,6 @@ table.rubrica{width:100%;border-collapse:separate;border-spacing:0;font-size:13p
 .portada-vista p{color:#DCE4EE;margin:0;max-width:520px}
 .portada-vista select{width:auto;background:#fff;color:var(--tinta)}
 @media(max-width:620px){.portada-vista{min-height:170px;padding:22px 20px;background-position:80% 30%!important}.portada-vista h1{font-size:24px}}
+.banda-vista{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between;background:#FFF4E8;border-bottom:2px solid #F07C1B;color:var(--tinta);padding:10px 20px;font-size:14px}
+.banda-vista .btn{flex:0 0 auto}
+@media (max-width:640px){.amb-largo{display:none}.banda-vista{padding:10px 14px;font-size:13px}}

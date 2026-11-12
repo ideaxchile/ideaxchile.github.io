@@ -112,6 +112,7 @@
     if (u.roles.indexOf('estudiante') >= 0) a.push(['estudiante', 'Estudiante']);
     if (p.indexOf('corregir') >= 0 || p.indexOf('editar_contenido') >= 0) a.push(['docente', 'Docente']);
     if (['gestion_academica', 'gestion_administrativa', 'crm', 'certificados'].some(x => p.indexOf(x) >= 0)) a.push(['gestion', 'Gestión']);
+    if (['corregir', 'editar_contenido', 'gestion_academica', 'gestion_administrativa'].some(x => p.indexOf(x) >= 0)) a.push(['vista', 'Ver como estudiante']);
     return a;
   }
   const tiene = p => S.usuario && S.usuario.permisos.indexOf(p) >= 0;
@@ -144,9 +145,12 @@
     [/^#\/cuentas$/, vCuentas, 'gestion'],
     [/^#\/solicitudes-gestion$/, vSolicitudesGestion, 'gestion'],
     [/^#\/programas$/, vContenidos, 'gestion'],
-    [/^#\/crm$/, vCrm, 'gestion']
+    [/^#\/crm$/, vCrm, 'gestion'],
+    [/^#\/ev$/, vVistaProgramas, 'vista'],
+    [/^#\/ev\/([\w-]+)$/, vVistaCurso, 'vista'],
+    [/^#\/ev\/([\w-]+)\/([\w-]+)$/, vVistaSemana, 'vista']
   ];
-  const INICIO = { estudiante: '#/inicio', docente: '#/bandeja', gestion: '#/gestion' };
+  const INICIO = { estudiante: '#/inicio', docente: '#/bandeja', gestion: '#/gestion', vista: '#/ev' };
 
   function irA(hash) { if (location.hash === hash) router(); else location.hash = hash; }
 
@@ -165,9 +169,10 @@
     if (!ambs.length) { pintarVacio('Tu cuenta no tiene un ambiente asignado', 'Escribe a contacto@ideax.cl para que revisemos tus permisos.'); return; }
     if (!ruta || hash === '#/' || ruta[1] === vIngresar) {
       const amb = leer('ef_ambiente');
-      S.ambiente = ambs.find(a => a[0] === amb) ? amb : ambs[0][0];
+      S.ambiente = amb !== 'vista' && ambs.find(a => a[0] === amb) ? amb : ambs[0][0];
       irA(INICIO[S.ambiente]); return;
     }
+    if (S.ambiente && S.ambiente !== 'vista') S.ambientePrevio = S.ambiente;
     if (ruta[2] && ruta[2] !== 'sola' && ambs.find(a => a[0] === ruta[2])) S.ambiente = ruta[2];
     if (!S.ambiente || !ambs.find(a => a[0] === S.ambiente)) S.ambiente = ambs[0][0];
     escribir('ef_ambiente', S.ambiente);
@@ -180,6 +185,7 @@
 
   function navDe(amb) {
     if (amb === 'estudiante') return [['#/inicio', 'Inicio'], ['#/notas', 'Notas'], ['#/mensajes', 'Mensajes', 'msj'], ['#/documentos', 'Documentos'], ['#/solicitudes', 'Solicitudes']];
+    if (amb === 'vista') return [['#/ev', 'Programas']];
     if (amb === 'docente') return [['#/bandeja', 'Bandeja'], ['#/libro', 'Libro de notas'], ['#/contenidos', 'Contenidos'], ['#/mensajes', 'Mensajes']];
     const n = [['#/gestion', 'Resumen']];
     if (tiene('gestion_administrativa')) n.push(['#/matriculas', 'Matrículas'], ['#/cuentas', 'Cuentas']);
@@ -192,12 +198,19 @@
 
   function pintarMarco(hash) {
     const u = S.usuario, ambs = ambientesDe(u);
-    const nav = navDe(S.ambiente).map(n => '<a href="' + n[0] + '"' + (hash.indexOf(n[0]) === 0 || (n[0] === '#/inicio' && /^#\/(curso|semana)/.test(hash)) || (n[0] === '#/bandeja' && /^#\/corregir/.test(hash)) || (n[0] === '#/contenidos' && /^#\/(programa|editar)\//.test(hash) && S.ambiente === 'docente') || (n[0] === '#/programas' && /^#\/(programa|editar)\//.test(hash)) || (n[0] === '#/mensajes' && /^#\/hilo/.test(hash)) ? ' class="activo"' : '') + '>' + h(n[1]) + (n[2] ? '<span class="burbuja oculto" id="burbuja-msj"></span>' : '') + '</a>').join('');
+    const nav = navDe(S.ambiente).map(n => '<a href="' + n[0] + '"' + (hash.indexOf(n[0]) === 0 || (n[0] === '#/inicio' && /^#\/(curso|semana)/.test(hash)) || (n[0] === '#/ev' && /^#\/ev/.test(hash)) || (n[0] === '#/bandeja' && /^#\/corregir/.test(hash)) || (n[0] === '#/contenidos' && /^#\/(programa|editar)\//.test(hash) && S.ambiente === 'docente') || (n[0] === '#/programas' && /^#\/(programa|editar)\//.test(hash)) || (n[0] === '#/mensajes' && /^#\/hilo/.test(hash)) ? ' class="activo"' : '') + '>' + h(n[1]) + (n[2] ? '<span class="burbuja oculto" id="burbuja-msj"></span>' : '') + '</a>').join('');
     app.innerHTML = '<header class="barra no-imprimir"><a class="marca" href="' + INICIO[S.ambiente] + '"><img src="../img/logo-ideax-blanco.png" alt=""><span>IDEA<i>X</i></span><small>eFACULTAD</small></a>' +
       '<nav class="nav" aria-label="Secciones">' + nav + '</nav><span class="espacio"></span>' +
-      (ambs.length > 1 ? '<div class="ambientes" role="tablist">' + ambs.map(a => '<button data-amb="' + a[0] + '" class="' + (a[0] === S.ambiente ? 'activo' : '') + '">' + a[1] + '</button>').join('') + '</div>' : '') +
-      '<button class="usuario" id="btn-usuario" aria-label="Mi cuenta">' + avatar(u.nombre, u.foto) + '</button></header><main id="vista">' + cargando() + '</main>';
+      (ambs.length > 1 ? '<div class="ambientes" role="tablist">' + ambs.map(a => '<button data-amb="' + a[0] + '" class="' + (a[0] === S.ambiente ? 'activo' : '') + '"' + (a[0] === 'vista' ? ' title="Ver como estudiante">👁<span class="amb-largo"> Ver como estudiante</span>' : '>' + a[1]) + '</button>').join('') + '</div>' : '') +
+      '<button class="usuario" id="btn-usuario" aria-label="Mi cuenta">' + avatar(u.nombre, u.foto) + '</button></header>' +
+      (S.ambiente === 'vista' ? '<div class="banda-vista no-imprimir"><span>👁️ <b>Estás viendo la eFacultad como estudiante.</b> Todas las semanas están abiertas y nada de lo que escribas o respondas se guarda.</span>' +
+        '<button class="btn chico" id="btn-salir-vista">Volver a ' + h((ambs.find(a => a[0] === (S.ambientePrevio || '')) || ambs[0])[1]) + '</button></div>' : '') +
+      '<main id="vista">' + cargando() + '</main>';
     $$('[data-amb]').forEach(b => b.onclick = () => { S.ambiente = b.dataset.amb; escribir('ef_ambiente', S.ambiente); irA(INICIO[S.ambiente]); });
+    if ($('#btn-salir-vista')) $('#btn-salir-vista').onclick = () => {
+      const previo = ambs.find(a => a[0] === S.ambientePrevio) ? S.ambientePrevio : ambs[0][0];
+      S.ambiente = previo; escribir('ef_ambiente', previo); irA(INICIO[previo]);
+    };
     $('#btn-usuario').onclick = e => {
       e.stopPropagation();
       const viejo = $('.menu-usuario'); if (viejo) { viejo.remove(); return; }
@@ -321,6 +334,23 @@
 
   const ICONOS = { cuaderno: ['📘', 'Cuaderno de estudio', 'Conceptos y herramientas'], caso: ['🗂️', 'Caso de la semana', 'Lo que debes resolver'], herramienta: ['🧰', 'Herramienta', 'Plantilla o planilla'], lectura: ['📄', 'Lectura complementaria', 'Opcional'] };
 
+  /* Podcast de la semana: se escucha en la misma página y se puede descargar.
+     Si el enlace es de Drive, se usa su reproductor; si es un audio directo, la etiqueta <audio>. */
+  function idDrive(url) {
+    const m = String(url || '').match(/\/d\/([\w-]{20,})/) || String(url || '').match(/[?&]id=([\w-]{20,})/);
+    return m ? m[1] : '';
+  }
+  function htmlPodcast(url, n) {
+    if (!url) return '';
+    const id = idDrive(url);
+    const reproductor = id
+      ? '<iframe class="podcast-drive" src="https://drive.google.com/file/d/' + h(id) + '/preview" allow="autoplay" loading="lazy" title="Podcast de la semana ' + n + '"></iframe>'
+      : '<audio controls preload="none" src="' + h(url) + '" style="width:100%"></audio>';
+    const bajar = id ? 'https://drive.google.com/uc?export=download&id=' + encodeURIComponent(id) : url;
+    return '<section class="podcast"><div class="podcast-cab"><span class="ico">🎧</span><span><b>Podcast de la semana</b><small>Escúchalo aquí o descárgalo para oírlo donde quieras</small></span>' +
+      '<a class="btn claro chico" href="' + h(bajar) + '" target="_blank" rel="noopener" download>Descargar audio</a></div>' + reproductor + '</section>';
+  }
+
   function htmlRubrica(rub, puntajes, editable) {
     const niveles = [['destacado', 'Destacado'], ['logrado', 'Logrado'], ['en_desarrollo', 'En desarrollo'], ['insuficiente', 'Insuficiente']];
     return '<div class="tabla-cont"><table class="rubrica"><thead><tr><th>Criterio</th>' + niveles.map(n => '<th>' + n[1] + (rub.niveles ? ' <small style="font-weight:400;opacity:.8">' + rub.niveles[n[0]] + '%</small>' : '') + '</th>').join('') + (puntajes || editable ? '<th style="width:90px">%</th>' : '') + '</tr></thead><tbody>' +
@@ -361,12 +391,48 @@
     pintarSemana(d, null);
   }
 
-  function pintarSemana(d, mat) {
-    const s = d.semana, p = d.programa, e = d.entrega;
-    const editable = !!mat && !d.vistaPrevia && !d.soloLectura && (!e || /Borrador|Devuelta/.test(e.estado));
+  /* =================== VER COMO ESTUDIANTE (docentes y administración) =================== */
+  const TIPO_PROG = { gratuito: 'Curso gratuito', ejecutivo: 'Curso ejecutivo', diplomado: 'Diplomado', paper: 'Paper', emprendedores: 'Emprendedores', master: 'Master Profesional' };
+  async function vVistaProgramas() {
+    const progs = await api('programasVista');
+    const grupos = {};
+    progs.forEach(p => (grupos[p.tipo] = grupos[p.tipo] || []).push(p));
+    const tarjeta = p => '<article class="prog" style="--c:' + h(p.color) + '" data-buscar="' + h((p.nombre + ' ' + p.cod).toLowerCase()) + '"><div class="franja"></div><div class="cuerpo"><div class="tipo">' + h(TIPO_PROG[p.tipo] || p.tipo) + '</div>' +
+      '<h3>' + h(p.nombre) + '</h3><div style="font-size:13px;color:var(--gris)">' + p.semanas + ' semanas · ' + p.horas + ' horas</div>' +
+      '<div class="barra-avance"><i style="width:' + Math.round(p.listas / p.semanas * 100) + '%"></i></div><div style="font-size:12px;color:var(--gris)">' + p.listas + ' de ' + p.semanas + ' semanas con material listo</div></div>' +
+      '<div class="pie"><span></span><div class="acciones"><a class="btn naranja chico" href="#/ev/' + h(p.cod) + '">Entrar como estudiante</a></div></div></article>';
+    vista('<div class="encabezado-vista"><div><h1>Ver como estudiante</h1><p>Elige un programa para recorrerlo tal como lo ve un estudiante, con todas sus semanas abiertas.</p></div>' +
+      '<input type="search" id="buscar-ev" placeholder="Buscar programa" style="max-width:280px"></div>' +
+      (progs.length ? Object.keys(TIPOS).filter(t => grupos[t]).map(t => '<h2 class="grupo-ev" style="margin-top:18px">' + TIPOS[t] + '</h2><div class="rejilla r2 grupo-ev">' + grupos[t].map(tarjeta).join('') + '</div>').join('')
+        : vacio('No tienes programas para revisar', 'Cuando tengas programas asignados aparecerán aquí.')));
+    $('#buscar-ev').oninput = ev => { const q = ev.target.value.toLowerCase(); $$('article[data-buscar]').forEach(a => a.classList.toggle('oculto', q && a.dataset.buscar.indexOf(q) < 0)); };
+  }
+
+  async function vVistaCurso(cod) {
+    const d = await api('cursoVista', { programa: cod });
+    const p = d.programa;
+    let html = '<div class="miga"><a href="#/ev">Ver como estudiante</a> › ' + h(p.nombre) + '</div><div class="encabezado-vista"><div><h1>' + h(p.nombre) + '</h1><p>' + d.semanas.length + ' semanas · ' + p.horas + ' horas</p></div></div>';
+    let materia = null;
+    html += '<div class="semanas">';
+    d.semanas.forEach(s => {
+      if (s.materia_n !== materia && d.semanas.some(x => x.materia_n !== s.materia_n)) { materia = s.materia_n; html += '<div class="materia-tit">Materia ' + s.materia_n + ' · ' + h(s.materia) + '</div>'; }
+      html += '<a class="sem abierta" href="#/ev/' + h(p.cod) + '/' + h(s.id) + '"><span class="n">' + s.n + '</span><span class="t"><b>' + h(s.tema) + '</b><small>' + (s.materialListo ? 'Material listo' + (s.podcast ? ' · con podcast' : '') : 'Material pendiente') + '</small></span>' +
+        (s.materialListo ? etqEstado('disponible') : '<span class="etq">Pendiente</span>') + '</a>';
+    });
+    vista(html + '</div>');
+  }
+
+  async function vVistaSemana(cod, sem) {
+    const d = await api('semana', { semana: sem });
+    pintarSemana(d, null, true);
+  }
+
+  function pintarSemana(d, mat, simulacion) {
+    const s = d.semana, p = d.programa, e = simulacion ? null : d.entrega;
+    const editable = simulacion || (!!mat && !d.vistaPrevia && !d.soloLectura && (!e || /Borrador|Devuelta/.test(e.estado)));
     const contenido = Object.assign({}, e ? e.contenido : {});
     const claveLocal = 'ef_borrador_' + (mat || '') + '_' + s.id;
-    if (editable) {
+    if (editable && !simulacion) {
       const local = JSON.parse(leer(claveLocal) || 'null');
       if (local && (!e || !e.guardado || local.t > new Date(e.guardado).getTime())) Object.assign(contenido, local.c);
     }
@@ -377,19 +443,19 @@
         : '<div class="recurso pendiente"><span class="ico">' + i[0] + '</span><span><b>' + i[1] + '</b><small>Disponible pronto</small></span></div>';
     }).join('');
     const pest = [['ficha', 'Mi entrega'], ['rubrica', 'Rúbrica'], d.autoevaluacion.preguntas.length ? ['auto', 'Autoevaluación'] : null].filter(Boolean);
-    let html = '<div class="miga no-imprimir">' + (mat ? '<a href="#/inicio">Inicio</a> › <a href="#/curso/' + mat + '">' + h(p.nombre) + '</a>' : '<a href="#/programa/' + p.cod + '">' + h(p.nombre) + '</a> › Vista previa') + ' › Semana ' + s.n + '</div>' +
+    let html = '<div class="miga no-imprimir">' + (simulacion ? '<a href="#/ev">Ver como estudiante</a> › <a href="#/ev/' + h(p.cod) + '">' + h(p.nombre) + '</a>' : mat ? '<a href="#/inicio">Inicio</a> › <a href="#/curso/' + mat + '">' + h(p.nombre) + '</a>' : '<a href="#/programa/' + p.cod + '">' + h(p.nombre) + '</a> › Vista previa') + ' › Semana ' + s.n + '</div>' +
       '<div class="semana-cab" style="--c:' + h(p.color) + '"><div class="sup">' + (s.materia && s.materia !== p.nombre ? 'Materia ' + s.materia_n + ' · ' + h(s.materia) + ' · ' : '') + 'Semana ' + s.n + '</div><h1>' + h(s.tema) + '</h1>' +
       (s.descripcion ? '<p>' + h(s.descripcion) + '</p>' : '') + (s.entrega ? '<p style="margin-top:8px"><b style="color:#F8B57A">Entrega:</b> ' + h(s.entrega) + '</p>' : '') + '</div>' +
-      (d.vistaPrevia ? '<div class="aviso info">Vista previa del docente: así ven esta semana los estudiantes. No se puede escribir.</div>' : '') +
-      (!s.materialListo && !d.vistaPrevia ? '<div class="aviso alerta">El material de esta semana se está terminando de cargar. Te avisaremos apenas esté completo.</div>' : '') +
-      '<div class="recursos">' + rec + '</div>' +
+      (d.vistaPrevia && !simulacion ? '<div class="aviso info">Vista previa del docente: así ven esta semana los estudiantes. No se puede escribir.</div>' : '') +
+      (!s.materialListo && (!d.vistaPrevia || simulacion) ? '<div class="aviso alerta">El material de esta semana se está terminando de cargar. Te avisaremos apenas esté completo.</div>' : '') +
+      '<div class="recursos">' + rec + '</div>' + htmlPodcast(s.recursos.podcast, s.n) +
       '<div class="pestanas">' + pest.map((x, i) => '<button data-pest="' + x[0] + '" class="' + (i === 0 ? 'activo' : '') + '">' + x[1] + '</button>').join('') + '</div>';
 
     // ---- ficha
     let ficha = '';
     if (e && e.estado === 'Corregida') ficha += '<h3>Tu calificación</h3>' + notaHtml(e.nota, true) + (e.retro ? '<h4>Retroalimentación de tu docente</h4><div class="retro" style="margin-bottom:16px">' + h(e.retro) + '</div>' : '');
     if (e && e.estado === 'Devuelta') ficha += '<div class="aviso error"><b>Tu docente te devolvió esta entrega para corregirla.</b><div style="white-space:pre-wrap;margin-top:6px">' + h(e.retro) + '</div></div>';
-    if (editable) ficha += '<div class="ficha-estado"><span class="guardado" id="estado-guardado">' + (e && e.guardado ? 'Guardado ' + haceCuanto(e.guardado) : 'Se guarda automáticamente mientras escribes') + '</span>' +
+    if (editable) ficha += '<div class="ficha-estado"><span class="guardado" id="estado-guardado">' + (simulacion ? 'Vista como estudiante: lo que escribas no se guarda' : e && e.guardado ? 'Guardado ' + haceCuanto(e.guardado) : 'Se guarda automáticamente mientras escribes') + '</span>' +
       '<div class="acciones"><button class="btn claro chico" id="btn-guardar">Guardar ahora</button><button class="btn naranja chico" id="btn-enviar">Enviar entrega definitiva</button></div></div>';
     else if (e && /Enviada|Corregida/.test(e.estado)) ficha += '<div class="ficha-estado"><span>' + etqEstado(e.estado) + ' Enviada el ' + fechaHora(e.enviada) + '</span><a class="btn claro chico" href="#/imprimir/entrega/' + e.id + '" target="_blank">Descargar PDF</a></div>';
     else if (d.soloLectura && mat) ficha += '<div class="aviso alerta">El plazo de tu programa terminó. Puedes solicitar una prórroga en Solicitudes.</div>';
@@ -422,7 +488,7 @@
       const resp = auto.preguntas.map((q, i) => { const x = ev.target.querySelector('input[name=q' + i + ']:checked'); return x ? Number(x.value) : null; });
       if (resp.some(x => x === null)) { toast('Responde todas las preguntas.', true); return; }
       try {
-        const r = await api('autoevaluar', { semana: s.id, respuestas: resp });
+        const r = await api('autoevaluar', { semana: s.id, respuestas: resp, simulacion: !!simulacion });
         r.detalle.forEach((x, i) => { $('.res-q[data-q="' + i + '"]').innerHTML = '<div class="aviso ' + (x.ok ? 'ok' : 'error') + '" style="margin:10px 0 0">' + (x.ok ? '¡Correcto!' : 'La respuesta correcta es la ' + x.correcta + '.') + (x.explicacion ? ' ' + h(x.explicacion) : '') + '</div>'; });
         toast('Obtuviste ' + r.aciertos + ' de ' + r.total + '.');
       } catch (er) { toast(er.message, true); }
@@ -440,6 +506,20 @@
       c.classList.toggle('excede', !!max && n > max);
       t.style.height = 'auto'; t.style.height = Math.min(Math.max(t.scrollHeight + 4, 150), 900) + 'px';
     };
+    if (simulacion) {
+      // Igual que para el estudiante, pero sin guardar ni enviar nada.
+      $$('textarea[data-id]').forEach(t => { contar(t); t.addEventListener('input', () => contar(t)); });
+      const aviso = () => toast('Estás en la vista como estudiante: no se guarda ni se envía nada.');
+      $('#btn-guardar').onclick = aviso;
+      $('#btn-enviar').onclick = () => {
+        recolectar();
+        const vacias = d.ficha.casillas.filter(c => !String(contenido[c.id] || '').trim());
+        if (vacias.length) { toast('El estudiante vería este aviso: completa todas las casillas antes de enviar. Falta: ' + vacias.map(c => c.titulo).join(', ') + '.', true); return; }
+        aviso();
+      };
+      $('#in-adjunto').onchange = ev => { ev.target.value = ''; aviso(); };
+      return;
+    }
     const guardar = async () => {
       clearTimeout(temporizador);
       if (!pendiente) return;
@@ -922,7 +1002,7 @@
       d.semanas.map(s => {
         let fila = '';
         if (s.materia_n !== materia && d.semanas.some(x => x.materia_n !== s.materia_n)) { materia = s.materia_n; fila += '<tr><td colspan="7" style="background:#FBFCFD;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--gris);font-weight:700">Materia ' + s.materia_n + ' · ' + h(s.materia) + '</td></tr>'; }
-        return fila + '<tr><td><b>' + s.n + '.</b> ' + h(s.tema) + '</td><td class="num">' + s.recursos + ' de 4</td><td>' + (s.ficha ? '<span class="etq verde">Propia (' + s.ficha + ')</span>' : '<span class="etq">Por defecto</span>') + '</td>' +
+        return fila + '<tr><td><b>' + s.n + '.</b> ' + h(s.tema) + '</td><td class="num">' + s.recursos + ' de 4' + (s.podcast ? ' <span title="Con podcast">🎧</span>' : '') + '</td><td>' + (s.ficha ? '<span class="etq verde">Propia (' + s.ficha + ')</span>' : '<span class="etq">Por defecto</span>') + '</td>' +
           '<td>' + (s.rubrica ? '<span class="etq verde">Propia</span>' : '<span class="etq">Por defecto</span>') + '</td><td class="num">' + (s.autoeval || '') + '</td><td>' + (s.materialListo ? '<span class="etq verde">Lista</span>' : '<span class="etq naranja">Pendiente</span>') + '</td>' +
           '<td class="num"><div class="acciones" style="justify-content:flex-end"><a class="btn claro chico" href="#/vista/' + s.id + '">Vista previa</a><a class="btn chico" href="#/editar/' + s.id + '">Editar</a></div></td></tr>';
       }).join('') + '</tbody></table></div>');
@@ -965,7 +1045,7 @@
       '<div class="encabezado-vista"><div><h1>Semana ' + s.n + ': ' + h(s.tema) + '</h1><p>' + (s.materia ? 'Materia ' + s.materia_n + ' · ' + h(s.materia) : '') + '</p></div><div class="acciones"><a class="btn claro" href="#/vista/' + s.id + '" target="_blank">Vista previa</a><button class="btn naranja" data-guardar>Guardar</button></div></div>' +
       '<div class="pestanas"><button class="activo" data-pest="gen">Semana y recursos</button><button data-pest="fic">Ficha de entrega</button><button data-pest="rub">Rúbrica</button><button data-pest="aut">Autoevaluación</button></div>' +
       '<div data-panel="gen" class="tarjeta">' + campo('tema', 'Tema') + campo('descripcion', 'Descripción', 'area', 'Contenidos y caso de la semana, en pocas líneas.') + campo('entrega', 'Qué se entrega', 'area') +
-      '<div class="fila-campos">' + campo('cuaderno', 'Cuaderno de estudio (enlace)', 'url', 'Enlace de Drive compartido con "cualquier persona con el enlace".') + campo('caso', 'Caso (enlace)', 'url') + campo('herramienta', 'Herramienta (enlace)', 'url') + campo('lectura', 'Lectura complementaria (enlace)', 'url') + '</div>' +
+      '<div class="fila-campos">' + campo('cuaderno', 'Cuaderno de estudio (enlace)', 'url', 'Enlace de Drive compartido con "cualquier persona con el enlace".') + campo('caso', 'Caso (enlace)', 'url') + campo('herramienta', 'Herramienta (enlace)', 'url') + campo('lectura', 'Lectura complementaria (enlace)', 'url') + campo('podcast', 'Podcast de la semana (enlace)', 'url', 'Audio en Drive compartido con enlace, o enlace directo a un .mp3.') + '</div>' +
       '<label class="check"><input type="checkbox" data-s="material_listo"' + (s.material_listo ? ' checked' : '') + '> Material listo: la semana está completa para los estudiantes</label></div>' +
       '<div data-panel="fic" class="oculto">' + (!d.ficha.propia ? '<div class="aviso info">Esta semana usa la ficha por defecto del método de casos. Si la modificas y guardas, queda como ficha propia de la semana.</div>' : '') + '<div id="ed-casillas"></div><button class="btn claro" id="add-c">Agregar casilla</button></div>' +
       '<div data-panel="rub" class="oculto">' + (!d.rubrica.propia ? '<div class="aviso info">Esta semana usa la rúbrica por defecto del método de casos.</div>' : '') + '<div id="ed-rubrica"></div><button class="btn claro" id="add-r">Agregar criterio</button></div>' +
