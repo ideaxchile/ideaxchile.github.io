@@ -126,6 +126,7 @@
     return a;
   }
   const tiene = p => S.usuario && S.usuario.permisos.indexOf(p) >= 0;
+  const esEquipo = () => ['corregir', 'gestion_academica', 'gestion_administrativa', 'certificados'].some(tiene);
 
   /* =================== rutas =================== */
   const RUTAS = [
@@ -146,6 +147,8 @@
     [/^#\/mensajes$/, vMensajes, null],
     [/^#\/hilo\/([\w-]+)$/, vHilo, null],
     [/^#\/perfil$/, vPerfil, null],
+    [/^#\/experiencia$/, vExperiencia, null],
+    [/^#\/experiencia\/([\w-]+)$/, vExperiencia, 'gestion'],
     [/^#\/bandeja$/, vBandeja, 'docente'],
     [/^#\/corregir\/([\w-]+)$/, vCorregir, 'docente'],
     [/^#\/libro(?:\/([\w-]+))?$/, vLibro, 'docente'],
@@ -206,7 +209,7 @@
   function navDe(amb) {
     if (amb === 'estudiante') return [['#/inicio', 'Inicio'], ['#/notas', 'Notas'], ['#/mensajes', 'Mensajes', 'msj'], ['#/documentos', 'Documentos'], ['#/solicitudes', 'Solicitudes']];
     if (amb === 'vista') return [['#/ev', 'Programas'], ['#/ev-notas', 'Notas'], ['#/ev-mensajes', 'Mensajes'], ['#/ev-documentos', 'Documentos'], ['#/ev-solicitudes', 'Solicitudes']];
-    if (amb === 'docente') return [['#/bandeja', 'Bandeja'], ['#/libro', 'Libro de notas'], ['#/contenidos', 'Contenidos'], ['#/encuestas', 'Encuestas'], ['#/mensajes', 'Mensajes']];
+    if (amb === 'docente') return [['#/bandeja', 'Bandeja'], ['#/libro', 'Libro de notas'], ['#/contenidos', 'Contenidos'], ['#/encuestas', 'Encuestas'], ['#/mensajes', 'Mensajes'], ['#/experiencia', 'Mi experiencia']];
     const n = [['#/gestion', 'Resumen']];
     if (tiene('gestion_administrativa')) n.push(['#/matriculas', 'Matrículas'], ['#/cuentas', 'Cuentas']);
     if (tiene('gestion_administrativa') || tiene('certificados')) n.push(['#/solicitudes-gestion', 'Solicitudes']);
@@ -236,7 +239,7 @@
       const viejo = $('.menu-usuario'); if (viejo) { viejo.remove(); return; }
       const m = document.createElement('div'); m.className = 'menu-usuario';
       m.innerHTML = '<div class="quien"><b>' + h(u.nombre) + '</b><span>' + h(u.correo) + '</span><br><span>' + h(u.roles.join(' · ')) + '</span></div>' +
-        '<a href="#/perfil">Mi perfil y foto</a><a href="#/clave">Cambiar clave</a><a href="https://www.ideax.cl" target="_blank" rel="noopener">Ir a www.ideax.cl</a><button id="btn-salir">Cerrar sesión</button>';
+        '<a href="#/perfil">Mi perfil y foto</a>' + (esEquipo() ? '<a href="#/experiencia">Mi certificado de experiencia</a>' : '') + '<a href="#/clave">Cambiar clave</a><a href="https://www.ideax.cl" target="_blank" rel="noopener">Ir a www.ideax.cl</a><button id="btn-salir">Cerrar sesión</button>';
       document.body.appendChild(m);
       m.querySelector('#btn-salir').onclick = async () => { try { await api('salir'); } catch (er) { } cerrarLocal(); if (window.google && google.accounts) google.accounts.id.disableAutoSelect(); irA('#/ingresar'); };
       setTimeout(() => document.addEventListener('click', function f() { m.remove(); document.removeEventListener('click', f); }), 0);
@@ -1781,6 +1784,88 @@
     md.el.querySelector('#btn-cred').onclick = async () => { if (!await confirmar('¿Generar una nueva clave temporal y enviarla a ' + m.correo + '?', 'Enviar')) return; try { await api('reenviarCredenciales', { id: m.usuario_id }); toast('Credenciales enviadas.'); } catch (er) { toast(er.message, true); } };
   }
 
+  /* =================== CERTIFICADO DE EXPERIENCIA =================== */
+  async function vExperiencia(uid) {
+    const d = await api('experiencia', uid ? { usuario: uid } : {});
+    const propio = !uid || uid === S.usuario.id;
+    const ed = d.puedeEditar, t = d.totales;
+    const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+    const mes = iso => { const x = new Date(iso); return MES[x.getMonth()] + ' ' + x.getFullYear(); };
+    const periodoTxt = t.desde ? mes(t.desde) + ' a ' + (t.vigente ? 'la fecha' : mes(t.hasta)) : 'Sin registros';
+    const hist = '<span class="etq amarillo" title="Registro histórico ingresado por la Dirección; en el certificado se marca con †">Histórico †</span>';
+    const btnFila = x => ed ? '<td style="white-space:nowrap">' + (x.origen === 'manual' ? '<button class="btn claro chico" data-ed="' + h(x.id) + '">Editar</button> <button class="btn texto chico" data-qx="' + h(x.id) + '">Quitar</button>' : '') + '</td>' : '';
+    const filasDoc = d.docencia.map(x => '<tr><td><b>' + h(x.nombre) + '</b>' + (x.historico ? ' ' + hist : '') + '<br><small>' + h(x.programa || '') + (x.sub ? '<br>' + h(x.sub) : '') + '</small></td><td>' + h(x.area || '') + '</td><td>' + h(x.periodo) + '</td><td>' + h(x.rol || '') + '</td><td class="num">' + h(x.horas) + '</td>' +
+      '<td>' + (x.origen === 'sistema' ? '<span class="etq verde">eFacultad</span>' : '<span class="etq azul">Registro manual</span>') + '</td>' + btnFila(x) + '</tr>').join('');
+    const filasGes = d.gestion.map(x => '<tr><td><b>' + h(x.nombre) + '</b>' + (x.historico ? ' ' + hist : '') + (x.funciones ? '<br><small>' + h(x.funciones) + '</small>' : '') + '</td><td>' + h(x.unidad || '') + '<br><small>' + h(x.area || '') + '</small></td><td>' + h(x.periodo) + (x.vigente ? ' <span class="etq verde">Vigente</span>' : '') + '</td><td>' + h(x.dedicacion || '') + '</td>' + btnFila(x) + '</tr>').join('');
+    vista('<div class="encabezado-vista"><div>' + (propio ? '' : '<p style="margin:0 0 4px"><a href="#/cuentas">← Volver a Cuentas</a></p>') + '<h1>' + (propio ? 'Mi certificado de experiencia' : 'Experiencia de ' + h(d.persona.nombre)) + '</h1>' +
+      '<p>' + (propio ? 'Acredita tu docencia y tu gestión en IDEAX, con folio y código de verificación. Sirve para postular a trabajos, concursos y acreditaciones.' : 'Los cursos calificados en la eFacultad se suman solos. Aquí registras los cursos dictados antes de la plataforma y los cargos de gestión.') + '</p></div></div>' +
+      '<div class="rejilla r4"><div class="cifra"><b>' + t.cursos + '</b><span>Cursos dictados</span></div><div class="cifra"><b>' + t.horas + '</b><span>Horas cronológicas de docencia</span></div>' +
+      '<div class="cifra"><b>' + t.cargos + '</b><span>Cargos de gestión</span></div><div class="cifra"><b style="font-size:20px;padding:5px 0">' + h(periodoTxt) + '</b><span>Período</span></div></div><div style="height:16px"></div>' +
+      '<section class="tarjeta"><div class="encabezado-vista" style="margin:0 0 8px"><h2 style="margin:0">Docencia</h2>' + (ed ? '<button class="btn claro chico" id="btn-add-doc">+ Agregar curso histórico</button>' : '') + '</div>' +
+      (d.docencia.length ? '<div class="tabla-cont"><table class="tabla"><thead><tr><th>Curso y programa</th><th>Área</th><th>Período</th><th>Rol</th><th class="num">Horas</th><th>Origen</th>' + (ed ? '<th></th>' : '') + '</tr></thead><tbody>' + filasDoc + '</tbody></table></div>'
+        : vacio('Aún no hay cursos', propio ? 'Tus cursos aparecen aquí cuando calificas entregas en la eFacultad. Si dictaste cursos antes de la plataforma, pide a la Dirección que los registre.' : 'Agrega aquí los cursos dictados antes de la eFacultad.')) +
+      '<p style="color:var(--gris);font-size:13px;margin:8px 0 0">Las horas son las horas cronológicas de cada programa. Un curso aparece una vez por cada versión que dictaste.</p></section>' +
+      '<section class="tarjeta"><div class="encabezado-vista" style="margin:0 0 8px"><h2 style="margin:0">Gestión académica y administrativa</h2>' + (ed ? '<button class="btn claro chico" id="btn-add-ges">+ Agregar cargo</button>' : '') + '</div>' +
+      (d.gestion.length ? '<div class="tabla-cont"><table class="tabla"><thead><tr><th>Cargo o función</th><th>Unidad</th><th>Período</th><th>Dedicación</th>' + (ed ? '<th></th>' : '') + '</tr></thead><tbody>' + filasGes + '</tbody></table></div>'
+        : vacio('Sin cargos de gestión registrados', propio ? 'Los cargos de coordinación o administración los registra la Dirección. Si te falta alguno, escríbenos desde Mensajes.' : 'Agrega los cargos de coordinación, comités o administración, con sus fechas.')) + '</section>' +
+      '<section class="tarjeta"><h2 style="margin-top:0">Emitir el certificado</h2>' +
+      '<p style="color:var(--gris)">La primera hoja resume tu experiencia y las siguientes detallan la docencia y la gestión. Se descarga en PDF, ' + (propio ? 'te llega' : 'le llega') + ' por correo y cualquier institución puede verificarlo en www.ideax.cl/verificar.</p>' +
+      (d.evaluacion ? '<label class="check" style="margin:8px 0 14px"><input type="checkbox" id="chk-eval"> <span>Incluir la evaluación docente: <b>' + String(d.evaluacion.prom).replace('.', ',') + ' de 7,0</b> (promedio de ' + d.evaluacion.n + ' respuestas a la encuesta de satisfacción, en ' + d.evaluacion.cursos + ' cursos)</span></label>'
+        : '<p style="font-size:13px;color:var(--gris)">La evaluación docente se puede incluir cuando haya al menos ' + d.minRespuestas + ' respuestas a la encuesta de satisfacción en los cursos.</p>') +
+      '<div class="acciones"><button class="btn naranja" id="btn-emitir"' + (d.docencia.length || d.gestion.length ? '' : ' disabled') + '>Emitir certificado</button></div>' +
+      (d.emitidos.length ? '<h3 style="margin-top:22px">Certificados emitidos</h3><div class="tabla-cont"><table class="tabla"><thead><tr><th>Folio</th><th>Emitido</th><th class="num">Horas</th><th></th></tr></thead><tbody>' +
+        d.emitidos.map(c => '<tr><td><b>' + h(c.folio) + '</b><br><small>Código ' + h(c.codigo) + '</small></td><td>' + fecha(c.emitido) + '</td><td class="num">' + h(c.horas) + '</td><td><button class="btn claro chico" data-bajar-exp="' + h(c.folio) + '">Descargar PDF</button></td></tr>').join('') + '</tbody></table></div>' : '') +
+      '</section>');
+    const recargar = () => vExperiencia(uid);
+    $('#btn-emitir').onclick = async ev => {
+      const b = ev.target; b.disabled = true; b.textContent = 'Generando el certificado…';
+      try { const r = await api('emitirExperiencia', { usuario: uid || '', evaluacion: !!($('#chk-eval') && $('#chk-eval').checked) }); guardarPdf(r); toast('Certificado emitido. También llegó por correo.'); recargar(); }
+      catch (er) { toast(er.message, true); b.disabled = false; b.textContent = 'Emitir certificado'; }
+    };
+    $$('[data-bajar-exp]').forEach(b => b.onclick = async () => { b.disabled = true; try { guardarPdf(await api('descargarDocumento', { folio: b.dataset.bajarExp })); } catch (er) { toast(er.message, true); } b.disabled = false; });
+    if (!ed) return;
+    const AREAS_G = ['Gestión académica', 'Gestión administrativa'];
+    const ROLES_D = ['Docente titular', 'Docente colaborador', 'Docente invitado', 'Tutor', 'Director de paper'];
+    const dia = iso => iso ? new Date(iso).toLocaleDateString('sv-SE') : '';
+    const form = (tipo, x) => {
+      x = x || { historico: tipo === 'Docencia' };
+      const doc = tipo === 'Docencia';
+      const sel = (nombre, ops, val) => '<select name="' + nombre + '">' + ops.map(o => '<option' + (o === val ? ' selected' : '') + '>' + h(o) + '</option>').join('') + '</select>';
+      const m = modal('<div class="modal-cab"><h3>' + (x.id ? 'Editar ' : 'Agregar ') + (doc ? 'curso' : 'cargo de gestión') + '</h3><button class="cerrar" data-cerrar>×</button></div><form>' +
+        (doc ? '<label class="campo"><span>Curso</span><input type="text" name="nombre" value="' + h(x.nombre || '') + '" placeholder="Ej.: Finanzas corporativas" required></label>' +
+          '<label class="campo"><span>Programa en que se dictó</span><input type="text" name="programa" value="' + h(x.programa || '') + '" placeholder="Ej.: Diplomado en Finanzas Corporativas"></label>' +
+          '<div class="fila-campos"><label class="campo"><span>Área</span>' + sel('area', d.areas.concat(['Otros']), x.area) + '</label><label class="campo"><span>Rol</span>' + sel('rol', ROLES_D, x.rol) + '</label></div>' +
+          '<div class="fila-campos"><label class="campo"><span>Inicio</span><input type="date" name="inicio" value="' + dia(x.inicio) + '" required></label><label class="campo"><span>Término</span><input type="date" name="termino" value="' + dia(x.termino) + '" required></label><label class="campo"><span>Horas cronológicas</span><input type="number" name="horas" min="1" value="' + h(x.horas || '') + '" required></label></div>'
+          : '<label class="campo"><span>Cargo o función</span><input type="text" name="nombre" value="' + h(x.nombre || '') + '" placeholder="Ej.: Coordinador Académico del Área Finanzas" required></label>' +
+          '<div class="fila-campos"><label class="campo"><span>Unidad</span><input type="text" name="unidad" value="' + h(x.unidad || '') + '" placeholder="Ej.: Área Finanzas, Dirección, Admisión"></label><label class="campo"><span>Tipo</span>' + sel('area', AREAS_G, x.area) + '</label></div>' +
+          '<div class="fila-campos"><label class="campo"><span>Inicio</span><input type="date" name="inicio" value="' + dia(x.inicio) + '" required></label><label class="campo"><span>Término (vacío si está vigente)</span><input type="date" name="termino" value="' + dia(x.vigente ? '' : x.termino) + '"></label></div>' +
+          '<label class="campo"><span>Dedicación</span><input type="text" name="dedicacion" value="' + h(x.dedicacion || '') + '" placeholder="Ej.: 10 h semanales, sesiones mensuales, por encargo"></label>' +
+          '<label class="campo"><span>Funciones principales</span><textarea name="funciones" rows="3" placeholder="Una o dos líneas; aparecen bajo el cargo en el certificado.">' + h(x.funciones || '') + '</textarea></label>') +
+        '<label class="check" style="margin:8px 0"><input type="checkbox" name="historico"' + (x.historico ? ' checked' : '') + '> Registro histórico, anterior a la eFacultad (en el certificado se marca con †)</label>' +
+        '<div class="acciones" style="margin-top:12px;justify-content:flex-end"><button type="button" class="btn claro" data-cerrar>Cancelar</button><button class="btn naranja">Guardar</button></div></form>');
+      const f = m.el.querySelector('form');
+      f.onsubmit = async e => {
+        e.preventDefault();
+        const v = n => f[n] ? f[n].value : '';
+        try {
+          await api('guardarExperiencia', { usuario: d.persona.id, id: x.id || '', tipo: tipo, nombre: v('nombre'), programa: v('programa'), unidad: v('unidad'), area: v('area'), rol: v('rol'),
+            inicio: v('inicio'), termino: v('termino'), horas: v('horas'), dedicacion: v('dedicacion'), funciones: v('funciones'), historico: f.historico.checked });
+          m.cerrar(); toast('Registro guardado.'); recargar();
+        } catch (er) { toast(er.message, true); }
+      };
+    };
+    $('#btn-add-doc').onclick = () => form('Docencia');
+    $('#btn-add-ges').onclick = () => form('Gestión');
+    $$('[data-ed]').forEach(b => b.onclick = () => {
+      const enGes = d.gestion.find(z => z.id === b.dataset.ed);
+      form(enGes ? 'Gestión' : 'Docencia', enGes || d.docencia.find(z => z.id === b.dataset.ed));
+    });
+    $$('[data-qx]').forEach(b => b.onclick = async () => {
+      if (!await confirmar('¿Quitar este registro? Los certificados ya emitidos no cambian.', 'Quitar')) return;
+      try { await api('quitarExperiencia', { id: b.dataset.qx }); toast('Registro quitado.'); recargar(); } catch (er) { toast(er.message, true); }
+    });
+  }
+
   async function vCuentas() {
     const lista = await api('usuarios', {});
     const ROLES = [['estudiante', 'Estudiante'], ['docente', 'Docente'], ['academico', 'Gestión académica'], ['administrativo', 'Gestión administrativa'], ['admin', 'Administrador']];
@@ -1790,7 +1875,7 @@
     const pintar = () => {
       const q = $('#f-q').value.toLowerCase(), rol = $('#f-rol').value;
       $('#tb-u').innerHTML = lista.filter(u => (!rol || u.roles.indexOf(rol) >= 0) && (!q || (u.nombre + ' ' + u.correo + ' ' + u.documento).toLowerCase().indexOf(q) >= 0))
-        .map(u => '<tr><td><b>' + h(u.nombre) + '</b><br><small>' + h(u.correo) + '</small></td><td>' + u.roles.map(r => '<span class="etq azul" style="margin:1px">' + h((ROLES.find(x => x[0] === r) || [r, r])[1]) + '</span>').join(' ') + '</td><td class="num">' + u.matriculas + '</td><td>' + (u.ultimoIngreso ? haceCuanto(u.ultimoIngreso) : '<small>Nunca</small>') + '</td><td>' + (u.activo ? '<span class="etq verde">Activa</span>' : '<span class="etq rojo">Inactiva</span>') + '</td><td><button class="btn claro chico" data-u="' + u.id + '">Editar</button></td></tr>').join('');
+        .map(u => '<tr><td><b>' + h(u.nombre) + '</b><br><small>' + h(u.correo) + '</small></td><td>' + u.roles.map(r => '<span class="etq azul" style="margin:1px">' + h((ROLES.find(x => x[0] === r) || [r, r])[1]) + '</span>').join(' ') + '</td><td class="num">' + u.matriculas + '</td><td>' + (u.ultimoIngreso ? haceCuanto(u.ultimoIngreso) : '<small>Nunca</small>') + '</td><td>' + (u.activo ? '<span class="etq verde">Activa</span>' : '<span class="etq rojo">Inactiva</span>') + '</td><td style="white-space:nowrap"><button class="btn claro chico" data-u="' + u.id + '">Editar</button>' + (tiene('certificados') && u.roles.some(r => r !== 'estudiante') ? ' <a class="btn claro chico" href="#/experiencia/' + h(u.id) + '">Experiencia</a>' : '') + '</td></tr>').join('');
       $$('[data-u]').forEach(b => b.onclick = () => form(lista.find(x => x.id === b.dataset.u)));
     };
     const form = u => {
