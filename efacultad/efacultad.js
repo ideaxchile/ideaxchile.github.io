@@ -450,8 +450,10 @@
         extra: id ? '<iframe class="podcast-drive" src="https://drive.google.com/file/d/' + h(id) + '/preview" allow="autoplay" loading="lazy" title="Podcast de la semana ' + s.n + '"></iframe>'
           : '<audio controls preload="none" src="' + h(r.podcast) + '" style="width:100%"></audio>' });
     }
-    recurso('caso', 'Estudia el caso', 'La situación que vas a analizar. Léelo completo una vez y vuelve a él con las preguntas en mente.', 'Abrir caso');
-    recurso('herramienta', 'Trabaja con la herramienta', 'La planilla o plantilla de la semana, con los datos del caso. Adjúntala a tu entrega.', 'Abrir herramienta');
+    /* Si la semana ya tiene su cuaderno y no trae caso o herramienta (por ejemplo, el diplomado de metodología),
+       ese paso no se muestra; si aún no hay material, queda como «Disponible pronto». */
+    if (r.caso || !r.cuaderno) recurso('caso', 'Estudia el caso', 'La situación que vas a analizar. Léelo completo una vez y vuelve a él con las preguntas en mente.', 'Abrir caso');
+    if (r.herramienta || !r.cuaderno) recurso('herramienta', 'Trabaja con la herramienta', 'La planilla o plantilla de la semana, con los datos del caso. Adjúntala a tu entrega.', 'Abrir herramienta');
     if (r.lectura) recurso('lectura', 'Lectura complementaria', 'Opcional, para profundizar.', 'Abrir lectura');
     if (d.autoevaluacion.preguntas.length) pasos.push({ k: 'auto', titulo: 'Haz la autoevaluación', texto: d.autoevaluacion.preguntas.length + ' preguntas para comprobar que entendiste los conceptos. No lleva nota y puedes repetirla.',
       accion: '<button class="btn claro chico" data-ir-pest="auto">Ir a la autoevaluación</button>', hecho: !!d.autoevaluacion.intento });
